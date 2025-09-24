@@ -1,45 +1,72 @@
-import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-
-import NavBar from './components/NavBar';
-import HomePage from './pages/HomePage';
-import BrowsePage from './pages/BrowsePage';
-import ProfilePage from './pages/ProfilePage';
-import CreateListingPage from './pages/CreateListingPage';
-import RegistrationForm from './components/RegistrationForm';
-import LoginForm from './components/LoginForm';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { AuthProvider } from "./contexts/AuthContext"
+import Navbar from "./components/layout/Navbar"
+import HomePage from "./pages/LoginPage"
+import LoginPage from "./pages/LoginPage"
+import SignupPage from "./pages/SignupPage"
+import ListingsPage from "./pages/ListingsPage"
+import ListingDetailPage from "./pages/ListingDetailPage"
+import ProfilePage from "./pages/ProfilePage"
+import MyListingsPage from "./pages/MyListingsPage"
+import SessionsPage from "./pages/SessionsPage"
+import ReviewsPage from "./pages/ReviewsPage"
+import ProtectedRoute from "./components/auth/ProtectedRoute"
+import "./App.css"
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  function handleLogin(loggedInUser) {
-    setUser(loggedInUser);
-  }
-
-  function handleLogout() {
-    fetch('/logout', {
-      method: 'POST',
-    }).then(() => {
-      setUser(null);
-    });
-  }
-
   return (
-    <BrowserRouter>
-      <NavBar user={user} onLogout={handleLogout} />
-      <div className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/browse" element={<BrowsePage />} />
-          <Route path="/create-listing" element={<CreateListingPage user={user} />} />
-          <Route path="/profile" element={<ProfilePage user={user} />} />
-          <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
-  );
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <main className="main-content">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/listings" element={<ListingsPage />} />
+              <Route path="/listings/:id" element={<ListingDetailPage />} />
+
+              {/* Protected Routes */}
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-listings"
+                element={
+                  <ProtectedRoute>
+                    <MyListingsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sessions"
+                element={
+                  <ProtectedRoute>
+                    <SessionsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/reviews"
+                element={
+                  <ProtectedRoute>
+                    <ReviewsPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </AuthProvider>
+  )
 }
 
-export default App;
+export default App
