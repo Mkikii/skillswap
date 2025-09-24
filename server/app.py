@@ -1,0 +1,40 @@
+from flask import Flask
+from flask_cors import CORS
+from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
+from config import Config
+from models import db
+
+def create_app():
+    app = Flask(name)
+    app.config.from_object(Config)
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
+    jwt = JWTManager(app)
+    CORS(app)
+
+    from routes.auth import auth_bp
+    from routes.skills import skills_bp
+    from routes.listings import listings_bp
+    from routes.sessions import sessions_bp
+    from routes.reviews import reviews_bp
+
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(skills_bp, url_prefix='/api/skills')
+    app.register_blueprint(listings_bp, url_prefix='/api/listings')
+    app.register_blueprint(sessions_bp, url_prefix='/api/sessions')
+    app.register_blueprint(reviews_bp, url_prefix='/api/reviews')
+
+    @app.route('/')
+    def home():
+        return {"message": "SkillSwap API is running!", "version": "1.0.0"}
+
+    return app
+
+if name == 'main':
+    app = create_app()
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, port=5555)
+
