@@ -79,7 +79,7 @@ def create_test_data():
         print(f"🎯 Skills: {Skill.query.count()}") 
         print(f"📝 Listings: {Listing.query.count()}")
         
-        # Show the listing IDs that were created
+       
         listings = Listing.query.all()
         for listing in listings:
             print(f"   Listing {listing.id}: {listing.title}")

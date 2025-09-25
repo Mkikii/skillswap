@@ -6,29 +6,25 @@ def simple_seed():
     with app.app_context():
         print("Starting simple seed...")
         
-        # Clear and create tables
         db.drop_all()
         db.create_all()
         
-        # Create one simple user (using password_hash directly)
+       
         user = User(
             username='testuser', 
             email='test@example.com',
             bio='Test user bio'
         )
         
-        # Check if set_password method exists, otherwise set password_hash directly
         if hasattr(user, 'set_password'):
             user.set_password('test123')
         else:
-            # Simple password hashing (you should use proper hashing in production)
+            
             import hashlib
             user.password_hash = hashlib.sha256('test123'.encode()).hexdigest()
         
-        # Create one simple skill
         skill = Skill(name='Python Programming', category='Technology')
-        
-        # Create one simple listing
+      
         listing = Listing(
             title='Python Tutoring Session',
             description='Learn Python programming basics',

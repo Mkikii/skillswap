@@ -5,7 +5,7 @@ import bcrypt
 with app.app_context():
     user = User.query.filter_by(email="test@example.com").first()
     if user:
-        # Reset password using bcrypt (same method as login expects)
+       
         hashed_password = bcrypt.hashpw('password123'.encode('utf-8'), bcrypt.gensalt())
         user.password_hash = hashed_password.decode('utf-8')
         db.session.commit()

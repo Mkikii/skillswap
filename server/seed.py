@@ -155,7 +155,6 @@ def seed_database():
         
         db.session.commit()
         
-        # Create sample sessions
         sessions_data = [
             {
                 "teacher_id": users[0].id,
@@ -193,8 +192,7 @@ def seed_database():
             db.session.add(session)
         
         db.session.commit()
-        
-        # Create sample reviews for completed sessions
+       
         reviews_data = [
             {
                 "rating": 5,

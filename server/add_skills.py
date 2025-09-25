@@ -21,8 +21,7 @@ with app.app_context():
     
     db.session.commit()
     print(f"Added {len(skills)} skills to the database!")
-    
-    # Verify
+   
     all_skills = Skill.query.all()
     print(f"Total skills now: {len(all_skills)}")
     for skill in all_skills:

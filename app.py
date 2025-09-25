@@ -8,13 +8,11 @@ from routes.skills import skills_bp
 app = Flask(__name__)
 app.config.from_object('config')
 
-# Enable CORS
 CORS(app)
 
-# Initialize database
+
 db.init_app(app)
 
-# Register blueprints
 app.register_blueprint(listings_bp, url_prefix='/api/listings')
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(skills_bp, url_prefix='/api/skills')

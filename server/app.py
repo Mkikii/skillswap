@@ -9,7 +9,7 @@ from routes.sessions import sessions_bp
 from routes.reviews import reviews_bp
 from routes.skills import skills_bp
 
-# Initialize Flask app
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///skillswap.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -20,7 +20,7 @@ db.init_app(app)
 jwt.init_app(app)
 CORS(app)
 
-# Register Blueprints with /api prefix
+
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(listings_bp, url_prefix='/api/listings')
 app.register_blueprint(sessions_bp, url_prefix='/api/sessions')

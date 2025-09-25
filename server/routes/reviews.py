@@ -206,7 +206,7 @@ def get_my_reviews():
         # Get reviews received by current user
         received_reviews = Review.query.filter_by(reviewee_id=current_user_id).order_by(Review.created_at.desc()).all()
         
-        # Calculate average rating received
+       
         if received_reviews:
             average_rating = sum(review.rating for review in received_reviews) / len(received_reviews)
         else:

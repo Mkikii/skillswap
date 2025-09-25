@@ -16,7 +16,7 @@ with app.app_context():
     
     added_count = 0
     for skill_data in skills_data:
-        # Check if skill already exists
+       
         existing_skill = Skill.query.filter_by(name=skill_data['name']).first()
         if not existing_skill:
             skill = Skill(**skill_data)
@@ -28,8 +28,7 @@ with app.app_context():
     
     db.session.commit()
     print(f"Successfully added {added_count} new skills!")
-    
-    # Show all skills
+   
     all_skills = Skill.query.all()
     print(f"Total skills in database: {len(all_skills)}")
     for skill in all_skills:

@@ -3,7 +3,7 @@ from models import User, Skill, Listing
 
 def create_test_data():
     with app.app_context():
-        # Clear existing data and create tables
+       
         db.drop_all()
         db.create_all()
         

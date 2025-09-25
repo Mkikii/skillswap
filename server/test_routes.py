@@ -5,7 +5,6 @@ from flask import jsonify
 with app.app_context():
     print("=== TESTING ROUTE LOGIC ===")
     
-    # Simulate what the route does
     try:
         listings = Listing.query.all()
         result = []
