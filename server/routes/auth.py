@@ -19,7 +19,7 @@ def register():
         user = User(
             username=data['username'],
             email=data['email'],
-            password=hashed_password.decode('utf-8'),
+            password_hash=hashed_password.decode('utf-8'),
             bio=data.get('bio', '')
         )
         
