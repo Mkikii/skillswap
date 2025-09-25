@@ -48,7 +48,7 @@ def login():
         data = request.get_json()
         user = User.query.filter_by(email=data['email']).first()
         
-        if user and bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
+        if user and bcrypt.checkpw(data['password'].encode('utf-8'), user.password_hash.encode('utf-8')):
             access_token = create_access_token(identity=user.id)
             return jsonify({
                 'message': 'Login successful',
