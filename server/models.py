@@ -3,8 +3,14 @@ from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 
-db = SQLAlchemy()
+from config import db
+
 bcrypt = Bcrypt()
+
+user_skills = db.Table('user_skills',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('skill_id', db.Integer, db.ForeignKey('skills.id'), primary_key=True)
+)
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -15,6 +21,9 @@ class User(db.Model, SerializerMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     bio = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    skills = db.relationship('Skill', secondary=user_skills, lazy='subquery',
+                           backref=db.backref('users', lazy=True))
     
     listings = db.relationship('Listing', backref='user', lazy=True)
     teaching_sessions = db.relationship('Session', foreign_keys='Session.teacher_id', backref='teacher', lazy=True)
