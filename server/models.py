@@ -72,8 +72,8 @@ class Session(db.Model, SerializerMixin):
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'), nullable=False)
     scheduled_date = db.Column(db.DateTime, nullable=False)
-    duration = db.Column(db.Integer, nullable=False)  # in minutes
-    status = db.Column(db.String(20), default='pending')  # pending, confirmed, completed, cancelled
+    duration = db.Column(db.Integer, nullable=False) 
+    status = db.Column(db.String(20), default='pending')  
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -83,7 +83,7 @@ class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
     
     id = db.Column(db.Integer, primary_key=True)
-    rating = db.Column(db.Integer, nullable=False)  # 1-5 stars
+    rating = db.Column(db.Integer, nullable=False)  
     comment = db.Column(db.Text)
     reviewer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     reviewee_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

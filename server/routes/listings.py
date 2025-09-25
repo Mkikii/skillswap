@@ -14,11 +14,9 @@ class ListingList(Resource):
             
             query = Listing.query.join(User).join(Skill)
             
-            # Filter by category
             if category:
                 query = query.filter(Skill.category == category)
             
-            # Search in title and description
             if search:
                 query = query.filter(
                     db.or_(
@@ -28,10 +26,8 @@ class ListingList(Resource):
                     )
                 )
             
-            # Order by creation date (newest first)
             query = query.order_by(Listing.created_at.desc())
             
-            # Paginate results
             listings = query.paginate(
                 page=page, 
                 per_page=per_page, 
@@ -55,18 +51,14 @@ class ListingList(Resource):
             current_user_id = get_jwt_identity()
             data = request.get_json()
             
-            # Validate required fields
             required_fields = ['title', 'description', 'price_per_hour', 'skill_id']
             for field in required_fields:
                 if not data.get(field):
                     return {'error': f'{field} is required'}, 400
             
-            # Validate skill exists
             skill = Skill.query.get(data['skill_id'])
             if not skill:
                 return {'error': 'Skill not found'}, 404
-            
-            # Validate price
             try:
                 price = float(data['price_per_hour'])
                 if price < 0:
@@ -113,13 +105,11 @@ class ListingDetail(Resource):
             if not listing:
                 return {'error': 'Listing not found'}, 404
             
-            # Check if user owns the listing
             if listing.user_id != current_user_id:
                 return {'error': 'Unauthorized to update this listing'}, 403
             
             data = request.get_json()
             
-            # Update fields if provided
             if 'title' in data:
                 listing.title = data['title']
             if 'description' in data:
@@ -158,7 +148,6 @@ class ListingDetail(Resource):
             if not listing:
                 return {'error': 'Listing not found'}, 404
             
-            # Check if user owns the listing
             if listing.user_id != current_user_id:
                 return {'error': 'Unauthorized to delete this listing'}, 403
             
