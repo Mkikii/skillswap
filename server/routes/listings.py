@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 listings_bp = Blueprint('listings', __name__)
 
+# Endpoint to get all listings
 @listings_bp.route('/', methods=['GET'])
 def get_listings():
     try:
@@ -30,6 +31,7 @@ def get_listings():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Endpoint to create a new listing (requires JWT authentication)
 @listings_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_listing():
@@ -37,6 +39,7 @@ def create_listing():
         data = request.get_json()
         user_id = get_jwt_identity()
         
+        # Create a new Listing instance with the provided data
         listing = Listing(
             title=data['title'],
             description=data['description'],
@@ -45,14 +48,19 @@ def create_listing():
             skill_id=data['skill_id']
         )
         
+        # Add the new listing to the database and commit the session
         db.session.add(listing)
         db.session.commit()
         
-        return jsonify({'message': 'Listing created successfully', 'listing_id': listing.id}), 201
+        return jsonify({
+            'message': 'Listing created successfully',
+            'listing_id': listing.id
+        }), 201
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Endpoint to get a specific listing by its ID
 @listings_bp.route('/<int:listing_id>', methods=['GET'])
 def get_listing(listing_id):
     try:
@@ -75,5 +83,27 @@ def get_listing(listing_id):
                 }
             }
         }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Endpoint to get all listings for a specific user
+@listings_bp.route('/user/<int:user_id>', methods=['GET'])
+def get_user_listings(user_id):
+    try:
+        listings = Listing.query.filter_by(user_id=user_id).all()
+        result = []
+        for listing in listings:
+            result.append({
+                'id': listing.id,
+                'title': listing.title,
+                'description': listing.description,
+                'price_per_hour': listing.price_per_hour,
+                'skill': {
+                    'id': listing.skill.id,
+                    'name': listing.skill.name,
+                    'category': listing.skill.category
+                }
+            })
+        return jsonify({'listings': result}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
