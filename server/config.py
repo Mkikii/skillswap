@@ -1,14 +1,10 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
-from flask_cors import CORS
+import os
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///skillswap.db'
-app.config['SECRET_KEY'] = 'skillswap-secret-key'
-app.config['JWT_SECRET_KEY'] = 'jwt-skillswap-secret'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False  
+basedir = os.path.abspath(os.path.dirname(__file__))
 
-db = SQLAlchemy(app)
-jwt = JWTManager(app)
-CORS(app) 
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'skillswap.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'skillswap-secret-key'
+    JWT_SECRET_KEY = 'jwt-skillswap-secret'
+    JWT_ACCESS_TOKEN_EXPIRES = False

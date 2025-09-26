@@ -6,9 +6,6 @@ skills_bp = Blueprint('skills', __name__)
 
 @skills_bp.route('/', methods=['GET'])
 def get_skills():
-    try:
-        skills = Skill.query.all()
-        result = [{'id': s.id, 'name': s.name, 'category': s.category} for s in skills]
-        return jsonify({'skills': result}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    skills = Skill.query.all()
+    result = [{'id': s.id, 'name': s.name, 'category': s.category} for s in skills]
+    return jsonify({'skills': result}), 200
