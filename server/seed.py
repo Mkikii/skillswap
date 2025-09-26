@@ -1,7 +1,9 @@
-from app import app, db
+from app import create_app
+from database import db
 from models import User, Skill, Listing
 
 def seed_database():
+    app = create_app()
     with app.app_context():
         db.drop_all()
         db.create_all()
@@ -37,27 +39,31 @@ def seed_database():
         
         db.session.commit()
         
+        python_skill = Skill.query.filter_by(name="Python Programming").first()
+        guitar_skill = Skill.query.filter_by(name="Guitar Playing").first()
+        web_skill = Skill.query.filter_by(name="Web Design").first()
+        
         listings_data = [
             {
                 "title": "Learn Python Programming",
                 "description": "Python fundamentals for beginners",
                 "price_per_hour": 25.0,
                 "user_id": users[0].id,
-                "skill_id": Skill.query.filter_by(name="Python Programming").first().id
+                "skill_id": python_skill.id
             },
             {
                 "title": "Guitar Lessons",
                 "description": "Beginner to intermediate guitar",
                 "price_per_hour": 30.0,
                 "user_id": users[1].id,
-                "skill_id": Skill.query.filter_by(name="Guitar Playing").first().id
+                "skill_id": guitar_skill.id
             },
             {
                 "title": "Web Design Basics",
                 "description": "HTML, CSS and responsive design",
                 "price_per_hour": 35.0,
                 "user_id": users[2].id,
-                "skill_id": Skill.query.filter_by(name="Web Design").first().id
+                "skill_id": web_skill.id
             }
         ]
         

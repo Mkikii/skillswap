@@ -6,4 +6,10 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  esbuild: {
+    loader: 'jsx',
+    include: /src\/.*\.jsx?$/,
+    exclude: [],
+  },
+  // optimizeDeps block has been removed
 })

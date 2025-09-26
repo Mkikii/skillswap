@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify
-from config import db
+from database import db
 from models import User
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-import bcrypt
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -12,15 +11,16 @@ def register():
     
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'error': 'Email already registered'}), 400
-        
-    hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
+    
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({'error': 'Username already taken'}), 400
     
     user = User(
         username=data['username'],
         email=data['email'],
-        password_hash=hashed_password.decode('utf-8'),
         bio=data.get('bio', '')
     )
+    user.set_password(data['password'])
     
     db.session.add(user)
     db.session.commit()
@@ -43,7 +43,7 @@ def login():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
     
-    if user and bcrypt.checkpw(data['password'].encode('utf-8'), user.password_hash.encode('utf-8')):
+    if user and user.check_password(data['password']):
         access_token = create_access_token(identity=user.id)
         return jsonify({
             'message': 'Login successful',
@@ -63,6 +63,9 @@ def login():
 def get_profile():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
     
     return jsonify({
         'user': {

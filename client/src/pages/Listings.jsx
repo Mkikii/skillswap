@@ -59,7 +59,7 @@ const Listings = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings.map(listing => (
-              <div key={listing.id} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+              <div key={listing.id} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden card-hover">
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -78,14 +78,14 @@ const Listings = () => {
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                        <span className="text-sm font-medium text-gray-700">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-sm font-medium text-white">
                           {listing.user?.username?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <span className="text-sm text-gray-700">{listing.user?.username}</span>
                     </div>
-                    <button className="btn-primary">
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors">
                       Learn More
                     </button>
                   </div>

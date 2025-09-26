@@ -7,4 +7,3 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'skillswap-secret-key'
     JWT_SECRET_KEY = 'jwt-skillswap-secret'
-    JWT_ACCESS_TOKEN_EXPIRES = False

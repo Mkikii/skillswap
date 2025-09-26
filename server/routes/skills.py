@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from config import db
+from database import db
 from models import Skill
 
 skills_bp = Blueprint('skills', __name__)

@@ -16,21 +16,29 @@ const Login = () => {
     setError('');
 
     try {
+      // Assuming your login function handles the API call and returns a successful response object
       const response = await login(email, password);
-      if (response.status === 200) {
+      // Checking for a successful status code (e.g., 200) or other success indicator
+      if (response && response.status === 200) { 
         navigate('/');
       }
     } catch (err) {
+      // Accessing error message from the response data if available
       setError(err.response?.data?.error || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
 
+  const useDemoAccount = (demoEmail, demoPassword) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="bg-white rounded-2xl shadow-xl p-8 slide-in">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
             <p className="text-gray-600">Sign in to your account</p>
@@ -48,36 +56,30 @@ const Login = () => {
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email Address
                 </label>
-                <div className="relative">
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    placeholder="Enter your email"
-                  />
-                  <i className='bx bx-envelope absolute right-3 top-3 text-gray-400'></i>
-                </div>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your email"
+                />
               </div>
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    placeholder="Enter your password"
-                  />
-                  <i className='bx bx-lock-alt absolute right-3 top-3 text-gray-400'></i>
-                </div>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="Enter your password"
+                />
               </div>
             </div>
 
@@ -99,11 +101,23 @@ const Login = () => {
             </div>
 
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 text-center">
-                Demo Accounts:<br/>
-                Teacher: teacher@demo.com / demo123<br/>
-                Student: student@demo.com / demo123
-              </p>
+              <p className="text-sm text-gray-600 text-center mb-2 font-semibold">Demo Accounts:</p>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => useDemoAccount('alice@example.com', 'password123')}
+                  className="w-full bg-green-100 text-green-700 py-2 px-4 rounded text-sm hover:bg-green-200 transition-colors"
+                >
+                  Use Teacher Demo (alice@example.com)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => useDemoAccount('bob@example.com', 'password123')}
+                  className="w-full bg-purple-100 text-purple-700 py-2 px-4 rounded text-sm hover:bg-purple-200 transition-colors"
+                >
+                  Use Student Demo (bob@example.com)
+                </button>
+              </div>
             </div>
           </form>
         </div>
