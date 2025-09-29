@@ -1,29 +1,50 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Listings from './pages/Listings';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import './App.css';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage.jsx';
+import AuthPage from './pages/AuthPage.jsx';
+import SkillsListings from './pages/SkillsListings.jsx';
+import Sessions from './pages/Sessions.jsx';
+import CreateListing from './pages/CreateListing.jsx';
+import ProtectedRoute from './components/ProtectedRoute';
 
-function App() {
+const App = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
+    <Router>
+      <AuthProvider>
+        <div className="App flex flex-col min-h-screen">
           <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/listings" element={<Listings />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/listings" element={<SkillsListings />} />
+              <Route
+                path="/sessions"
+                element={
+                  <ProtectedRoute>
+                    <Sessions />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create-listing"
+                element={
+                  <ProtectedRoute>
+                    <CreateListing />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </main>
+          <Footer />
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
-}
+};
 
 export default App;

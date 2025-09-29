@@ -1,14 +1,31 @@
-from database import db
+# models.py - Working version
+import os
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 
+# Import db from database.py
+from database import db
+
+# Create bcrypt instance (we'll initialize it in the app)
+from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 
-user_skills = db.Table('user_skills',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('skill_id', db.Integer, db.ForeignKey('skills.id'), primary_key=True)
-)
+class UserSkill(db.Model, SerializerMixin):
+    __tablename__ = 'user_skills'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    skill_id = db.Column(db.Integer, db.ForeignKey('skills.id'))
+    proficiency_level = db.Column(db.String(50))
+    years_experience = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user = db.relationship('User', backref='user_skills')
+    skill = db.relationship('Skill', backref='user_skills')
+    
+    serialize_rules = ('-user.user_skills', '-skill.user_skills')
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -20,10 +37,11 @@ class User(db.Model, SerializerMixin):
     bio = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    skills = db.relationship('Skill', secondary=user_skills, backref='users')
     listings = db.relationship('Listing', backref='user', lazy=True)
+    reviews_given = db.relationship('Review', foreign_keys='Review.reviewer_id', backref='reviewer', lazy=True)
+    reviews_received = db.relationship('Review', foreign_keys='Review.reviewee_id', backref='reviewee', lazy=True)
     
-    serialize_rules = ('-password_hash',)
+    serialize_rules = ('-password_hash', '-user_skills.user', '-listings.user', '-reviews_given.reviewer', '-reviews_received.reviewee')
     
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -40,6 +58,8 @@ class Skill(db.Model, SerializerMixin):
     description = db.Column(db.Text)
     
     listings = db.relationship('Listing', backref='skill', lazy=True)
+    
+    serialize_rules = ('-user_skills.skill', '-listings.skill')
 
 class Listing(db.Model, SerializerMixin):
     __tablename__ = 'listings'
@@ -51,3 +71,39 @@ class Listing(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     skill_id = db.Column(db.Integer, db.ForeignKey('skills.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    serialize_rules = ('-user.listings', '-skill.listings')
+
+class Session(db.Model, SerializerMixin):
+    __tablename__ = 'sessions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'), nullable=False)
+    scheduled_date = db.Column(db.DateTime, nullable=False)
+    duration_hours = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), default='scheduled')
+    notes = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    student = db.relationship('User', foreign_keys=[student_id], backref='sessions_as_student')
+    teacher = db.relationship('User', foreign_keys=[teacher_id], backref='sessions_as_teacher')
+    listing = db.relationship('Listing', backref='sessions')
+    
+    serialize_rules = ('-student.sessions_as_student', '-teacher.sessions_as_teacher', '-listing.sessions')
+
+class Review(db.Model, SerializerMixin):
+    __tablename__ = 'reviews'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text)
+    reviewer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    reviewee_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    session_id = db.Column(db.Integer, db.ForeignKey('sessions.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    session = db.relationship('Session', backref='reviews')
+    
+    serialize_rules = ('-reviewer.reviews_given', '-reviewee.reviews_received', '-session.reviews')

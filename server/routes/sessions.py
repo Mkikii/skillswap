@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from config import db
-from models import Session, Listing, User
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from database import db
+from models import Session, Listing, User
 from datetime import datetime
 
 sessions_bp = Blueprint('sessions', __name__)
@@ -12,27 +12,21 @@ def create_session():
     try:
         data = request.get_json()
         student_id = get_jwt_identity()
-        
         listing = Listing.query.get(data['listing_id'])
         if not listing:
             return jsonify({'error': 'Listing not found'}), 404
-        
         session = Session(
             student_id=student_id,
             teacher_id=listing.user_id,
             listing_id=data['listing_id'],
-            scheduled_time=datetime.fromisoformat(data['scheduled_time']),
-            status='pending'
+            scheduled_date=datetime.fromisoformat(data['scheduled_date']),
+            duration_hours=data.get('duration_hours', 1.0),
+            status='scheduled',
+            notes=data.get('notes', '')
         )
-        
         db.session.add(session)
         db.session.commit()
-        
-        return jsonify({
-            'message': 'Session booked successfully',
-            'session_id': session.id
-        }), 201
-        
+        return jsonify({'message': 'Session booked successfully', 'session_id': session.id}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -44,7 +38,6 @@ def get_user_sessions():
         sessions = Session.query.filter(
             (Session.student_id == user_id) | (Session.teacher_id == user_id)
         ).all()
-        
         result = []
         for session in sessions:
             result.append({
@@ -52,11 +45,11 @@ def get_user_sessions():
                 'student': {'id': session.student.id, 'username': session.student.username},
                 'teacher': {'id': session.teacher.id, 'username': session.teacher.username},
                 'listing_title': session.listing.title,
-                'scheduled_time': session.scheduled_time.isoformat(),
-                'status': session.status
+                'scheduled_date': session.scheduled_date.isoformat(),
+                'duration_hours': session.duration_hours,
+                'status': session.status,
+                'notes': session.notes
             })
-        
         return jsonify({'sessions': result}), 200
-        
     except Exception as e:
         return jsonify({'error': str(e)}), 500

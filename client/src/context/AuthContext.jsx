@@ -1,15 +1,7 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 
 const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -18,37 +10,36 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      authAPI.getProfile()
-        .then(response => {
-          setUser(response.data.user);
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      fetchUserProfile();
     } else {
       setLoading(false);
     }
   }, []);
 
+  const fetchUserProfile = async () => {
+    try {
+      const response = await authAPI.getProfile();
+      setUser(response.data.user);
+    } catch (error) {
+      localStorage.removeItem('token');
+    }
+    setLoading(false);
+  };
+
   const login = async (email, password) => {
     const response = await authAPI.login({ email, password });
-    if (response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
-      setUser(response.data.user);
-    }
-    return response;
+    const { access_token, user } = response.data;
+    localStorage.setItem('token', access_token);
+    setUser(user);
+    return response.data;
   };
 
   const register = async (userData) => {
     const response = await authAPI.register(userData);
-    if (response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
-      setUser(response.data.user);
-    }
-    return response;
+    const { access_token, user } = response.data;
+    localStorage.setItem('token', access_token);
+    setUser(user);
+    return response.data;
   };
 
   const logout = () => {
@@ -64,9 +55,9 @@ export const AuthProvider = ({ children }) => {
     loading
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  return useContext(AuthContext);
 };

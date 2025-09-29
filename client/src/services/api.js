@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5555/api';
+const API_BASE_URL = 'http://localhost:5555';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -15,19 +15,31 @@ api.interceptors.request.use((config) => {
 });
 
 export const authAPI = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
-  getProfile: () => api.get('/auth/profile'),
+  login: (credentials) => api.post('/api/auth/login', credentials),
+  register: (userData) => api.post('/api/auth/register', userData),
+  getProfile: () => api.get('/api/auth/profile'),
 };
 
 export const listingsAPI = {
-  getAll: () => api.get('/listings'),
-  getById: (id) => api.get(`/listings/${id}`),
-  create: (listingData) => api.post('/listings', listingData),
+  getAll: () => api.get('/api/listings'),
+  getById: (id) => api.get(`/api/listings/${id}`),
+  create: (listingData) => api.post('/api/listings', listingData),
 };
 
 export const skillsAPI = {
-  getAll: () => api.get('/skills'),
+  getAll: () => api.get('/api/skills'),
+};
+
+export const sessionsAPI = {
+  getAll: () => api.get('/api/sessions'),
+  create: (sessionData) => api.post('/api/sessions', sessionData),
+  update: (id, sessionData) => api.put(`/api/sessions/${id}`, sessionData),
+};
+
+export const reviewsAPI = {
+  getAll: () => api.get('/api/reviews'),
+  create: (reviewData) => api.post('/api/reviews', reviewData),
+  getMyReviews: () => api.get('/api/reviews/my-reviews'),
 };
 
 export default api;
