@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SkillCard = ({ skill }) => {
+  const navigate = useNavigate();
+
+  const handleLearnMore = () => {
+    navigate(`/listings/${skill.id}`);
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
@@ -17,7 +24,10 @@ const SkillCard = ({ skill }) => {
         <div className="flex items-center space-x-2">
           <span className="text-sm text-gray-500">Teacher: {skill.teacher?.username || 'Teacher'}</span>
         </div>
-        <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all">
+        <button 
+          onClick={handleLearnMore}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all"
+        >
           Learn More
         </button>
       </div>

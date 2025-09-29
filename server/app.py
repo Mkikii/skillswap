@@ -12,6 +12,7 @@ def create_app():
     CORS(app)
     jwt = JWTManager(app)
     
+    # Import and register blueprints
     from routes.auth import auth_bp
     from routes.skills import skills_bp
     from routes.listings import listings_bp

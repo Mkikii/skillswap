@@ -6,7 +6,7 @@ from datetime import datetime
 
 sessions_bp = Blueprint('sessions', __name__)
 
-@sessions_bp.route('/', methods=['POST'])
+@sessions_bp.route('', methods=['POST'])
 @jwt_required()
 def create_session():
     try:
@@ -30,7 +30,7 @@ def create_session():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@sessions_bp.route('/user', methods=['GET'])
+@sessions_bp.route('', methods=['GET'])
 @jwt_required()
 def get_user_sessions():
     try:
