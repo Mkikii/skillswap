@@ -11,8 +11,10 @@ def get_all_skills():
             'skills': [{
                 'id': skill.id,
                 'name': skill.name,
-                'category': skill.category
+                'category': skill.category,
+                'description': skill.description
             } for skill in skills]
         }), 200
     except Exception as e:
+        print(f"Skills error: {e}")
         return jsonify({'error': 'Failed to fetch skills'}), 500

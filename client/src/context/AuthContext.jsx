@@ -8,6 +8,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Test backend connection
+    testAPI.home()
+      .then(response => console.log('Backend connection:', response.data))
+      .catch(error => console.error('Backend connection failed:', error));
+
     const token = localStorage.getItem('token');
     if (token) {
       fetchUserProfile();
@@ -21,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authAPI.getProfile();
       setUser(response.data.user);
     } catch (error) {
+      console.error('Profile fetch error:', error);
       localStorage.removeItem('token');
     }
     setLoading(false);

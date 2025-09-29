@@ -1,57 +1,50 @@
 const skills = [
   {
     id: 1,
-    title: "Python Programming",
-    description: "Learn Python fundamentals from scratch",
-    teacher: "kikii",
-    price: 500,
-    category: 'Programming'
+    title: "Advanced Python & Flask Development",
+    description: "Master Python programming with Flask framework. Learn REST APIs, database integration, and deployment strategies.",
+    teacher: "dennis_teacher",
+    price: 45.00,
+    category: 'Technology'
   },
   {
     id: 2,
-    title: "Guitar Lessons",
-    description: "Beginner to intermediate guitar lessons",
-    teacher: "molly",
-    price: 800,
-    category: 'Music'
+    title: "Modern JavaScript & React Development", 
+    description: "Comprehensive JavaScript and React course covering ES6+, hooks, state management, and modern frontend development.",
+    teacher: "dennis_teacher",
+    price: 40.00,
+    category: 'Technology'
   },
   {
     id: 3,
-    title: "Web Design",
-    description: "HTML, CSS & responsive design",
-    teacher: "dominique",
-    price: 700,
+    title: "Graphic Design Fundamentals",
+    description: "Master the principles of graphic design and create stunning visual content.",
+    teacher: "bob_design",
+    price: 40.00,
     category: 'Design'
   },
   {
     id: 4,
-    title: "Spanish Language",
-    description: "Conversational Spanish for beginners",
-    teacher: "maureen",
-    price: 600,
-    category: 'Language'
+    title: "Italian Cooking Masterclass",
+    description: "Learn authentic Italian recipes and cooking techniques from a professional chef.",
+    teacher: "carol_chef", 
+    price: 50.00,
+    category: 'Culinary'
   },
   {
     id: 5,
-    title: "Photography",
-    description: "Digital photography and editing",
-    teacher: "carl",
-    price: 750,
-    category: 'Art'
-  },
-  {
-    id: 6,
-    title: "Yoga & Meditation",
-    description: "Beginner yoga and mindfulness",
-    teacher: "vanessa",
-    price: 400,
-    category: 'Fitness'
+    title: "Portrait Photography Workshop",
+    description: "Learn lighting, composition, and editing techniques for professional portraits.",
+    teacher: "dave_photo",
+    price: 45.00,
+    category: 'Arts'
   }
 ];
 
-const demoAccounts = {
-  teacher: { email: "teacher@demo.com", password: "demo123", name: "Molly", role: "teacher" },
-  student: { email: "student@demo.com", password: "demo123", name: "John", role: "student" }
+const demoAccount = {
+  email: "guest@gmail.com", 
+  password: "password123", 
+  username: "guest_user"
 };
 
-export { skills, demoAccounts };
+export { skills, demoAccount };

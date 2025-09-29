@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import HomePage from './pages/HomePage.jsx';
-import AuthPage from './pages/AuthPage.jsx';
-import SkillsListings from './pages/SkillsListings.jsx';
-import Sessions from './pages/Sessions.jsx';
-import CreateListing from './pages/CreateListing.jsx';
+import HomePage from './pages/HomePage';
+import AuthPage from './pages/AuthPage';
+import SkillsListings from './pages/SkillsListings';
+import Sessions from './pages/Sessions';
+import CreateListing from './pages/CreateListing';
 import ProtectedRoute from './components/ProtectedRoute';
+import './index.css';
 
 const App = () => {
   return (

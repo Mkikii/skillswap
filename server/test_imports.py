@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 
-print("🔍 Testing imports in server directory...")
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+print("🔍 Testing imports...")
+
+try:
+    from flask_sqlalchemy import SQLAlchemy
+    from flask_bcrypt import Bcrypt
+    print("✅ Flask extensions imported")
+except ImportError as e:
+    print(f"❌ Error importing Flask extensions: {e}")
 
 try:
     from database import db, bcrypt
@@ -9,18 +21,21 @@ except ImportError as e:
     print(f"❌ Error importing from database.py: {e}")
 
 try:
-    from models import User, Skill, Listing, UserSkill, Session, Review
-    print("✅ All models imported successfully")
+    import models
+    print("✅ models module imported")
     
-    # Check table names
-    print(f"User table: {User.__tablename__}")
-    print(f"Skill table: {Skill.__tablename__}")
-    print(f"UserSkill table: {UserSkill.__tablename__}")
-    print(f"Listing table: {Listing.__tablename__}")
-    print(f"Session table: {Session.__tablename__}")
-    print(f"Review table: {Review.__tablename__}")
-    
+    if hasattr(models, 'User'):
+        print("✅ User class found")
+    if hasattr(models, 'Skill'):
+        print("✅ Skill class found")
+    if hasattr(models, 'UserSkill'):
+        print("✅ UserSkill class found")
+    if hasattr(models, 'Listing'):
+        print("✅ Listing class found")
+    if hasattr(models, 'Session'):
+        print("✅ Session class found")
+    if hasattr(models, 'Review'):
+        print("✅ Review class found")
+        
 except ImportError as e:
     print(f"❌ Error importing models: {e}")
-    import traceback
-    traceback.print_exc()

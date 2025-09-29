@@ -15,10 +15,9 @@ def setup_database():
     
     with app.app_context():
         try:
-            if os.path.exists("skillswap.db"):
-                os.remove("skillswap.db")
-            
+            db.drop_all()
             db.create_all()
+            print("✅ Database tables created successfully")
             
             skills_data = [
                 {"name": "Python Programming", "category": "Technology"},
@@ -45,6 +44,7 @@ def setup_database():
                 db.session.add(skill)
             
             db.session.commit()
+            print("✅ Skills created successfully")
             
             users_data = [
                 {
@@ -88,6 +88,12 @@ def setup_database():
                     "email": "frank@example.com", 
                     "password": "password123",
                     "bio": "Financial advisor helping people with investment strategies and retirement planning."
+                },
+                {
+                    "username": "guest_user", 
+                    "email": "guest@gmail.com", 
+                    "password": "password123",
+                    "bio": "Guest user exploring SkillSwap platform and available skills."
                 }
             ]
             
@@ -103,6 +109,7 @@ def setup_database():
                 users.append(user)
             
             db.session.commit()
+            print("✅ Users created successfully")
             
             user_skills_data = [
                 {"user_id": 1, "skill_id": 1, "proficiency_level": "expert"},
@@ -120,6 +127,8 @@ def setup_database():
                 {"user_id": 6, "skill_id": 10, "proficiency_level": "expert"},
                 {"user_id": 6, "skill_id": 11, "proficiency_level": "advanced"},
                 {"user_id": 7, "skill_id": 15, "proficiency_level": "expert"},
+                {"user_id": 8, "skill_id": 1, "proficiency_level": "beginner"},
+                {"user_id": 8, "skill_id": 4, "proficiency_level": "beginner"},
             ]
             
             for us_data in user_skills_data:
@@ -127,6 +136,7 @@ def setup_database():
                 db.session.add(user_skill)
             
             db.session.commit()
+            print("✅ User skills created successfully")
             
             listings_data = [
                 {
@@ -206,6 +216,7 @@ def setup_database():
                 db.session.add(listing)
             
             db.session.commit()
+            print("✅ Listings created successfully")
             
             sessions_data = [
                 {
@@ -242,6 +253,7 @@ def setup_database():
                 db.session.add(session)
             
             db.session.commit()
+            print("✅ Sessions created successfully")
             
             reviews_data = [
                 {
@@ -272,6 +284,7 @@ def setup_database():
                 db.session.add(review)
             
             db.session.commit()
+            print("✅ Reviews created successfully")
             
             user_count = User.query.count()
             skill_count = Skill.query.count()
@@ -279,23 +292,25 @@ def setup_database():
             session_count = Session.query.count()
             review_count = Review.query.count()
             
-            print("DATABASE SETUP COMPLETED")
-            print(f"Users: {user_count}")
-            print(f"Skills: {skill_count}")
-            print(f"Listings: {listing_count}")
-            print(f"Sessions: {session_count}")
-            print(f"Reviews: {review_count}")
-            print("DEMO ACCOUNT FOR DENNIS:")
-            print("Email: dennis@example.com")
-            print("Password: password123")
-            print("OTHER DEMO ACCOUNT:")
-            print("Email: alice@example.com")
-            print("Password: password123")
+            print("\n🎉 DATABASE SETUP COMPLETED SUCCESSFULLY!")
+            print("=" * 50)
+            print(f"📊 Users: {user_count}")
+            print(f"📊 Skills: {skill_count}")
+            print(f"📊 Listings: {listing_count}")
+            print(f"📊 Sessions: {session_count}")
+            print(f"📊 Reviews: {review_count}")
+            print("=" * 50)
+            print("\n🔑 DEMO ACCOUNTS:")
+            print("👨‍🏫 Teacher: dennis@example.com / password123")
+            print("👩‍🎓 Student: alice@example.com / password123")
+            print("👤 Guest: guest@gmail.com / password123")
+            print("=" * 50)
+            print("\n🚀 Backend is ready! Run: python app.py")
             
             return True
             
         except Exception as e:
-            print(f"Error during database setup: {e}")
+            print(f"❌ Error during database setup: {e}")
             import traceback
             traceback.print_exc()
             db.session.rollback()

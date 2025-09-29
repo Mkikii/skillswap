@@ -1,15 +1,10 @@
-# models.py - Working version
 import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
 from flask_bcrypt import Bcrypt
-
-# Import db from database.py
 from database import db
 
-# Create bcrypt instance (we'll initialize it in the app)
-from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 
 class UserSkill(db.Model, SerializerMixin):
