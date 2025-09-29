@@ -6,7 +6,6 @@ Frontend	Deployed (Planned)	[Railway App URL]
 Backend	Deployed (Planned)	[Railway API URL]
 Demo Accounts	Available	See Demo Accounts section below
 
-Export to Sheets
  Project Overview
 This project was developed through a collaborative effort. Maureen K assumed the primary responsibility for authentication, backend integration, project consolidation, and deployment setup.
 
