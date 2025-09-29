@@ -2,11 +2,11 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "cd server && python app.py"
+# The start command is crucial. It first runs the server's seed script (optional), 
+# then navigates to the 'server' directory, and runs the main Python application.
+startCommand = "cd server && python seed.py && python app.py"
 
-[[services]]
-name = "web"
-run = "cd server && python app.py"
-
-[build.env]
-PYTHON_VERSION = "3.8"
+[environment]
+# Set the necessary Node and Python versions for the Nixpacks builder
+NODE_VERSION = "18"
+PYTHON_VERSION = "3.11"
