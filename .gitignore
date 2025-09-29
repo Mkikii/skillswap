@@ -18,4 +18,27 @@ client/node_modules/
 
 # Build directories
 dist/
-build/
+build/server/venv/
+
+# Virtual environments
+venv/
+server/venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Database files  
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables
+.env
+.env.local
+
