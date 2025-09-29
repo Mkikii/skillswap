@@ -1,0 +1,12 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "cd server && python app.py"
+
+[[services]]
+name = "web"
+run = "cd server && python app.py"
+
+[build.env]
+PYTHON_VERSION = "3.8"
