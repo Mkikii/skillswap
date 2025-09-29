@@ -7,3 +7,15 @@ instance/
 .vscode/
 venv/
 *.sqlite3
+
+# Virtual environments
+server/venv/
+client/node_modules/
+
+# Database files
+*.db
+*.sqlite
+
+# Build directories
+dist/
+build/
