@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import { authAPI, testAPI } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Test backend connection
     testAPI.home()
       .then(response => console.log('Backend connection:', response.data))
       .catch(error => console.error('Backend connection failed:', error));
