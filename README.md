@@ -1,13 +1,3 @@
-This revised README is optimized for easy copying and pasting, with all code blocks and lists clearly marked in Markdown.
-
-I've corrected the following minor issues for you:
-
-Code Block Clarity: Ensured all setup steps and troubleshooting commands are inside proper Markdown code blocks (```bash) for easy one-click copying.
-
-Port Consistency: Updated the frontend port to 3000 in the setup instructions to match your previous note (changed from 5173 to 3000 in the Quick Setup section).
-
-Contributors Table: Integrated the final contributor details into a proper Markdown table.
-
 SkillSwap - Skill Sharing Platform
 A full-stack web application for sharing and learning skills. It is built with a Flask backend and a React frontend.
 
@@ -22,12 +12,12 @@ This project was developed through a collaborative effort. Maureen K assumed the
 
  Contributors
 Name	Primary Role	Branch
-Maureen K	Project Lead, Authentication, Backend Integration,assisted in Frontend, Deployment	dev, main
+Maureen K	Project Lead, Authentication, Backend Integration, Deployment	dev, main
 Andrew	Frontend Development	feat/frontend-setup
 Odour	Initial Backend Development	feat/backend-api
 
 Export to Sheets
-🛠️ Tech Stack
+ Tech Stack
 Category	Technologies Used
 Backend	Python, Flask, SQLAlchemy, Flask-JWT-Extended, bcrypt
 Frontend	React, React Router, Axios, Formik, Yup, Tailwind CSS
@@ -35,7 +25,7 @@ Database	SQLite
 Deployment	Railway
 
 Export to Sheets
-📁 Project Structure
+  Project Structure
 Plaintext
 
 skillswap/
@@ -54,7 +44,7 @@ skillswap/
 │   ├── package.json
 │   └── vite.config.js
 └── README.md
- Quick Setup
+Quick Setup
 Prerequisites
 Python 3.8+ (pip required)
 
@@ -91,16 +81,16 @@ npm install
 
 # Start frontend development server
 npm run dev
-Frontend runs on: http://localhost:3000 (Check your package.json or configuration if this is different)
+Frontend runs on: http://localhost:5173
 
-🔑 Demo Accounts
+ Demo Accounts
 Role	Email	Password
 Teacher	dennis@example.com	password123
 Student	alice@example.com	password123
 Guest	guest@gmail.com	password123
 
 Export to Sheets
-🎯 API Endpoints
+ API Endpoints
 Method	Endpoint	Description	Authentication
 POST	/api/auth/login	User login (returns JWT)	Public
 GET	/api/auth/profile	Get user profile data	Required
@@ -111,32 +101,16 @@ Export to Sheets
 Features Implemented
 User Authentication with JWT.
 
-Skill Management: Browsing and creating listings.
-
-Session System: Booking and tracking of learning sessions.
+Listing & Session Management: Creation, browsing, booking, and tracking of skill sessions.
 
 Authorization: Protected routes enforced on the frontend and backend.
 
 Localization: KSH currency display.
 
-UX/UI: Responsive design using Tailwind CSS.
+UX/UI: Responsive design using Tailwind CSS and form validation with Formik/Yup.
 
-Branch Management and Deployment
-Merging Dev to Main
-To promote the current development version (dev) to the production branch (main):
-
-Bash
-
-# Switch to main branch
-git checkout main
-
-# Merge dev branch
-git merge dev
-
-# Push the updated main branch to the remote repository
-git push origin main
-Railway Deployment
-The application is configured for deployment as two separate services on Railway (Backend and Frontend). Ensure the frontend's API base URL is updated to point to the live backend service URL post-deployment.
+ Deployment
+The application is configured for separate deployment of the backend and frontend on Railway. The frontend's API_BASE_URL must be updated to point to the live backend service URL post-deployment.
 
  Troubleshooting
 Common Fixes (Complete Reset)
@@ -153,13 +127,6 @@ cd ../client
 rm -rf node_modules
 npm install
 npm run dev
-Specific Backend Issues
-Problem	Fix
-Port 5555 already in use	Change port in server/app.py.
-Database errors	Run cd server && rm -f skillswap.db && python seed.py.
-Missing dependencies	Run pip install -r requirements.txt.
-
-Export to Sheets
 Database Migrations
 Use Flask-Migrate when making changes to server/models.py:
 
@@ -168,20 +135,5 @@ Bash
 cd server
 flask db migrate -m "Description of changes"
 flask db upgrade
- License
+📜 License
 This project was developed for educational purposes as part of the Phase 4 Flatiron School curriculum.
-
-
-
-
-
-
-
-
-
-
-
-
-Tools
-
-Gemini 
