@@ -1,7 +1,6 @@
 SkillSwap - Skill Sharing Platform
 A full-stack web application for sharing and learning skills. It is built with a Flask backend and a React frontend.
 
-Component	Status	URL
 Frontend	Deployed (Planned)	[Railway App URL]
 Backend	Deployed (Planned)	[Railway API URL]
 Demo Accounts	Available	See Demo Accounts section below
@@ -10,12 +9,11 @@ Demo Accounts	Available	See Demo Accounts section below
 This project was developed through a collaborative effort. Maureen K assumed the primary responsibility for authentication, backend integration, project consolidation, and deployment setup.
 
  Contributors
-Name	Primary Role	Branch
+
 Maureen K	Project Lead, Authentication, Backend Integration, Deployment	dev, main
 Andrew	Frontend Development	feat/frontend-setup
 Odour	Initial Backend Development	feat/backend-api
 
-Export to Sheets
  Tech Stack
 Category	Technologies Used
 Backend	Python, Flask, SQLAlchemy, Flask-JWT-Extended, bcrypt
@@ -23,7 +21,6 @@ Frontend	React, React Router, Axios, Formik, Yup, Tailwind CSS
 Database	SQLite
 Deployment	Railway
 
-Export to Sheets
   Project Structure
 Plaintext
 
@@ -88,7 +85,6 @@ Teacher	dennis@example.com	password123
 Student	alice@example.com	password123
 Guest	guest@gmail.com	password123
 
-Export to Sheets
  API Endpoints
 Method	Endpoint	Description	Authentication
 POST	/api/auth/login	User login (returns JWT)	Public
@@ -96,7 +92,6 @@ GET	/api/auth/profile	Get user profile data	Required
 GET/POST	/api/listings	Retrieve all listings / Create new listing	Public / Required
 GET/POST	/api/sessions	Retrieve/Create user sessions	Required
 
-Export to Sheets
 Features Implemented
 User Authentication with JWT.
 
@@ -134,5 +129,6 @@ Bash
 cd server
 flask db migrate -m "Description of changes"
 flask db upgrade
-📜 License
+
+ License
 This project was developed for educational purposes as part of the Phase 4 Flatiron School curriculum.
