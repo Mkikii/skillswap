@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 
 import sys
 import os
@@ -6,12 +6,11 @@ from datetime import datetime, timedelta
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from app import create_app
+from app import app
 from database import db
 from models import User, Skill, Listing, UserSkill, Session, Review
 
 def setup_database():
-    app = create_app()
     
     with app.app_context():
         try:
