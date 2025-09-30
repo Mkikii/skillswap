@@ -1,17 +1,13 @@
 [build]
-builder = "nixpacks"
+builder = "dockerfile"
+dockerfilePath = "./server/Dockerfile"
 
 [[services]]
 name = "backend"
-rootDir = "./server"
-commands = [
-  "pip install -r requirements.txt"
-]
+sourcePath = "./server"
 
 [[services]]
-name = "frontend" 
+name = "frontend"
 rootDir = "./client"
-commands = [
-  "npm install",
-  "npm run build"
-]
+startCommand = "npm run start"
+buildCommand = "npm install && npm run build"
