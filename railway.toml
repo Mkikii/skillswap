@@ -1,9 +1,0 @@
-[build]
-builder = "nixpacks"
-
-[deploy]
-startCommand = "cd server && python app.py"
-
-[[services]]
-name = "web"
-run = "cd server && python app.py"
