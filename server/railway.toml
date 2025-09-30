@@ -1,26 +1,17 @@
 [build]
 builder = "nixpacks"
 
-[deployments]
-
-[[deployments]]
+[[services]]
 name = "backend"
 rootDir = "./server"
 commands = [
-  "pip install -r requirements.txt",
-  "python -c 'from app import app, db; app.app_context().push(); db.create_all()'"
+  "pip install -r requirements.txt"
 ]
-startCommand = "gunicorn app:app"
 
-[[deployments]]
-name = "frontend"
+[[services]]
+name = "frontend" 
 rootDir = "./client"
 commands = [
   "npm install",
   "npm run build"
 ]
-startCommand = "npm run start"
-
-[[deployments]]
-name = "database"
-plugin = "postgresql"
