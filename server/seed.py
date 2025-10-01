@@ -1,5 +1,3 @@
-
-
 import sys
 import os
 from datetime import datetime, timedelta
@@ -47,50 +45,50 @@ def setup_database():
             
             users_data = [
                 {
-                    "username": "dennis_teacher", 
-                    "email": "dennis@example.com", 
+                    "username": "molly_tech", 
+                    "email": "molly@example.com", 
                     "password": "password123",
                     "bio": "Software Engineering lecturer and full-stack developer with expertise in modern web technologies."
                 },
                 {
-                    "username": "alice_dev", 
-                    "email": "alice@example.com", 
+                    "username": "kikii_dev", 
+                    "email": "kikii@example.com", 
                     "password": "password123",
                     "bio": "Full-stack developer passionate about teaching Python and web development."
                 },
                 {
-                    "username": "bob_design", 
-                    "email": "bob@example.com", 
+                    "username": "wangari_design", 
+                    "email": "wangari@example.com", 
                     "password": "password123",
                     "bio": "Graphic designer with 5 years of experience in UI/UX design."
                 },
                 {
-                    "username": "carol_chef", 
-                    "email": "carol@example.com", 
+                    "username": "najma_chef", 
+                    "email": "najma@example.com", 
                     "password": "password123",
                     "bio": "Professional chef specializing in Italian and French cuisine."
                 },
                 {
-                    "username": "dave_photo", 
-                    "email": "dave@example.com", 
+                    "username": "carl_photo", 
+                    "email": "carl@example.com", 
                     "password": "password123",
                     "bio": "Award-winning photographer with expertise in portrait and landscape photography."
                 },
                 {
-                    "username": "eve_yoga", 
-                    "email": "eve@example.com", 
+                    "username": "vanessa_yoga", 
+                    "email": "vanessa@example.com", 
                     "password": "password123",
                     "bio": "Certified yoga instructor focusing on mindfulness and meditation."
                 },
                 {
-                    "username": "frank_finance", 
-                    "email": "frank@example.com", 
+                    "username": "maureen_finance", 
+                    "email": "maureen@example.com", 
                     "password": "password123",
                     "bio": "Financial advisor helping people with investment strategies and retirement planning."
                 },
                 {
-                    "username": "guest_user", 
-                    "email": "guest@gmail.com", 
+                    "username": "malkiki_guest", 
+                    "email": "malkiki@example.com", 
                     "password": "password123",
                     "bio": "Guest user exploring SkillSwap platform and available skills."
                 }
@@ -260,14 +258,14 @@ def setup_database():
                     "reviewer_id": 2,
                     "reviewee_id": 1,
                     "rating": 5,
-                    "comment": "Dennis is an exceptional teacher! His explanations are clear and he provides great real-world examples."
+                    "comment": "Molly is an exceptional teacher! Her explanations are clear and she provides great real-world examples."
                 },
                 {
                     "session_id": 2, 
                     "reviewer_id": 3,
                     "reviewee_id": 1,
                     "rating": 5,
-                    "comment": "Excellent JavaScript course. Dennis's teaching style makes complex concepts easy to understand."
+                    "comment": "Excellent JavaScript course. Molly's teaching style makes complex concepts easy to understand."
                 },
                 {
                     "session_id": 3,
@@ -300,9 +298,9 @@ def setup_database():
             print(f"📊 Reviews: {review_count}")
             print("=" * 50)
             print("\n🔑 DEMO ACCOUNTS:")
-            print("👨‍🏫 Teacher: dennis@example.com / password123")
-            print("👩‍🎓 Student: alice@example.com / password123")
-            print("👤 Guest: guest@gmail.com / password123")
+            print("👨‍🏫 Teacher: molly@example.com / password123")
+            print("👩‍🎓 Student: kikii@example.com / password123")
+            print("👤 Guest: malkiki@example.com / password123")
             print("=" * 50)
             print("\n🚀 Backend is ready! Run: python app.py")
             

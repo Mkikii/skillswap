@@ -15,6 +15,7 @@ def get_all_listings():
         result = []
         for listing in listings:
             try:
+                # Create basic listing data without recursion
                 listing_data = {
                     'id': listing.id,
                     'title': listing.title,
@@ -27,6 +28,7 @@ def get_all_listings():
                     'teacher_id': listing.user_id
                 }
                 
+                # Calculate teacher rating
                 reviews = Review.query.filter_by(reviewee_id=listing.user_id).all()
                 avg_rating = sum(r.rating for r in reviews) / len(reviews) if reviews else 0
                 listing_data['teacher_rating'] = round(avg_rating, 1)
@@ -147,69 +149,3 @@ def get_my_listings():
     except Exception as e:
         print(f"Get my listings error: {e}")
         return jsonify({'error': 'Failed to fetch your listings'}), 500
-
-@listings_bp.route('/<int:listing_id>', methods=['PUT'])
-@jwt_required()
-def update_listing(listing_id):
-    try:
-        current_user_id = get_jwt_identity()
-        listing = Listing.query.get(listing_id)
-        
-        if not listing:
-            return jsonify({'error': 'Listing not found'}), 404
-        
-        if listing.user_id != current_user_id:
-            return jsonify({'error': 'Unauthorized'}), 403
-        
-        data = request.get_json()
-        if 'title' in data:
-            listing.title = data['title']
-        if 'description' in data:
-            listing.description = data['description']
-        if 'price_per_hour' in data:
-            if data['price_per_hour'] <= 0:
-                return jsonify({'error': 'Price must be greater than 0'}), 400
-            listing.price_per_hour = data['price_per_hour']
-        if 'skill_id' in data:
-            skill = Skill.query.get(data['skill_id'])
-            if not skill:
-                return jsonify({'error': 'Skill not found'}), 404
-            listing.skill_id = data['skill_id']
-        
-        db.session.commit()
-        
-        return jsonify({
-            'message': 'Listing updated successfully',
-            'listing': {
-                'id': listing.id,
-                'title': listing.title,
-                'description': listing.description,
-                'price_per_hour': listing.price_per_hour
-            }
-        }), 200
-    except Exception as e:
-        db.session.rollback()
-        print(f"Update listing error: {e}")
-        return jsonify({'error': 'Failed to update listing'}), 500
-
-@listings_bp.route('/<int:listing_id>', methods=['DELETE'])
-@jwt_required()
-def delete_listing(listing_id):
-    try:
-        current_user_id = get_jwt_identity()
-        listing = Listing.query.get(listing_id)
-        
-        if not listing:
-            return jsonify({'error': 'Listing not found'}), 404
-        
-        if listing.user_id != current_user_id:
-            return jsonify({'error': 'Unauthorized'}), 403
-        
-        db.session.delete(listing)
-        db.session.commit()
-        
-        return jsonify({'message': 'Listing deleted successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        print(f"Delete listing error: {e}")
-        return jsonify({'error': 'Failed to delete listing'}), 500

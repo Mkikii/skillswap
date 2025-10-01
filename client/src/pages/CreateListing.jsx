@@ -8,7 +8,7 @@ import * as yup from 'yup';
 const validationSchema = yup.object({
   title: yup.string().min(5, 'Title must be at least 5 characters').required('Title is required'),
   description: yup.string().min(10, 'Description must be at least 10 characters').required('Description is required'),
-  price_per_hour: yup.number().min(1, 'Price must be at least 1').required('Price is required'),
+  price_per_hour: yup.number().min(100, 'Price must be at least KSH 100').max(999, 'Price must be less than KSH 1000').required('Price is required'),
   skill_id: yup.number().required('Skill is required')
 });
 
@@ -29,10 +29,12 @@ const CreateListing = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        await listingsAPI.create(values);
+        const response = await listingsAPI.create(values);
+        console.log('Listing created:', response.data);
         navigate('/listings');
       } catch (error) {
-        console.error('Failed to create listing:', error);
+        console.error('Failed to create listing:', error.response?.data || error.message);
+        alert(error.response?.data?.error || 'Failed to create listing');
       }
       setLoading(false);
     }
@@ -120,8 +122,9 @@ const CreateListing = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                min="1"
-                step="0.5"
+                min="100"
+                max="999"
+                step="50"
               />
               {formik.touched.price_per_hour && formik.errors.price_per_hour && (
                 <div className="text-red-500 text-sm mt-1">{formik.errors.price_per_hour}</div>
