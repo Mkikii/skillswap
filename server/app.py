@@ -4,9 +4,13 @@ from flask_jwt_extended import JWTManager
 from config import Config
 from database import db
 from models import User
+from datetime import timedelta
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# Extend JWT expiration to 7 days
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
 
 db.init_app(app)
 CORS(app)
