@@ -8,7 +8,7 @@ A full-stack web application that connects knowledge seekers with skilled expert
 
 | Component | URL |
 | :--- | :--- |
-| **Frontend Application** | https://mkikiiskillswap.netlify.app/ |
+| **Frontend Application** | https://https://mkskillswap.netlify.app/// |
 | **Backend API** | https://skillswap-production-0e78.up.railway.app/ |
 
 **Deployment Note:** The application is deployed from the `dev` branch, which contains the most stable and tested version of the codebase.
