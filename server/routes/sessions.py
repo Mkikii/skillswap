@@ -44,8 +44,40 @@ def get_user_sessions():
                 'id': session.id,
                 'student': {'id': session.student.id, 'username': session.student.username},
                 'teacher': {'id': session.teacher.id, 'username': session.teacher.username},
-                'listing_title': session.listing.title,
-                'scheduled_date': session.scheduled_date.isoformat(),
+                'listing': {
+                    'id': session.listing.id,
+                    'title': session.listing.title,
+                    'skill': {'name': session.listing.skill.name}
+                },
+                'scheduled_time': session.scheduled_date.isoformat(),
+                'duration_hours': session.duration_hours,
+                'status': session.status,
+                'notes': session.notes
+            })
+        return jsonify({'sessions': result}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@sessions_bp.route('/my-sessions', methods=['GET'])
+@jwt_required()
+def get_my_sessions():
+    try:
+        user_id = get_jwt_identity()
+        sessions = Session.query.filter(
+            (Session.student_id == user_id) | (Session.teacher_id == user_id)
+        ).all()
+        result = []
+        for session in sessions:
+            result.append({
+                'id': session.id,
+                'student': {'id': session.student.id, 'username': session.student.username},
+                'teacher': {'id': session.teacher.id, 'username': session.teacher.username},
+                'listing': {
+                    'id': session.listing.id,
+                    'title': session.listing.title,
+                    'skill': {'name': session.listing.skill.name}
+                },
+                'scheduled_time': session.scheduled_date.isoformat(),
                 'duration_hours': session.duration_hours,
                 'status': session.status,
                 'notes': session.notes

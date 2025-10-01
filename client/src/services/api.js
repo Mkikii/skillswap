@@ -46,6 +46,7 @@ export const skillsAPI = {
 
 export const sessionsAPI = {
   getAll: () => api.get('/api/sessions'),
+  getUserSessions: () => api.get('/api/sessions/my-sessions'),
   create: (sessionData) => api.post('/api/sessions', sessionData),
 };
 

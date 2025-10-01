@@ -1,8 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
@@ -36,7 +36,7 @@ const HomePage = () => {
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           <div className="bg-white p-8 rounded-xl shadow-lg text-center">
-            <div className="text-4xl mb-4">Community</div>
+            <div className="text-4xl mb-4">👥</div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Expert Community</h3>
             <ul className="text-gray-600 space-y-1">
               <li>Connect with verified experts</li>
@@ -45,7 +45,7 @@ const HomePage = () => {
           </div>
           
           <div className="bg-white p-8 rounded-xl shadow-lg text-center">
-            <div className="text-4xl mb-4">Pricing</div>
+            <div className="text-4xl mb-4">💰</div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Fair Pricing</h3>
             <ul className="text-gray-600 space-y-1">
               <li>Teachers set their rates</li>
@@ -54,20 +54,13 @@ const HomePage = () => {
           </div>
           
           <div className="bg-white p-8 rounded-xl shadow-lg text-center">
-            <div className="text-4xl mb-4">Quality</div>
+            <div className="text-4xl mb-4">⭐</div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Quality</h3>
             <ul className="text-gray-600 space-y-1">
               <li>Rate your experiences</li>
               <li>4.9 Rating</li>
             </ul>
           </div>
-        </div>
-
-        <div className="bg-white p-8 rounded-xl shadow-lg text-center mb-16">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">STATS</h3>
-          <p className="text-lg text-gray-600">
-            50+ Teachers • 100+ Skills • 500+ Students
-          </p>
         </div>
 
         <div className="text-center">
@@ -80,7 +73,7 @@ const HomePage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
