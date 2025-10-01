@@ -5,3 +5,8 @@
 
 [build.environment]
   VITE_API_URL = "https://skillswap-production-0e78.up.railway.app"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
