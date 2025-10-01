@@ -1,188 +1,263 @@
-Markdown
+SkillSwap - Skill Exchange Platform
+A full-stack web application that connects knowledge seekers with skilled experts for personalized learning experiences. SkillSwap enables users to share expertise, book learning sessions, and build a community around skill development.
 
-# SkillSwap: Knowledge Exchange Platform
+Live Deployment
+Frontend Application: https://mkikiiskillswap.netlify.app/
 
-**SkillSwap** is a full-stack web application that connects people who want to learn new skills with experts willing to teach them. Users can browse skill listings, book sessions, and exchange knowledge in a community-driven platform.
+Backend API: https://skillswap-production-0e78.up.railway.app/
 
----
+Deployment Note: The application is deployed from the dev branch, which contains the most stable and tested version of the codebase.
 
-## Live Deployment
+Key Features
+Secure Authentication - JWT-based login/registration system with password encryption
 
-| Component | URL |
-| :--- | :--- |
-| **Frontend** | [https://mkikiiskillswap.netlify.app/](https://mkikiiskillswap.netlify.app/) |
-| **Backend API** | [https://skillswap-production-0e78.up.railway.app/](https://skillswap-production-0e78.up.railway.app/) |
+Skill Marketplace - Browse and create detailed skill listings with pricing
 
----
+Expert Profiles - View teacher profiles with ratings, reviews, and skill expertise
 
-## Features
+Session Management - Book and manage learning sessions with scheduling
 
-* **User Authentication**: Secure login and registration with **JWT tokens**.
-* **Skill Listings**: Browse and create listings for skills you can teach.
-* **Session Booking**: Schedule and manage learning sessions with teachers.
-* **Reviews & Ratings**: Leave feedback for completed sessions.
-* **User Profiles**: View teacher profiles and their expertise.
-* **Skill Management**: Add skills to your profile with proficiency levels.
+Review System - Rate and review completed learning sessions
 
----
+Skill Management - Add skills to your profile with proficiency levels
 
-## Tech Stack
+Advanced Search - Find experts by skills, categories, or keywords
 
-### Backend
-
-* **Flask**: Python web framework
-* **SQLAlchemy**: ORM for database management
-* **Flask-JWT-Extended**: JWT authentication
-* **Flask-CORS**: Cross-origin resource sharing
-* **PostgreSQL**: Database (with `psycopg2` driver)
-* **bcrypt**: Password hashing
-
-### Frontend
-
-* **React**: JavaScript library for building user interfaces
-* **React Router**: Client-side routing
-* **Axios**: HTTP client for API requests
-* **Tailwind CSS**: Utility-first CSS framework
-* **Formik**: Form management
-* **Yup**: Form validation
-* **Vite**: Build tool and development server
-
----
-
-## Team Contribution
-
-| Team Member | Role | Final Contribution Scope |
-| :--- | :--- | :--- |
-| **Maureen (Me)** | Auth & Project Structure | Lead Developer (Authentication, Project Structure, Full Backend development, Merging/Gitflow, and Deployment setup) |
-| **Andrew** | Frontend | Core Frontend setup and initial features |
-| **Odour** | Backend | Initial contribution only |
-
----
-
-## Installation
-
-### Prerequisites
-
-* **Python 3.8+**
-* **Node.js 16+**
-* **PostgreSQL** (or SQLite for development)
-
-### Clone the Repository
-
-```bash
-git clone <repository-url>
-cd skillswap
-git checkout dev
-Backend Setup
-Bash
-
-cd server
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-Frontend Setup
-Bash
-
-cd ../client
-npm install
-Configuration
-Environment Variables
-Create a .env file in the server directory:
-
-Plaintext
-
-DATABASE_URL=postgresql://username:password@localhost/skillswap
-JWT_SECRET_KEY=your-secret-key
-Database
-Run the seed file to populate the database (optional):
-
-Bash
-
-cd server
-python seed.py
-Usage
-Start the Backend
-Bash
-
-cd server
-python app.py
-The API will be available at http://localhost:5555
-
-Start the Frontend
-Bash
-
-cd client
-npm run dev
-The app will be available at http://localhost:5173
-
-API Endpoints
-Resource	Method	Endpoint	Description
-Authentication	POST	/api/auth/login	User login
-POST	/api/auth/register	User registration
-Skills	GET	/api/skills	Get all skills
-POST	/api/skills	Create a new skill
-Listings	GET	/api/listings	Get all skill listings
-POST	/api/listings	Create a new listing
-GET	/api/listings/<id>	Get listing details
-PATCH	/api/listings/<id>	Update listing
-DELETE	/api/listings/<id>	Delete listing
-Sessions	GET	/api/sessions	Get user sessions
-POST	/api/sessions	Book a new session
-Reviews	GET	/api/reviews	Get reviews
-POST	/api/reviews	Create a review
-Users	GET	/api/users/<id>	Get user profile
-PUT	/api/users/<id>	Update user profile
-Frontend Routes
-/: Home page
-
-/auth: Authentication (login/register)
-
-/listings: Browse skill listings
-
-/profile/:userId: User profile page
-
-Database Models
-User: User authentication and profiles
-
-Skill: Available skills in the system
-
-Listing: Skill offerings by users
-
-Session: Booked learning sessions
-
-Review: User feedback and ratings
-
-Testing
-The project includes various test files: server/test_*.py
-
-Run backend tests with:
-
-Bash
-
-python -m pytest server/
-Deployment
+Tech Stack
 Backend
-Deployed on Railway with PostgreSQL.
+Flask - Python web framework with RESTful API design
 
-Dockerfile provided for containerized deployment.
+SQLAlchemy - ORM with model relationships and serialization
 
-Uses Gunicorn for production.
+PostgreSQL - Production database with SQLite for development
+
+JWT Authentication - Secure token-based authentication
+
+Flask-CORS - Cross-origin resource sharing
+
+bcrypt - Password hashing and security
+
+Gunicorn - Production WSGI server
 
 Frontend
-Deployed on Netlify.
+React 18 - Modern React with hooks and functional components
 
-Build for production: npm run build
+React Router - Client-side routing with navigation
 
-Contributing
-Fork the repository
+Formik & Yup - Form management with comprehensive validation
 
-Create a feature branch
+Tailwind CSS - Utility-first CSS framework
 
-Make your changes
+Axios - HTTP client for API communication
 
-Add tests if applicable
+Vite - Fast build tool and development server
 
-Submit a pull request
+Prerequisites
+Before running the application, ensure you have the following installed:
 
+Python 3.8+ - Backend runtime environment
+
+Node.js 16+ - Frontend runtime environment
+
+npm - Node package manager (comes with Node.js)
+
+Git - Version control system
+
+PostgreSQL (optional) - For production database (SQLite used in development)
+
+Quick Start Guide
+Follow these steps to get the application running locally:
+
+1. Clone and Setup Repository
+bash
+# Clone the repository
+git clone <repository-url>
+cd skillswap
+2. Backend Setup & Installation
+bash
+# Navigate to server directory
+cd server
+
+# Create and activate virtual environment
+python -m venv venv
+
+# On Windows:
+venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Initialize database with sample data
+python seed.py
+Expected Output:
+
+text
+Database tables created successfully
+Skills created successfully  
+Users created successfully
+User skills created successfully
+Listings created successfully
+Sessions created successfully
+Reviews created successfully
+
+DATABASE SETUP COMPLETED SUCCESSFULLY!
+Users: 10 | Skills: 17 | Listings: 9 | Sessions: 3 | Reviews: 3
+3. Start Backend Server
+bash
+# Start Flask development server (keep terminal open)
+python app.py
+Verification: Visit http://localhost:5555/api/health - you should see {"status": "API healthy"}
+
+4. Frontend Setup & Installation
+Open a new terminal window and run:
+
+bash
+# Navigate to client directory  
+cd client
+
+# Install npm dependencies
+npm install
+
+# Start development server
+npm run dev
+Verification: Visit http://localhost:5173 - you should see the SkillSwap homepage
+
+Testing the Application
+Demo Accounts for Testing
+Role	Email	Password	Capabilities
+Teacher	seoyeji@example.com	password123	Create listings, receive sessions
+Student	maureen@example.com	password123	Browse listings, book sessions
+Guest	malkiki@example.com	password123	Basic browsing
+Test Backend API Endpoints
+bash
+cd server
+
+# Comprehensive endpoint testing
+python test_all_endpoints.py
+
+# Test listing creation flow  
+python test_create_listing.py
+
+# Verify demo accounts work
+python test_demo_accounts.py
+Test Frontend Features
+Authentication Flow
+
+Register new account
+
+Login with demo credentials
+
+Access protected routes
+
+Listing Management
+
+Browse all skill listings
+
+View listing details
+
+Create new listing (requires login)
+
+User Experience
+
+Navigate between pages using navbar
+
+View user profiles with ratings
+
+Test form validation on all inputs
+
+Database Schema
+The application uses a robust relational database design:
+
+Users - User accounts and profiles
+
+Skills - Available skills and categories
+
+Listings - Skill offerings by teachers
+
+UserSkills - Many-to-many relationship with proficiency levels
+
+Sessions - Booked learning sessions
+
+Reviews - Ratings and feedback system
+
+Troubleshooting
+Common Issues
+Backend Not Starting:
+
+Ensure port 5555 is available
+
+Verify virtual environment is activated
+
+Check database was seeded properly
+
+Frontend Connection Issues:
+
+Confirm backend is running on port 5555
+
+Clear browser cache if seeing cached versions
+
+Check browser console for CORS errors
+
+Database Issues:
+
+Run python seed.py to reset database
+
+Verify SQLite file permissions
+
+Check model imports in models.py
+
+Environment Configuration
+Backend Environment:
+
+bash
+# Create .env file in server/ directory
+DATABASE_URL=sqlite:///skillswap.db
+JWT_SECRET_KEY=your-secret-key-here
+Frontend Environment:
+
+bash
+# .env.production in client/ directory  
+VITE_API_URL=https://skillswap-production-0e78.up.railway.app
+Development Team
+Team Member	Role	Contributions
+Maureen	Lead Developer	Full-stack development (Authentication, Backend API, Database Design, Frontend Components, Debugging, Deployment, Git Workflow)
+Andrew	Frontend Developer	Core Frontend setup and initial React components
+Odour	Backend Developer	Initial backend architecture and models
 License
-This project is licensed under the MIT License.
+MIT License
+
+Copyright (c) 2024 Maureen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Support
+For technical support or questions about the application:
+
+Check terminal output for specific error messages
+
+Verify all prerequisite software is installed
+
+Ensure each setup step completes successfully
+
+The application includes comprehensive error handling and user feedback
+
+SkillSwap - Bridging knowledge gaps through community-driven learning experiences.
+
