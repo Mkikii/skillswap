@@ -16,10 +16,12 @@ def get_all_reviews():
                 'comment': review.comment,
                 'reviewer': {'username': review.reviewer.username},
                 'reviewee': {'username': review.reviewee.username},
-                'session_id': review.session_id
+                'session_id': review.session_id,
+                'created_at': review.created_at.isoformat()
             } for review in reviews]
         }), 200
     except Exception as e:
+        print(f"Get reviews error: {e}")
         return jsonify({'error': 'Failed to fetch reviews'}), 500
 
 @reviews_bp.route('', methods=['POST'])
@@ -28,6 +30,8 @@ def create_review():
     try:
         current_user_id = get_jwt_identity()
         data = request.get_json()
+        
+        print(f"Creating review by user {current_user_id}")
         
         required_fields = ['rating', 'reviewee_id', 'session_id']
         for field in required_fields:
@@ -40,6 +44,15 @@ def create_review():
         session = Session.query.get(data['session_id'])
         if not session:
             return jsonify({'error': 'Session not found'}), 404
+        
+        # Check if user already reviewed this session
+        existing_review = Review.query.filter_by(
+            session_id=data['session_id'],
+            reviewer_id=current_user_id
+        ).first()
+        
+        if existing_review:
+            return jsonify({'error': 'You have already reviewed this session'}), 400
         
         review = Review(
             rating=data['rating'],
@@ -63,6 +76,7 @@ def create_review():
         
     except Exception as e:
         db.session.rollback()
+        print(f"Create review error: {e}")
         return jsonify({'error': 'Failed to create review'}), 500
 
 @reviews_bp.route('/session/<int:session_id>', methods=['GET'])
@@ -79,4 +93,5 @@ def get_session_reviews(session_id):
             } for review in reviews]
         }), 200
     except Exception as e:
+        print(f"Get session reviews error: {e}")
         return jsonify({'error': 'Failed to fetch reviews'}), 500

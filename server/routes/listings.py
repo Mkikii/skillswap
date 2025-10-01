@@ -15,7 +15,6 @@ def get_all_listings():
         result = []
         for listing in listings:
             try:
-                # Create basic listing data without recursion
                 listing_data = {
                     'id': listing.id,
                     'title': listing.title,
@@ -28,7 +27,6 @@ def get_all_listings():
                     'teacher_id': listing.user_id
                 }
                 
-                # Calculate teacher rating
                 reviews = Review.query.filter_by(reviewee_id=listing.user_id).all()
                 avg_rating = sum(r.rating for r in reviews) / len(reviews) if reviews else 0
                 listing_data['teacher_rating'] = round(avg_rating, 1)
@@ -90,28 +88,60 @@ def create_listing():
         current_user_id = get_jwt_identity()
         data = request.get_json()
         
+        print(f"🎯 CREATE LISTING REQUEST from user {current_user_id}")
+        print(f"📦 Request data: {data}")
+        
+        # Check if user exists and can create listings
+        user = User.query.get(current_user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        print(f"👤 User found: {user.username}")
+        
         required_fields = ['title', 'description', 'price_per_hour', 'skill_id']
         for field in required_fields:
-            if not data.get(field):
-                return jsonify({'error': f'{field} is required'}), 400
+            if field not in data or not data[field]:
+                print(f"❌ Missing field: {field}")
+                return jsonify({'error': f'{field} is required'}), 422
         
-        if data['price_per_hour'] <= 0:
-            return jsonify({'error': 'Price must be greater than 0'}), 400
+        # Convert price to float and validate
+        try:
+            price = float(data['price_per_hour'])
+            print(f"💰 Price converted: {price}")
+        except (ValueError, TypeError):
+            print(f"❌ Invalid price: {data['price_per_hour']}")
+            return jsonify({'error': 'Price must be a valid number'}), 422
+        
+        if price <= 0:
+            print(f"❌ Price too low: {price}")
+            return jsonify({'error': 'Price must be greater than 0'}), 422
+        
+        if price > 999:
+            print(f"❌ Price too high: {price}")
+            return jsonify({'error': 'Price per hour must be 3 digits or less'}), 422
         
         skill = Skill.query.get(data['skill_id'])
         if not skill:
+            print(f"❌ Skill not found: {data['skill_id']}")
             return jsonify({'error': 'Skill not found'}), 404
         
+        print(f"🎯 Skill found: {skill.name}")
+        
+        # Create the listing
         listing = Listing(
             title=data['title'],
             description=data['description'],
-            price_per_hour=data['price_per_hour'],
+            price_per_hour=price,
             user_id=current_user_id,
             skill_id=data['skill_id']
         )
         
+        print(f"📝 Creating listing: {listing.title}")
+        
         db.session.add(listing)
         db.session.commit()
+        
+        print("✅ Listing created successfully!")
         
         return jsonify({
             'message': 'Listing created successfully',
@@ -122,10 +152,13 @@ def create_listing():
                 'price_per_hour': listing.price_per_hour
             }
         }), 201
+        
     except Exception as e:
         db.session.rollback()
-        print(f"Create listing error: {e}")
-        return jsonify({'error': 'Failed to create listing'}), 500
+        print(f"💥 CREATE LISTING ERROR: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Failed to create listing: {str(e)}'}), 500
 
 @listings_bp.route('/my-listings', methods=['GET'])
 @jwt_required()
@@ -149,3 +182,25 @@ def get_my_listings():
     except Exception as e:
         print(f"Get my listings error: {e}")
         return jsonify({'error': 'Failed to fetch your listings'}), 500
+
+@listings_bp.route('/<int:listing_id>', methods=['DELETE'])
+@jwt_required()
+def delete_listing(listing_id):
+    try:
+        current_user_id = get_jwt_identity()
+        listing = Listing.query.get(listing_id)
+        
+        if not listing:
+            return jsonify({'error': 'Listing not found'}), 404
+        
+        if listing.user_id != current_user_id:
+            return jsonify({'error': 'Unauthorized to delete this listing'}), 403
+        
+        db.session.delete(listing)
+        db.session.commit()
+        
+        return jsonify({'message': 'Listing deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Delete listing error: {e}")
+        return jsonify({'error': 'Failed to delete listing'}), 500

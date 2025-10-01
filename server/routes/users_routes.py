@@ -15,22 +15,39 @@ def get_user_profile(user_id):
         user_skills = []
         for us in user.user_skills:
             skill_data = {
-                'skill': us.skill.to_dict(),
+                'id': us.skill.id,
+                'name': us.skill.name,
+                'category': us.skill.category,
                 'proficiency_level': us.proficiency_level,
                 'years_experience': us.years_experience
             }
             user_skills.append(skill_data)
         
-        listings = [listing.to_dict() for listing in user.listings]
+        listings_data = []
+        for listing in user.listings:
+            listing_data = {
+                'id': listing.id,
+                'title': listing.title,
+                'description': listing.description,
+                'price_per_hour': listing.price_per_hour,
+                'skill_name': listing.skill.name
+            }
+            listings_data.append(listing_data)
         
         reviews = Review.query.filter_by(reviewee_id=user_id).all()
         avg_rating = sum(r.rating for r in reviews) / len(reviews) if reviews else 0
         
-        user_data = user.to_dict()
-        user_data['skills'] = user_skills
-        user_data['listings'] = listings
-        user_data['average_rating'] = round(avg_rating, 1)
-        user_data['total_reviews'] = len(reviews)
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'bio': user.bio,
+            'created_at': user.created_at.isoformat(),
+            'skills': user_skills,
+            'listings': listings_data,
+            'average_rating': round(avg_rating, 1),
+            'total_reviews': len(reviews)
+        }
         
         return jsonify({'user': user_data}), 200
     except Exception as e:
@@ -119,7 +136,13 @@ def search_users():
         
         result = []
         for user in users:
-            user_data = user.to_dict()
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'bio': user.bio,
+                'created_at': user.created_at.isoformat()
+            }
             reviews = Review.query.filter_by(reviewee_id=user.id).all()
             user_data['average_rating'] = round(sum(r.rating for r in reviews) / len(reviews), 1) if reviews else 0
             user_data['total_reviews'] = len(reviews)
@@ -128,3 +151,47 @@ def search_users():
         return jsonify({'users': result}), 200
     except Exception as e:
         return jsonify({'error': 'Failed to search users'}), 500
+
+@users_bp.route('/experts', methods=['GET'])
+def get_experts():
+    try:
+        experts = User.query.join(UserSkill).filter(
+            UserSkill.proficiency_level.in_(['expert', 'advanced'])
+        ).distinct().all()
+        
+        result = []
+        for expert in experts:
+            expert_data = {
+                'id': expert.id,
+                'username': expert.username,
+                'email': expert.email,
+                'bio': expert.bio,
+                'created_at': expert.created_at.isoformat()
+            }
+            
+            user_skills = []
+            for us in expert.user_skills:
+                if us.proficiency_level in ['expert', 'advanced']:
+                    skill_data = {
+                        'id': us.skill.id,
+                        'name': us.skill.name,
+                        'category': us.skill.category,
+                        'proficiency_level': us.proficiency_level,
+                        'years_experience': us.years_experience
+                    }
+                    user_skills.append(skill_data)
+            
+            listings = Listing.query.filter_by(user_id=expert.id).all()
+            reviews = Review.query.filter_by(reviewee_id=expert.id).all()
+            
+            expert_data['skills'] = user_skills
+            expert_data['listings_count'] = len(listings)
+            expert_data['average_rating'] = round(sum(r.rating for r in reviews) / len(reviews), 1) if reviews else 0
+            expert_data['total_reviews'] = len(reviews)
+            
+            result.append(expert_data)
+        
+        return jsonify({'experts': result}), 200
+    except Exception as e:
+        print(f"Get experts error: {e}")
+        return jsonify({'error': 'Failed to fetch experts'}), 500

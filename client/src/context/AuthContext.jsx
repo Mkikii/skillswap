@@ -1,68 +1,66 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI, testAPI } from '../services/api';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    testAPI.home()
-      .then(response => console.log('Backend connection:', response.data))
-      .catch(error => console.error('Backend connection failed:', error));
-
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchUserProfile();
-    } else {
-      setLoading(false);
-    }
+    checkAuthStatus();
   }, []);
 
-  const fetchUserProfile = async () => {
-    try {
-      const response = await authAPI.getProfile();
-      setUser(response.data.user);
-    } catch (error) {
-      console.error('Profile fetch error:', error);
-      localStorage.removeItem('token');
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        logout();
+      }
     }
     setLoading(false);
   };
 
-  const login = async (email, password) => {
-    const response = await authAPI.login({ email, password });
-    const { access_token, user } = response.data;
-    localStorage.setItem('token', access_token);
-    setUser(user);
-    return response.data;
-  };
-
-  const register = async (userData) => {
-    const response = await authAPI.register(userData);
-    const { access_token, user } = response.data;
-    localStorage.setItem('token', access_token);
-    setUser(user);
-    return response.data;
+  const login = (userData, token) => {
+    setUser(userData);
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
     setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  };
+
+  const getToken = () => {
+    return localStorage.getItem('token');
+  };
+
+  const isAuthenticated = () => {
+    return !!getToken();
   };
 
   const value = {
     user,
     login,
-    register,
     logout,
+    getToken,
+    isAuthenticated,
     loading
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+}

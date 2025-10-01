@@ -36,7 +36,7 @@ class User(db.Model, SerializerMixin):
     reviews_given = db.relationship('Review', foreign_keys='Review.reviewer_id', backref='reviewer', lazy=True)
     reviews_received = db.relationship('Review', foreign_keys='Review.reviewee_id', backref='reviewee', lazy=True)
     
-    serialize_rules = ('-password_hash', '-user_skills.user', '-listings.user', '-reviews_given.reviewer', '-reviews_received.reviewee')
+    serialize_rules = ('-password_hash', '-listings.user', '-reviews_given.reviewer', '-reviews_received.reviewee', '-user_skills.user')
     
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -54,7 +54,7 @@ class Skill(db.Model, SerializerMixin):
     
     listings = db.relationship('Listing', backref='skill', lazy=True)
     
-    serialize_rules = ('-user_skills.skill', '-listings.skill')
+    serialize_rules = ('-listings.skill', '-user_skills.skill')
 
 class Listing(db.Model, SerializerMixin):
     __tablename__ = 'listings'
