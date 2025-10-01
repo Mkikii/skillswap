@@ -1,106 +1,188 @@
-# SkillSwap 
+Markdown
 
-SkillSwap is a full-stack web application that connects people who want to learn new skills with experts willing to teach them. Users can browse skill listings, book sessions, and exchange knowledge in a community-driven platform.
+# SkillSwap: Knowledge Exchange Platform
 
-##  Live Deployment and Teacher Marking Guide
-
-The application is fully deployed and accessible via the following links:
-
-| Component | Platform | URL |
-| :--- | :--- | :--- |
-| **Frontend (Client)** | Netlify | **https://mkikiiskillswap.netlify.app/** |
-| **Backend (Server) API** | Railway | **https://skillswap-production-0e78.up.railway.app/** |
-
-###  Easy Guide for Cloning and Marking
-
-To set up and run the project locally for a complete review:
-
-1.  **Clone the Repository:**
-    ```bash
-    git clone <repository-url>
-    cd skillswap
-    ```
-
-2.  **Use the Deployed Branch:**
-    All working code, including the final merges, is on the **`dev` branch** (which was used for the live deployment).
-    ```bash
-    git checkout dev
-    ```
-
-3.  **Run Backend (Server):**
-    ```bash
-    cd server
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    pip install -r requirements.txt
-    python seed.py # Optional: Populates the database with test data
-    python app.py  # Starts the API server (default: http://localhost:5555)
-    ```
-
-4.  **Run Frontend (Client):**
-    * **Crucial Step for Local Testing:** The frontend needs to point to your **local backend URL** (`http://localhost:5555`). Update the **`VITE_API_URL`** in the `client/.env.development` file if it exists, or create one:
-        ```
-        # client/.env.development
-        VITE_API_URL=http://localhost:5555
-        ```
-    ```bash
-    cd ../client
-    npm install
-    npm run dev  # Starts the web app (default: http://localhost:5173)
-    ```
-    Open `http://localhost:5173` in your browser.
+**SkillSwap** is a full-stack web application that connects people who want to learn new skills with experts willing to teach them. Users can browse skill listings, book sessions, and exchange knowledge in a community-driven platform.
 
 ---
 
-##  Team Contribution Summary
+## Live Deployment
 
-This project was developed by a team of three. Please see the table below for a summary of contributions, highlighting the final scope of work taken on by **Maureen**:
-
-| Team Member | Role | Final Contribution Scope |
-| :--- | :--- | :--- |
-| **Maureen (Me)** | Auth & Project Structure | **Lead Developer** (Authentication, Project Structure, **Full Backend** development, Merging/Gitflow, and Deployment setup). |
-| **Andrew** | Frontend | Core Frontend setup and initial features. |
-| **Odour** | Backend | Initial contribution only. |
+| Component | URL |
+| :--- | :--- |
+| **Frontend** | [https://mkikiiskillswap.netlify.app/](https://mkikiiskillswap.netlify.app/) |
+| **Backend API** | [https://skillswap-production-0e78.up.railway.app/](https://skillswap-production-0e78.up.railway.app/) |
 
 ---
 
-##  Features
+## Features
 
--   **User Authentication**: Secure login and registration with JWT tokens
--   **Skill Listings**: Browse and create listings for skills you can teach
--   **Session Booking**: Schedule and manage learning sessions
--   **Reviews & Ratings**: Leave feedback for completed sessions
+* **User Authentication**: Secure login and registration with **JWT tokens**.
+* **Skill Listings**: Browse and create listings for skills you can teach.
+* **Session Booking**: Schedule and manage learning sessions with teachers.
+* **Reviews & Ratings**: Leave feedback for completed sessions.
+* **User Profiles**: View teacher profiles and their expertise.
+* **Skill Management**: Add skills to your profile with proficiency levels.
+
+---
 
 ## Tech Stack
 
-### Backend (Server)
--   **Flask**: Python web framework
--   **SQLAlchemy**: ORM for database management
--   **Flask-JWT-Extended**: JWT authentication
--   **PostgreSQL**: Database (used in production)
+### Backend
 
-### Frontend (Client)
--   **React**: JavaScript library
--   **React Router**: Client-side routing
--   **Tailwind CSS**: Utility-first CSS framework
--   **Vite**: Build tool
+* **Flask**: Python web framework
+* **SQLAlchemy**: ORM for database management
+* **Flask-JWT-Extended**: JWT authentication
+* **Flask-CORS**: Cross-origin resource sharing
+* **PostgreSQL**: Database (with `psycopg2` driver)
+* **bcrypt**: Password hashing
+
+### Frontend
+
+* **React**: JavaScript library for building user interfaces
+* **React Router**: Client-side routing
+* **Axios**: HTTP client for API requests
+* **Tailwind CSS**: Utility-first CSS framework
+* **Formik**: Form management
+* **Yup**: Form validation
+* **Vite**: Build tool and development server
 
 ---
 
-## Testing
+## Team Contribution
 
-The project includes various test files in the `server/` directory:
--   Run all backend tests with: `python -m pytest server/`
+| Team Member | Role | Final Contribution Scope |
+| :--- | :--- | :--- |
+| **Maureen (Me)** | Auth & Project Structure | Lead Developer (Authentication, Project Structure, Full Backend development, Merging/Gitflow, and Deployment setup) |
+| **Andrew** | Frontend | Core Frontend setup and initial features |
+| **Odour** | Backend | Initial contribution only |
 
 ---
 
-##  Deployment Details
+## Installation
 
-### Backend Deployment (Railway)
--   Uses the **`Dockerfile`** and **`Procfile`** provided in the `server/` directory.
--   The application runs using **Gunicorn** in the production environment.
+### Prerequisites
 
-### Frontend Deployment (Netlify)
--   Deployed from the **`dev` branch** to Netlify.
--   Build command: `npm run build`
--   Publish directory: `dist`
+* **Python 3.8+**
+* **Node.js 16+**
+* **PostgreSQL** (or SQLite for development)
+
+### Clone the Repository
+
+```bash
+git clone <repository-url>
+cd skillswap
+git checkout dev
+Backend Setup
+Bash
+
+cd server
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+Frontend Setup
+Bash
+
+cd ../client
+npm install
+Configuration
+Environment Variables
+Create a .env file in the server directory:
+
+Plaintext
+
+DATABASE_URL=postgresql://username:password@localhost/skillswap
+JWT_SECRET_KEY=your-secret-key
+Database
+Run the seed file to populate the database (optional):
+
+Bash
+
+cd server
+python seed.py
+Usage
+Start the Backend
+Bash
+
+cd server
+python app.py
+The API will be available at http://localhost:5555
+
+Start the Frontend
+Bash
+
+cd client
+npm run dev
+The app will be available at http://localhost:5173
+
+API Endpoints
+Resource	Method	Endpoint	Description
+Authentication	POST	/api/auth/login	User login
+POST	/api/auth/register	User registration
+Skills	GET	/api/skills	Get all skills
+POST	/api/skills	Create a new skill
+Listings	GET	/api/listings	Get all skill listings
+POST	/api/listings	Create a new listing
+GET	/api/listings/<id>	Get listing details
+PATCH	/api/listings/<id>	Update listing
+DELETE	/api/listings/<id>	Delete listing
+Sessions	GET	/api/sessions	Get user sessions
+POST	/api/sessions	Book a new session
+Reviews	GET	/api/reviews	Get reviews
+POST	/api/reviews	Create a review
+Users	GET	/api/users/<id>	Get user profile
+PUT	/api/users/<id>	Update user profile
+Frontend Routes
+/: Home page
+
+/auth: Authentication (login/register)
+
+/listings: Browse skill listings
+
+/profile/:userId: User profile page
+
+Database Models
+User: User authentication and profiles
+
+Skill: Available skills in the system
+
+Listing: Skill offerings by users
+
+Session: Booked learning sessions
+
+Review: User feedback and ratings
+
+Testing
+The project includes various test files: server/test_*.py
+
+Run backend tests with:
+
+Bash
+
+python -m pytest server/
+Deployment
+Backend
+Deployed on Railway with PostgreSQL.
+
+Dockerfile provided for containerized deployment.
+
+Uses Gunicorn for production.
+
+Frontend
+Deployed on Netlify.
+
+Build for production: npm run build
+
+Contributing
+Fork the repository
+
+Create a feature branch
+
+Make your changes
+
+Add tests if applicable
+
+Submit a pull request
+
+License
+This project is licensed under the MIT License.
