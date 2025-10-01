@@ -1,183 +1,105 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCode, FaUsers, FaStar, FaArrowRight, FaShield, FaRocket, FaGraduationCap } from 'react-icons/fa';
+import { FaCode, FaUsers, FaStar, FaGraduationCap, FaChalkboardTeacher, FaHandshake } from 'react-icons/fa';
 
 function HomePage() {
-  const { user, login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleDemoLogin = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5555'}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'maureen@example.com',
-          password: 'password123'
-        })
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('token', data.access_token);
-        login(data.user);
-        navigate('/listings');
-      } else {
-        alert('Demo login failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Demo login error:', error);
-      alert('Network error. Please try again.');
-    }
-  };
-
-  const features = [
-    {
-      icon: <FaCode className="text-3xl text-pink-700" />,
-      title: 'Learn Any Skill',
-      description: 'From programming to cooking, find expert teachers in any field.'
-    },
-    {
-      icon: <FaUsers className="text-3xl text-pink-700" />,
-      title: 'Share Your Expertise',
-      description: 'Earn by teaching skills you\'re passionate about.'
-    },
-    {
-      icon: <FaStar className="text-3xl text-pink-700" />,
-      title: 'Community Driven',
-      description: 'Connect with like-minded learners and teachers.'
-    }
-  ];
-
-  const stats = [
-    { number: '50+', label: 'Skills Available' },
-    { number: '100+', label: 'Active Users' },
-    { number: '4.8/5', label: 'Average Rating' }
-  ];
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <nav className="bg-black border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-pink-700 to-pink-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">S</span>
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-700 to-pink-600 bg-clip-text text-transparent">
-                SKILLSWAP
-              </span>
-            </Link>
-            
-            <div className="flex items-center space-x-4">
-              {!user ? (
-                <>
-                  <button
-                    onClick={handleDemoLogin}
-                    className="bg-black hover:bg-gray-900 text-white border border-pink-700 px-6 py-3 rounded-lg font-semibold transition-all"
-                  >
-                    Try Demo
-                  </button>
-                  <Link
-                    to="/auth"
-                    className="border-2 border-pink-700 text-pink-700 hover:bg-pink-700 hover:text-white px-6 py-3 rounded-lg font-semibold transition-all"
-                  >
-                    Login
-                  </Link>
-                </>
-              ) : (
-                <div className="flex items-center space-x-4">
-                  <span className="text-white">Welcome, <span className="font-semibold text-pink-700">{user.username}</span>!</span>
-                  <Link
-                    to="/listings"
-                    className="bg-pink-700 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
-                  >
-                    Create Listing
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Share Skills,
-            <span className="block bg-gradient-to-r from-pink-700 to-pink-600 bg-clip-text text-transparent">
-              Learn Together
-            </span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold text-purple-600 mb-6 font-cursive">
+            SkillSwap
           </h1>
-          <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto leading-relaxed">
-            Connect with expert teachers in your community and discover new skills
+          <p className="text-2xl md:text-3xl text-dark-green mb-8">
+            🎯 Share Skills • Learn Together 🌱
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Link
-              to="/listings"
-              className="bg-pink-700 hover:bg-pink-600 text-white text-lg px-8 py-4 rounded-lg font-semibold transition-all flex items-center"
-            >
-              Explore Skills <FaArrowRight className="ml-2 inline" />
-            </Link>
-            {!user && (
-              <Link
-                to="/auth"
-                className="bg-black hover:bg-gray-900 text-white border border-pink-700 text-lg px-8 py-4 rounded-lg font-semibold transition-all"
-              >
-                Start Teaching
-              </Link>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-black border border-gray-800 rounded-2xl p-8 text-center hover:border-pink-700 transition-all">
-                <div className="flex justify-center mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-white leading-relaxed">{feature.description}</p>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+            Connect with experts, learn new skills, and share your knowledge with our community.
+          </p>
+          
+          {user ? (
+            <div className="space-y-4">
+              <p className="text-lg text-white">Welcome back, {user.username}! 👋</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/listings"
+                  className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+                >
+                  📚 Browse Listings
+                </Link>
+                <Link
+                  to="/listings"
+                  className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+                >
+                  🎓 Teach a Skill
+                </Link>
               </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-pink-700 mb-2">{stat.number}</div>
-                <div className="text-white font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-black border border-gray-800 rounded-2xl p-12 text-center max-w-4xl mx-auto">
-            <FaRocket className="text-5xl text-pink-700 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
-            <p className="text-white text-lg mb-8 max-w-2xl mx-auto">
-              Join our community of learners and teachers today. Share your skills or learn something new!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/listings"
-                className="bg-pink-700 hover:bg-pink-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all"
-              >
-                Browse Listings
-              </Link>
-              {!user && (
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/auth"
-                  className="border-2 border-pink-700 text-pink-700 hover:bg-pink-700 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all"
+                  className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
                 >
-                  Create Account
+                  🚀 Get Started
                 </Link>
-              )}
+                <Link
+                  to="/listings"
+                  className="border-2 border-brown-700 text-brown-700 hover:bg-brown-700 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+                >
+                  🔍 Browse Skills
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 text-center">
+            <FaChalkboardTeacher className="text-yellow-400 text-4xl mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-white mb-4">Teach Your Skills</h3>
+            <p className="text-gray-300">Share your expertise and earn while helping others learn</p>
+          </div>
+          
+          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 text-center">
+            <FaGraduationCap className="text-yellow-400 text-4xl mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-white mb-4">Learn from Experts</h3>
+            <p className="text-gray-300">Find skilled teachers and master new abilities</p>
+          </div>
+          
+          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 text-center">
+            <FaHandshake className="text-yellow-400 text-4xl mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-white mb-4">Build Community</h3>
+            <p className="text-gray-300">Connect with like-minded learners and teachers</p>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-white mb-8">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+              <p className="text-white">Sign Up</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+              <p className="text-white">Browse or Create Listings</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+              <p className="text-white">Book Sessions</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
+              <p className="text-white">Learn & Grow</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
