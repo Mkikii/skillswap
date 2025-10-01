@@ -40,20 +40,32 @@ def create_listing():
         data = request.get_json()
         
         if not data:
-            return jsonify({'error': 'No data received'}), 422
+            return jsonify({'error': 'No data received'}), 400
             
-        if not data.get('title') or not data.get('description') or not data.get('price_per_hour') or not data.get('skill_id'):
-            return jsonify({'error': 'All fields are required'}), 422
+        title = data.get('title', '').strip()
+        description = data.get('description', '').strip()
+        price_per_hour = data.get('price_per_hour')
+        skill_id = data.get('skill_id')
         
-        price = float(data['price_per_hour'])
-        skill_id = int(data['skill_id'])
+        if not title or not description or not price_per_hour or not skill_id:
+            return jsonify({'error': 'All fields are required'}), 400
+        
+        try:
+            price = float(price_per_hour)
+            skill_id_int = int(skill_id)
+        except:
+            return jsonify({'error': 'Invalid price or skill ID'}), 400
+        
+        skill = Skill.query.get(skill_id_int)
+        if not skill:
+            return jsonify({'error': 'Skill not found'}), 404
         
         listing = Listing(
-            title=data['title'],
-            description=data['description'],
+            title=title,
+            description=description,
             price_per_hour=price,
             user_id=current_user_id,
-            skill_id=skill_id
+            skill_id=skill_id_int
         )
         
         db.session.add(listing)
@@ -71,45 +83,4 @@ def create_listing():
         
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'Server error: ' + str(e)}), 500
-
-@listings_bp.route('/my-listings', methods=['GET'])
-@jwt_required()
-def get_my_listings():
-    try:
-        current_user_id = get_jwt_identity()
-        listings = Listing.query.filter_by(user_id=current_user_id).all()
-        result = []
-        for listing in listings:
-            listing_data = {
-                'id': listing.id,
-                'title': listing.title,
-                'description': listing.description,
-                'price_per_hour': listing.price_per_hour,
-                'skill_name': listing.skill.name
-            }
-            result.append(listing_data)
-        return jsonify({'listings': result}), 200
-    except Exception as e:
-        return jsonify({'error': 'Failed to fetch your listings'}), 500
-
-@listings_bp.route('/<int:listing_id>', methods=['DELETE'])
-@jwt_required()
-def delete_listing(listing_id):
-    try:
-        current_user_id = get_jwt_identity()
-        listing = Listing.query.get(listing_id)
-        
-        if not listing:
-            return jsonify({'error': 'Listing not found'}), 404
-        
-        if listing.user_id != current_user_id:
-            return jsonify({'error': 'Unauthorized to delete this listing'}), 403
-        
-        db.session.delete(listing)
-        db.session.commit()
-        
-        return jsonify({'message': 'Listing deleted successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'Failed to delete listing'}), 500
+        return jsonify({'error': str(e)}), 500
