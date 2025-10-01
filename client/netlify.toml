@@ -5,6 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  VITE_API_URL = "https://skillswap-production-0e78.up.railway.app"
 
 [[redirects]]
   from = "/*"

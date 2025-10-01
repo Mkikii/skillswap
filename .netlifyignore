@@ -1,9 +1,0 @@
-server/
-Pipfile
-Pipfile.lock
-requirements.txt
-*.py
-__pycache__/
-venv/
-skillswap-react-app/
-client-backup/
