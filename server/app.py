@@ -3,13 +3,24 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from config import Config
 from database import db
+from models import User
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
 CORS(app)
+
 jwt = JWTManager(app)
+
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return str(user)
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return User.query.get(int(identity))
 
 @app.route('/')
 def home():

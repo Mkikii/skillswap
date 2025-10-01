@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaPlus, FaStar, FaEdit, FaTrash, FaArrowLeft, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
+import { FaPlus, FaStar, FaEdit, FaTrash, FaArrowLeft, FaExclamationTriangle } from 'react-icons/fa';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5555';
+const API_URL = import.meta.env.VITE_API_URL;
 
 function SkillsListings() {
-  const { user, getToken } = useAuth();
+  const { user } = useAuth();
   const [listings, setListings] = useState([]);
   const [skills, setSkills] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -19,34 +19,49 @@ function SkillsListings() {
     skill_id: ''
   });
 
+  console.log('API URL:', API_URL);
+
   useEffect(() => {
     fetchListings();
     fetchSkills();
+    
+    fetch(`${API_URL}/api/health`)
+      .then(response => response.json())
+      .then(data => console.log('Backend connection:', data))
+      .catch(error => console.error('Backend connection failed:', error));
   }, []);
 
   const fetchListings = async () => {
     try {
+      console.log('Fetching listings from:', `${API_URL}/api/listings`);
       const response = await fetch(`${API_URL}/api/listings`);
+      console.log('Listings response status:', response.status);
       const data = await response.json();
+      console.log('Listings data:', data);
       setListings(data.listings || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching listings:', error);
+      setFormError('Failed to connect to server. Please check your connection.');
       setLoading(false);
     }
   };
 
   const fetchSkills = async () => {
     try {
+      console.log('Fetching skills from:', `${API_URL}/api/skills`);
       const response = await fetch(`${API_URL}/api/skills`);
+      console.log('Skills response status:', response.status);
       const data = await response.json();
+      console.log('Skills data:', data);
       setSkills(data.skills || []);
     } catch (error) {
       console.error('Error fetching skills:', error);
+      setFormError('Failed to load skills. Please refresh the page.');
     }
   };
 
-  const handleCreateListing = async (e) => {
+  const createListing = async (e) => {
     e.preventDefault();
     setFormError('');
     
@@ -55,61 +70,41 @@ function SkillsListings() {
       return;
     }
 
-    // Validate form data
-    if (!formData.title.trim() || !formData.description.trim() || !formData.price_per_hour || !formData.skill_id) {
-      setFormError('All fields are required');
-      return;
-    }
-
-    const price = parseFloat(formData.price_per_hour);
-    if (isNaN(price) || price <= 0) {
-      setFormError('Price must be a number greater than 0');
-      return;
-    }
-
-    if (price > 999) {
-      setFormError('Price per hour must be 3 digits or less');
-      return;
-    }
-
     try {
-      const token = getToken();
-      if (!token) {
-        setFormError('Authentication token missing. Please login again.');
-        return;
-      }
-
-      console.log('Sending create listing request with token');
+      const token = localStorage.getItem('token');
       
+      const requestData = {
+        title: formData.title,
+        description: formData.description,
+        price_per_hour: parseFloat(formData.price_per_hour),
+        skill_id: parseInt(formData.skill_id)
+      };
+
+      console.log('SENDING TO BACKEND:', requestData);
+
       const response = await fetch(`${API_URL}/api/listings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          title: formData.title,
-          description: formData.description,
-          price_per_hour: price,
-          skill_id: parseInt(formData.skill_id)
-        })
+        body: JSON.stringify(requestData)
       });
 
-      const data = await response.json();
-      console.log('Create listing response:', response.status);
-      
+      const result = await response.json();
+      console.log('BACKEND RESPONSE:', result);
+
       if (response.ok) {
         setShowForm(false);
         setFormData({ title: '', description: '', price_per_hour: '', skill_id: '' });
-        setFormError('');
         fetchListings();
-        alert('🎉 Listing created successfully!');
+        alert('Listing created successfully!');
       } else {
-        setFormError(data.error || `Failed to create listing (Status: ${response.status})`);
+        setFormError(result.error || 'Failed to create listing');
       }
     } catch (error) {
-      console.error('Error creating listing:', error);
-      setFormError('Failed to create listing. Please check your connection and try again.');
+      console.error('Error:', error);
+      setFormError('Network error. Please try again.');
     }
   };
 
@@ -119,7 +114,7 @@ function SkillsListings() {
     }
 
     try {
-      const token = getToken();
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/api/listings/${listingId}`, {
         method: 'DELETE',
         headers: {
@@ -162,7 +157,6 @@ function SkillsListings() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream-50 to-primary-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Link to="/" className="flex items-center space-x-2 text-primary-600 hover:text-primary-700 transition-colors">
             <FaArrowLeft />
@@ -170,16 +164,21 @@ function SkillsListings() {
           </Link>
           
           {user && (
-            <button
-              onClick={() => {
-                setShowForm(!showForm);
-                setFormError('');
-              }}
-              className="btn-primary flex items-center space-x-2"
-            >
-              <FaPlus />
-              <span>{showForm ? 'Cancel' : 'Create New Listing'}</span>
-            </button>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-700">
+                Logged in as: <span className="font-semibold text-primary-600">{user.username}</span>
+              </span>
+              <button
+                onClick={() => {
+                  setShowForm(!showForm);
+                  setFormError('');
+                }}
+                className="btn-primary flex items-center space-x-2"
+              >
+                <FaPlus />
+                <span>{showForm ? 'Cancel' : 'Create New Listing'}</span>
+              </button>
+            </div>
           )}
         </div>
 
@@ -192,17 +191,12 @@ function SkillsListings() {
           </p>
         </div>
 
-        {/* Debug Info */}
-        {user && (
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="flex items-center space-x-2 text-sm text-blue-700">
-              <FaCheckCircle />
-              <span>Logged in as: <strong>{user.username}</strong> (ID: {user.id})</span>
-            </div>
-          </div>
-        )}
+        <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-700">
+            <strong>Debug Info:</strong> API URL: {API_URL} | User: {user ? user.username : 'Not logged in'}
+          </p>
+        </div>
 
-        {/* Create Listing Form */}
         {showForm && (
           <div className="card mb-12 max-w-2xl mx-auto border-2 border-primary-100">
             <div className="text-center mb-6">
@@ -217,7 +211,7 @@ function SkillsListings() {
               </div>
             )}
 
-            <form onSubmit={handleCreateListing} className="space-y-6">
+            <form onSubmit={createListing} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -295,7 +289,6 @@ function SkillsListings() {
           </div>
         )}
 
-        {/* Listings Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {listings.map(listing => (
             <div key={listing.id} className="card group hover:shadow-2xl transition-all duration-300">
@@ -314,7 +307,6 @@ function SkillsListings() {
                   </div>
                 </div>
                 
-                {/* Delete button for listing owner */}
                 {user && user.id === listing.teacher_id && (
                   <div className="flex space-x-2 ml-4">
                     <button 
