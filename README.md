@@ -2,10 +2,11 @@ SkillSwap - Skill Exchange Platform
 A full-stack web application that connects knowledge seekers with skilled experts for personalized learning experiences. SkillSwap enables users to share expertise, book learning sessions, and build a community around skill development.
 
 Live Deployment
-Frontend Application: https://mkikiiskillswap.netlify.app/
+Component	URL
+Frontend Application	https://mkikiiskillswap.netlify.app/
+Backend API	https://skillswap-production-0e78.up.railway.app/
 
-Backend API: https://skillswap-production-0e78.up.railway.app/
-
+Export to Sheets
 Deployment Note: The application is deployed from the dev branch, which contains the most stable and tested version of the codebase.
 
 Key Features
@@ -69,12 +70,14 @@ Quick Start Guide
 Follow these steps to get the application running locally:
 
 1. Clone and Setup Repository
-bash
+Bash
+
 # Clone the repository
 git clone <repository-url>
 cd skillswap
 2. Backend Setup & Installation
-bash
+Bash
+
 # Navigate to server directory
 cd server
 
@@ -93,9 +96,10 @@ pip install -r requirements.txt
 python seed.py
 Expected Output:
 
-text
+Plaintext
+
 Database tables created successfully
-Skills created successfully  
+Skills created successfully
 Users created successfully
 User skills created successfully
 Listings created successfully
@@ -105,7 +109,8 @@ Reviews created successfully
 DATABASE SETUP COMPLETED SUCCESSFULLY!
 Users: 10 | Skills: 17 | Listings: 9 | Sessions: 3 | Reviews: 3
 3. Start Backend Server
-bash
+Bash
+
 # Start Flask development server (keep terminal open)
 python app.py
 Verification: Visit http://localhost:5555/api/health - you should see {"status": "API healthy"}
@@ -113,8 +118,9 @@ Verification: Visit http://localhost:5555/api/health - you should see {"status":
 4. Frontend Setup & Installation
 Open a new terminal window and run:
 
-bash
-# Navigate to client directory  
+Bash
+
+# Navigate to client directory
 cd client
 
 # Install npm dependencies
@@ -130,14 +136,17 @@ Role	Email	Password	Capabilities
 Teacher	seoyeji@example.com	password123	Create listings, receive sessions
 Student	maureen@example.com	password123	Browse listings, book sessions
 Guest	malkiki@example.com	password123	Basic browsing
+
+Export to Sheets
 Test Backend API Endpoints
-bash
+Bash
+
 cd server
 
 # Comprehensive endpoint testing
 python test_all_endpoints.py
 
-# Test listing creation flow  
+# Test listing creation flow
 python test_create_listing.py
 
 # Verify demo accounts work
@@ -184,69 +193,37 @@ Reviews - Ratings and feedback system
 
 Troubleshooting
 Common Issues
-Backend Not Starting:
+Issue	Solution
+Backend Not Starting	Ensure port 5555 is available; Verify virtual environment is activated; Check database was seeded properly.
+Frontend Connection Issues	Confirm backend is running on port 5555; Clear browser cache if seeing cached versions; Check browser console for CORS errors.
+Database Issues	Run python seed.py to reset database; Verify SQLite file permissions; Check model imports in models.py.
 
-Ensure port 5555 is available
-
-Verify virtual environment is activated
-
-Check database was seeded properly
-
-Frontend Connection Issues:
-
-Confirm backend is running on port 5555
-
-Clear browser cache if seeing cached versions
-
-Check browser console for CORS errors
-
-Database Issues:
-
-Run python seed.py to reset database
-
-Verify SQLite file permissions
-
-Check model imports in models.py
-
+Export to Sheets
 Environment Configuration
 Backend Environment:
 
-bash
+Bash
+
 # Create .env file in server/ directory
 DATABASE_URL=sqlite:///skillswap.db
 JWT_SECRET_KEY=your-secret-key-here
 Frontend Environment:
 
-bash
-# .env.production in client/ directory  
+Bash
+
+# .env.production in client/ directory
 VITE_API_URL=https://skillswap-production-0e78.up.railway.app
 Development Team
 Team Member	Role	Contributions
 Maureen	Lead Developer	Full-stack development (Authentication, Backend API, Database Design, Frontend Components, Debugging, Deployment, Git Workflow)
 Andrew	Frontend Developer	Core Frontend setup and initial React components
 Odour	Backend Developer	Initial backend architecture and models
+
+Export to Sheets
 License
 MIT License
 
-Copyright (c) 2024 Maureen
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Copyright (c) 2025 SkillSwap
 
 Support
 For technical support or questions about the application:
@@ -260,4 +237,3 @@ Ensure each setup step completes successfully
 The application includes comprehensive error handling and user feedback
 
 SkillSwap - Bridging knowledge gaps through community-driven learning experiences.
-
