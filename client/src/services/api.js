@@ -52,6 +52,7 @@ export const sessionsAPI = {
 
 export const reviewsAPI = {
   getAll: () => api.get('/api/reviews'),
+  getBySession: (sessionId) => api.get(`/api/reviews/session/${sessionId}`),
   create: (reviewData) => api.post('/api/reviews', reviewData),
 };
 
