@@ -59,13 +59,21 @@ function SkillsListings() {
 
     try {
       const token = localStorage.getItem('token');
+      console.log('🔑 Token:', token);
       
+      if (!token) {
+        setFormError('No authentication token found. Please login again.');
+        return;
+      }
+
       const requestData = {
         title: formData.title,
         description: formData.description,
         price_per_hour: parseFloat(formData.price_per_hour),
         skill_id: parseInt(formData.skill_id)
       };
+
+      console.log('📤 Sending data:', requestData);
 
       const response = await fetch(`${API_URL}/api/listings`, {
         method: 'POST',
@@ -76,7 +84,10 @@ function SkillsListings() {
         body: JSON.stringify(requestData)
       });
 
+      console.log('📡 Response status:', response.status);
+
       const result = await response.json();
+      console.log('📄 Response data:', result);
 
       if (response.ok) {
         setShowForm(false);
@@ -84,7 +95,7 @@ function SkillsListings() {
         fetchListings();
         alert('Listing created successfully!');
       } else {
-        setFormError(result.error || 'Failed to create listing');
+        setFormError(result.error || `Failed to create listing (Status: ${response.status})`);
       }
     } catch (error) {
       console.error('Error:', error);
