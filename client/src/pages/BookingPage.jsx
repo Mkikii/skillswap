@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaArrowLeft, FaCalendar, FaClock, FaMoneyBillWave, FaStar, FaCheckCircle } from 'react-icons/fa';
+import { listingsAPI, sessionsAPI } from "../services/api";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5555';
 

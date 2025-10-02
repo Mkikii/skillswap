@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaChalkboardTeacher, FaGraduationCap, FaHandshake } from 'react-icons/fa';
+import { FaCode, FaUsers, FaStar, FaArrowRight, FaRocket, FaGraduationCap } from 'react-icons/fa';
+import { authAPI } from "../services/api";
 
 function HomePage() {
   const { user } = useAuth();

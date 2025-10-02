@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+iimport React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaArrowLeft, FaStar, FaPaperPlane } from 'react-icons/fa';
+import { reviewsAPI } from "../services/api";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5555';
 

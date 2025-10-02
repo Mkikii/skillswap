@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaPlus, FaStar, FaTrash, FaEdit, FaArrowLeft, FaExclamationTriangle, FaUser, FaMoneyBillWave, FaGraduationCap } from 'react-icons/fa';
-import { listingsAPI, skillsAPI } from '../services/api';
+import { listingsAPI, skillsAPI } from "../services/api";
 
 function SkillsListings() {
   const { user } = useAuth();
@@ -56,7 +56,6 @@ function SkillsListings() {
     }
 
     try {
-      // Validate form data
       if (!formData.title.trim() || !formData.description.trim() || !formData.price_per_hour || !formData.skill_id) {
         setFormError('All fields are required');
         return;
@@ -68,11 +67,9 @@ function SkillsListings() {
       }
 
       if (editingListing) {
-        // Update existing listing
         await listingsAPI.update(editingListing.id, formData);
         alert('Listing updated successfully!');
       } else {
-        // Create new listing
         await listingsAPI.create(formData);
         alert('Listing created successfully!');
       }
@@ -145,7 +142,6 @@ function SkillsListings() {
   return (
     <div className="min-h-screen bg-black text-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Link to="/" className="flex items-center space-x-2 text-pink-700 hover:text-pink-600 transition-colors">
             <FaArrowLeft />
@@ -174,7 +170,6 @@ function SkillsListings() {
           )}
         </div>
 
-        {/* Page Title */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             All Skill Listings
@@ -184,7 +179,6 @@ function SkillsListings() {
           </p>
         </div>
 
-        {/* Create/Edit Listing Form */}
         {showForm && (
           <div className="bg-black p-8 rounded-lg mb-12 max-w-2xl mx-auto border border-pink-700">
             <div className="text-center mb-6">
@@ -290,7 +284,6 @@ function SkillsListings() {
           </div>
         )}
 
-        {/* Listings Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {listings.map(listing => (
             <div key={listing.id} className="bg-black p-6 rounded-lg border border-gray-700 hover:border-pink-700 transition-all group">
@@ -309,7 +302,6 @@ function SkillsListings() {
                   </div>
                 </div>
                 
-                {/* Edit/Delete buttons - only show if user owns the listing */}
                 {user && user.id === listing.teacher_id && (
                   <div className="flex space-x-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button 
@@ -358,7 +350,6 @@ function SkillsListings() {
                 </Link>
               </div>
 
-              {/* Book Session Button */}
               <div className="mt-4">
                 <Link
                   to={`/book/${listing.id}`}
@@ -371,7 +362,6 @@ function SkillsListings() {
           ))}
         </div>
 
-        {/* Empty State */}
         {listings.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📚</div>

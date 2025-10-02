@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaArrowLeft, FaGraduationCap, FaUser, FaCalendar } from 'react-icons/fa';
+import { usersAPI } from "../services/api";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5555';
 
