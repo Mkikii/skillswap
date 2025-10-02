@@ -44,12 +44,13 @@ def create_listing():
         
         price = float(data['price_per_hour'])
         skill_id = int(data['skill_id'])
+        user_id = int(current_user_id)
         
         listing = Listing(
             title=data['title'],
             description=data['description'],
             price_per_hour=price,
-            user_id=current_user_id,
+            user_id=user_id,
             skill_id=skill_id
         )
         
@@ -75,7 +76,8 @@ def create_listing():
 def get_my_listings():
     try:
         current_user_id = get_jwt_identity()
-        listings = Listing.query.filter_by(user_id=current_user_id).all()
+        user_id = int(current_user_id)
+        listings = Listing.query.filter_by(user_id=user_id).all()
         result = []
         for listing in listings:
             listing_data = {
@@ -95,12 +97,13 @@ def get_my_listings():
 def delete_listing(listing_id):
     try:
         current_user_id = get_jwt_identity()
+        user_id = int(current_user_id)
         listing = Listing.query.get(listing_id)
         
         if not listing:
             return jsonify({'error': 'Listing not found'}), 404
         
-        if listing.user_id != current_user_id:  # ✅ FIXED THE TYPO
+        if listing.user_id != user_id:
             return jsonify({'error': 'Unauthorized to delete this listing'}), 403
         
         db.session.delete(listing)

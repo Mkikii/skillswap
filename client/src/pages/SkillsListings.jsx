@@ -67,6 +67,8 @@ function SkillsListings() {
         skill_id: parseInt(formData.skill_id)
       };
 
+      console.log('Creating listing with:', requestData);
+
       const response = await fetch(`${API_URL}/api/listings`, {
         method: 'POST',
         headers: {
@@ -77,6 +79,7 @@ function SkillsListings() {
       });
 
       const result = await response.json();
+      console.log('Backend response:', result);
 
       if (response.ok) {
         setShowForm(false);
