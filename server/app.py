@@ -12,7 +12,13 @@ app.config.from_object(Config)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=10)
 
 db.init_app(app)
-CORS(app)
+
+CORS(app, origins=[
+    "https://skillswap-app.netlify.app",
+    "https://mkskillswap.netlify.app", 
+    "http://localhost:5173",
+    "http://localhost:3000"
+])
 
 jwt = JWTManager(app)
 
