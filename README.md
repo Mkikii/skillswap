@@ -141,8 +141,6 @@ Verification: Visit http://localhost:5173 — you should see the SkillSwap homep
 |---------|-------------------------|--------------|---------------------------------------|
 | Teacher | seoyeji@example.com     | password123  | Create listings, receive sessions     |
 | Student | maureen@example.com     | password123  | Browse listings, book sessions        |
-| Guest   | malkiki@example.com     | password123  | Basic browsing                        |
-
 
 Test Backend API Endpoints
 cd server
