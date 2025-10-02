@@ -1,4 +1,4 @@
-iimport React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaArrowLeft, FaStar, FaPaperPlane } from 'react-icons/fa';
