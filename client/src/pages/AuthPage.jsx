@@ -94,7 +94,7 @@ function AuthPage() {
       
       if (response.ok) {
         login(data.user, data.access_token);
-        alert(`🎉 Demo login successful! Welcome ${data.user.username}!`);
+        alert(` Demo login successful! Welcome ${data.user.username}!`);
         navigate('/');
       } else {
         alert('❌ Demo login failed: ' + data.error);
@@ -133,7 +133,7 @@ function AuthPage() {
           {/* Demo Accounts Section */}
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-900 text-center lg:text-left">
-              🚀 Try Demo Accounts
+               Try Demo Accounts
             </h2>
             <p className="text-gray-600 text-center lg:text-left">
               Test the platform with these pre-configured accounts:

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCode, FaUsers, FaStar, FaGraduationCap, FaChalkboardTeacher, FaHandshake } from 'react-icons/fa';
+import { FaChalkboardTeacher, FaGraduationCap, FaHandshake } from 'react-icons/fa';
 
 function HomePage() {
   const { user } = useAuth();
@@ -13,8 +13,8 @@ function HomePage() {
           <h1 className="text-5xl md:text-6xl font-bold text-purple-600 mb-6 font-cursive">
             SkillSwap
           </h1>
-          <p className="text-2xl md:text-3xl text-dark-green mb-8">
-            🎯 Share Skills • Learn Together 🌱
+          <p className="text-2xl md:text-3xl text-dark-purple mb-8">
+            Share Skills • Learn Together
           </p>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
             Connect with experts, learn new skills, and share your knowledge with our community.
@@ -22,19 +22,19 @@ function HomePage() {
           
           {user ? (
             <div className="space-y-4">
-              <p className="text-lg text-white">Welcome back, {user.username}! 👋</p>
+              <p className="text-lg text-dark-purple">Welcome back, {user.username}!</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/listings"
                   className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
                 >
-                  📚 Browse Listings
+                  Browse Listings
                 </Link>
                 <Link
                   to="/listings"
                   className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
                 >
-                  🎓 Teach a Skill
+                  Teach a Skill
                 </Link>
               </div>
             </div>
@@ -45,13 +45,13 @@ function HomePage() {
                   to="/auth"
                   className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
                 >
-                  🚀 Get Started
+                  Get Started
                 </Link>
                 <Link
                   to="/listings"
                   className="border-2 border-brown-700 text-brown-700 hover:bg-brown-700 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
                 >
-                  🔍 Browse Skills
+                  Browse Skills
                 </Link>
               </div>
             </div>
@@ -79,23 +79,23 @@ function HomePage() {
         </div>
 
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">How It Works</h2>
+          <h2 className="text-3xl font-bold text-dark-purple mb-8">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
-              <p className="text-white">Sign Up</p>
+              <p className="text-dark-purple font-semibold">Sign Up</p>
             </div>
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
-              <p className="text-white">Browse or Create Listings</p>
+              <p className="text-dark-purple font-semibold">Browse or Create Listings</p>
             </div>
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
-              <p className="text-white">Book Sessions</p>
+              <p className="text-dark-purple font-semibold">Connect with Teachers</p>
             </div>
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
-              <p className="text-white">Learn & Grow</p>
+              <p className="text-dark-purple font-semibold">Learn & Grow</p>
             </div>
           </div>
         </div>

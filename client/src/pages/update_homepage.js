@@ -1,4 +1,3 @@
-// Find the handleDemoLogin function in HomePage.jsx and replace it with:
 
   const handleDemoLogin = async () => {
     try {

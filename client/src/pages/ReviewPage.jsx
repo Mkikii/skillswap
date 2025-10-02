@@ -13,7 +13,7 @@ function ReviewPage() {
   const [reviewData, setReviewData] = useState({
     rating: 5,
     comment: '',
-    session_id: '' // In a real app, this would come from completed sessions
+    session_id: '' 
   });
 
   const handleSubmitReview = async (e) => {
@@ -43,7 +43,7 @@ function ReviewPage() {
           rating: reviewData.rating,
           comment: reviewData.comment,
           reviewee_id: parseInt(teacherId),
-          session_id: 1 // Placeholder - in real app, use actual session ID
+          session_id: 1 
         })
       });
 
