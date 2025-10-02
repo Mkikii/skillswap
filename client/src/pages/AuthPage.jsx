@@ -1,78 +1,107 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
-  const { login, register } = useAuth();
-  const [error, setError] = useState('');
-
-  const formik = useFormik({
-    initialValues: {
-      username: '',
-      email: '',
-      password: '',
-      bio: ''
-    },
-    validationSchema: isLogin 
-      ? Yup.object({
-          email: Yup.string().email('Invalid email address').required('Required'),
-          password: Yup.string().required('Required')
-        })
-      : Yup.object({
-          username: Yup.string().required('Required'),
-          email: Yup.string().email('Invalid email address').required('Required'),
-          password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required')
-        }),
-    onSubmit: async (values) => {
-      setError('');
-      try {
-        if (isLogin) {
-          await login(values.email, values.password);
-        } else {
-          await register(values.username, values.email, values.password, values.bio);
-        }
-      } catch (err) {
-        setError(err.response?.data?.error || 'Authentication failed');
-      }
-    }
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    bio: ''
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const useDemoAccount = (email, password) => {
-    formik.setFieldValue('email', email);
-    formik.setFieldValue('password', password);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      const payload = isLogin 
+        ? { email: formData.email, password: formData.password }
+        : formData;
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        login(data.user);
+        navigate('/');
+      } else {
+        setError(data.error || 'Something went wrong');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const fillDemoAccount = (type) => {
+    if (type === 'student') {
+      setFormData({
+        ...formData,
+        email: 'maureen@example.com',
+        password: 'password123'
+      });
+    } else if (type === 'teacher') {
+      setFormData({
+        ...formData,
+        email: 'seoyeji@example.com',
+        password: 'password123'
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center py-12">
+    <div className="min-h-screen bg-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-purple-600 font-cursive">SkillSwap</h2>
-          <p className="mt-2 text-2xl font-bold text-dark-purple">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-bold text-purple-600 font-cursive">
             {isLogin ? 'Sign in to SkillSwap' : 'Join SkillSwap'}
-          </p>
-          <p className="mt-2 text-gray-300">
+          </h2>
+          <p className="mt-2 text-center text-lg text-dark-purple">
             {isLogin ? 'Welcome back!' : 'Create your account'}
           </p>
         </div>
 
-        {/* Demo Account Buttons */}
         {isLogin && (
-          <div className="space-y-3">
-            <p className="text-sm text-gray-400 text-center">Try demo accounts:</p>
-            <div className="grid grid-cols-1 gap-2">
+          <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <p className="text-white text-center mb-3 font-medium">Try demo accounts:</p>
+            <div className="flex flex-col space-y-2">
               <button
                 type="button"
-                onClick={() => useDemoAccount('maureen@example.com', 'password123')}
-                className="w-full bg-brown-700 hover:bg-brown-600 text-white py-2 px-4 rounded-lg transition-colors text-sm"
+                onClick={() => fillDemoAccount('student')}
+                className="w-full bg-brown-700 hover:bg-brown-600 text-white py-2 px-4 rounded transition-colors"
               >
                 Student Demo: maureen@example.com
               </button>
               <button
                 type="button"
-                onClick={() => useDemoAccount('seoyeji@example.com', 'password123')}
-                className="w-full bg-brown-700 hover:bg-brown-600 text-white py-2 px-4 rounded-lg transition-colors text-sm"
+                onClick={() => fillDemoAccount('teacher')}
+                className="w-full bg-brown-700 hover:bg-brown-600 text-white py-2 px-4 rounded transition-colors"
               >
                 Teacher Demo: seoyeji@example.com
               </button>
@@ -80,104 +109,99 @@ function AuthPage() {
           </div>
         )}
 
-        <form onSubmit={formik.handleSubmit} className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg">
+            <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded">
               {error}
             </div>
           )}
-
-          {!isLogin && (
+          
+          <div className="space-y-4">
+            {!isLogin && (
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-dark-purple">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required={!isLogin}
+                  className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  placeholder="Choose a username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+            
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
-                Username
+              <label htmlFor="email" className="block text-sm font-medium text-dark-purple">
+                Email address
               </label>
               <input
-                id="username"
-                name="username"
-                type="text"
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent text-white"
-                placeholder="Choose a username"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.username}
+                id="email"
+                name="email"
+                type="email"
+                required
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
               />
-              {formik.touched.username && formik.errors.username && (
-                <div className="text-red-400 text-sm mt-1">{formik.errors.username}</div>
-              )}
             </div>
-          )}
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent text-white"
-              placeholder="Enter your email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-            />
-            {formik.touched.email && formik.errors.email && (
-              <div className="text-red-400 text-sm mt-1">{formik.errors.email}</div>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent text-white"
-              placeholder="Enter your password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-            />
-            {formik.touched.password && formik.errors.password && (
-              <div className="text-red-400 text-sm mt-1">{formik.errors.password}</div>
-            )}
-          </div>
-
-          {!isLogin && (
+            
             <div>
-              <label htmlFor="bio" className="block text-sm font-medium text-gray-300 mb-2">
-                Bio (Optional)
+              <label htmlFor="password" className="block text-sm font-medium text-dark-purple">
+                Password
               </label>
-              <textarea
-                id="bio"
-                name="bio"
-                rows="3"
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent text-white"
-                placeholder="Tell us about yourself..."
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.bio}
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
               />
             </div>
-          )}
+            
+            {!isLogin && (
+              <div>
+                <label htmlFor="bio" className="block text-sm font-medium text-dark-purple">
+                  Bio (Optional)
+                </label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  rows="3"
+                  className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  placeholder="Tell us about yourself..."
+                  value={formData.bio}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+          </div>
 
-          <button
-            type="submit"
-            className="w-full bg-brown-700 hover:bg-brown-600 text-white py-3 px-4 rounded-lg font-semibold transition-colors"
-          >
-            {isLogin ? 'Sign in' : 'Create account'}
-          </button>
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brown-700 hover:bg-brown-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 transition-colors disabled:opacity-50"
+            >
+              {loading ? 'Please wait...' : (isLogin ? 'Sign in' : 'Create account')}
+            </button>
+          </div>
 
           <div className="text-center">
             <button
               type="button"
-              onClick={() => setIsLogin(!isLogin)}
               className="text-brown-700 hover:text-brown-600 font-medium"
+              onClick={() => setIsLogin(!isLogin)}
             >
-              {isLogin ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
+              {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
             </button>
           </div>
         </form>
