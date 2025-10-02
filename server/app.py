@@ -8,8 +8,6 @@ from datetime import timedelta
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
-# Extend JWT expiration to 7 days
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
 
 db.init_app(app)
@@ -34,6 +32,7 @@ def home():
 def health_check():
     return jsonify({"status": "API healthy"})
 
+# CRITICAL: Make sure these imports and registrations work
 try:
     from routes.auth import auth_bp
     from routes.skills import skills_bp
