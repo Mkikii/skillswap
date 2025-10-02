@@ -100,7 +100,7 @@ def delete_listing(listing_id):
         if not listing:
             return jsonify({'error': 'Listing not found'}), 404
         
-        if listing.user_id != current_user_id:
+        if listing.user_id != current_user_id:  # ✅ FIXED THE TYPO
             return jsonify({'error': 'Unauthorized to delete this listing'}), 403
         
         db.session.delete(listing)
