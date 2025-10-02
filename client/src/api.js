@@ -25,6 +25,14 @@ api.interceptors.response.use(
   }
 );
 
+// Format listing data properly to prevent 422 errors
+const formatListingData = (data) => ({
+  title: data.title?.trim(),
+  description: data.description?.trim(),
+  price_per_hour: parseFloat(data.price_per_hour) || 0,
+  skill_id: parseInt(data.skill_id) || 0
+});
+
 export const authAPI = {
   login: (credentials) => api.post('/api/auth/login', credentials),
   register: (userData) => api.post('/api/auth/register', userData),
@@ -34,8 +42,8 @@ export const authAPI = {
 export const listingsAPI = {
   getAll: () => api.get('/api/listings'),
   getById: (id) => api.get(`/api/listings/${id}`),
-  create: (listingData) => api.post('/api/listings', listingData),
-  update: (id, listingData) => api.put(`/api/listings/${id}`, listingData),
+  create: (listingData) => api.post('/api/listings', formatListingData(listingData)),
+  update: (id, listingData) => api.put(`/api/listings/${id}`, formatListingData(listingData)),
   delete: (id) => api.delete(`/api/listings/${id}`),
   getMyListings: () => api.get('/api/listings/my-listings'),
 };
@@ -61,10 +69,6 @@ export const usersAPI = {
   removeSkill: (skillId) => api.delete(`/api/users/skills/${skillId}`),
   search: (params) => api.get('/api/users/search', { params }),
   getExperts: () => api.get('/api/users/experts'),
-};
-
-export const testAPI = {
-  home: () => api.get('/api/health'),
 };
 
 export default api;
