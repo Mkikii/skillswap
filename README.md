@@ -1,6 +1,6 @@
 # SkillSwap - Skill Exchange Platform
 
-SkillSwap is a full-stack web application that connects learners with teachers in a community-driven skill-sharing platform. Users can browse available skill listings, create their own offerings, and engage in knowledge exchange.
+A full-stack web application that connects learners with teachers in a community-driven skill-sharing platform. Users can browse available skill listings, create their own offerings, and engage in knowledge exchange.
 
 ## Live Deployment
 
