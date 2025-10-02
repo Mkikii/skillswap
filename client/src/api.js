@@ -47,6 +47,7 @@ export const skillsAPI = {
 export const sessionsAPI = {
   getAll: () => api.get('/api/sessions'),
   create: (sessionData) => api.post('/api/sessions', sessionData),
+  getMySessions: () => api.get('/api/sessions/my-sessions'),
 };
 
 export const reviewsAPI = {
@@ -59,6 +60,7 @@ export const usersAPI = {
   addSkill: (skillData) => api.post('/api/users/skills', skillData),
   removeSkill: (skillId) => api.delete(`/api/users/skills/${skillId}`),
   search: (params) => api.get('/api/users/search', { params }),
+  getExperts: () => api.get('/api/users/experts'),
 };
 
 export const testAPI = {
