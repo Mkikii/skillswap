@@ -12,7 +12,7 @@
 
   body {
     font-family: "Inter", sans-serif;
-    background: #000000;
+    background: #141212ff;
     color: #ffffff;
     min-height: 100vh;
   }
@@ -30,7 +30,11 @@
 
 @layer utilities {
   .text-dark-purple {
-    color: #6b21a8;
+    color: #3d0431ff;
+  }
+
+  .text-gold {
+    color: #fbbf24;
   }
 
   .bg-brown-700 {
@@ -42,7 +46,7 @@
   }
 
   .border-brown-700 {
-    border-color: #8b4513;
+    border-color: #2f042cff;
   }
 
   .text-brown-700 {

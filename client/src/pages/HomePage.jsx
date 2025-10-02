@@ -83,19 +83,19 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
-              <p className="text-dark-purple font-semibold">Sign Up</p>
+              <p className="text-gold font-semibold">Sign Up</p>
             </div>
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
-              <p className="text-dark-purple font-semibold">Browse or Create Listings</p>
+              <p className="text-gold font-semibold">Browse or Create Listings</p>
             </div>
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
-              <p className="text-dark-purple font-semibold">Connect with Teachers</p>
+              <p className="text-gold font-semibold">Connect with Teachers</p>
             </div>
             <div className="text-center">
               <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
-              <p className="text-dark-purple font-semibold">Learn & Grow</p>
+              <p className="text-gold font-semibold">Learn & Grow</p>
             </div>
           </div>
         </div>
