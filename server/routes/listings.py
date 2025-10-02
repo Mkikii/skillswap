@@ -112,4 +112,4 @@ def delete_listing(listing_id):
         return jsonify({'message': 'Listing deleted successfully'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'Failed to delete listing'}), 500
+        return jsonify({'error': 'Failed to delete listing'}), 500# Build trigger
