@@ -39,15 +39,39 @@ def create_listing():
         current_user_id = get_jwt_identity()
         data = request.get_json()
         
+        if not data:
+            return jsonify({'error': 'No data provided'}), 422
+        
         if not data.get('title') or not data.get('description') or not data.get('price_per_hour') or not data.get('skill_id'):
             return jsonify({'error': 'All fields are required'}), 422
         
-        price = float(data['price_per_hour'])
-        skill_id = int(data['skill_id'])
+        try:
+            price = float(data['price_per_hour'])
+        except (ValueError, TypeError):
+            return jsonify({'error': 'Price must be a valid number'}), 422
+        
+        if price <= 0:
+            return jsonify({'error': 'Price must be greater than 0'}), 422
+        
+        if price > 999:
+            return jsonify({'error': 'Price per hour must be 999 KSh or less'}), 422
+        
+        try:
+            skill_id = int(data['skill_id'])
+        except (ValueError, TypeError):
+            return jsonify({'error': 'Skill ID must be a valid number'}), 422
+        
+        skill = Skill.query.get(skill_id)
+        if not skill:
+            return jsonify({'error': 'Skill not found'}), 404
+        
+        user = User.query.get(current_user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
         
         listing = Listing(
-            title=data['title'],
-            description=data['description'],
+            title=data['title'].strip(),
+            description=data['description'].strip(),
             price_per_hour=price,
             user_id=current_user_id,
             skill_id=skill_id
@@ -62,7 +86,11 @@ def create_listing():
                 'id': listing.id,
                 'title': listing.title,
                 'description': listing.description,
-                'price_per_hour': listing.price_per_hour
+                'price_per_hour': listing.price_per_hour,
+                'skill_id': listing.skill_id,
+                'skill_name': skill.name,
+                'user_id': listing.user_id,
+                'created_at': listing.created_at.isoformat()
             }
         }), 201
         
@@ -83,7 +111,9 @@ def get_my_listings():
                 'title': listing.title,
                 'description': listing.description,
                 'price_per_hour': listing.price_per_hour,
-                'skill_name': listing.skill.name
+                'skill_name': listing.skill.name,
+                'skill_category': listing.skill.category,
+                'created_at': listing.created_at.isoformat()
             }
             result.append(listing_data)
         return jsonify({'listings': result}), 200

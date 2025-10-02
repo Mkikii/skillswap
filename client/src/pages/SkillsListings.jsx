@@ -59,21 +59,13 @@ function SkillsListings() {
 
     try {
       const token = localStorage.getItem('token');
-      console.log('🔑 Token:', token);
       
-      if (!token) {
-        setFormError('No authentication token found. Please login again.');
-        return;
-      }
-
       const requestData = {
         title: formData.title,
         description: formData.description,
         price_per_hour: parseFloat(formData.price_per_hour),
         skill_id: parseInt(formData.skill_id)
       };
-
-      console.log('📤 Sending data:', requestData);
 
       const response = await fetch(`${API_URL}/api/listings`, {
         method: 'POST',
@@ -84,10 +76,7 @@ function SkillsListings() {
         body: JSON.stringify(requestData)
       });
 
-      console.log('📡 Response status:', response.status);
-
       const result = await response.json();
-      console.log('📄 Response data:', result);
 
       if (response.ok) {
         setShowForm(false);
@@ -95,7 +84,7 @@ function SkillsListings() {
         fetchListings();
         alert('Listing created successfully!');
       } else {
-        setFormError(result.error || `Failed to create listing (Status: ${response.status})`);
+        setFormError(result.error || 'Failed to create listing');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -272,7 +261,7 @@ function SkillsListings() {
                 type="submit"
                 className="w-full bg-pink-700 hover:bg-pink-600 text-white py-4 text-lg font-semibold rounded-lg transition-all"
               >
-                🚀 Create Listing
+                Create Listing
               </button>
             </form>
           </div>
@@ -328,13 +317,13 @@ function SkillsListings() {
                 <div className="flex space-x-3">
                   <button 
                     className="text-pink-700 hover:text-pink-600 font-semibold transition-colors"
-                    onClick={() => alert('⭐ Rating feature coming soon!')}
+                    onClick={() => alert('Rating feature coming soon!')}
                   >
                     Rate
                   </button>
                   <button 
                     className="text-white hover:text-gray-300 font-semibold transition-colors"
-                    onClick={() => alert('📝 Review feature coming soon!')}
+                    onClick={() => alert('Review feature coming soon!')}
                   >
                     Review
                   </button>
