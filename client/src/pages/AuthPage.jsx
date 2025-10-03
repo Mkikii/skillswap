@@ -79,7 +79,7 @@ function AuthPage() {
     <div className="min-h-screen bg-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-purple-600">
+          <h2 className="mt-6 text-center text-3xl font-bold text-pink-600">
             {isLogin ? 'Sign in to SkillSwap' : 'Join SkillSwap'}
           </h2>
           <p className="mt-2 text-center text-lg text-gray-300">
@@ -94,14 +94,14 @@ function AuthPage() {
               <button
                 type="button"
                 onClick={() => fillDemoAccount('student')}
-                className="w-full bg-purple-700 hover:bg-purple-600 text-white py-2 px-4 rounded transition-colors"
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded transition-colors"
               >
                 Student Demo: maureen@example.com
               </button>
               <button
                 type="button"
                 onClick={() => fillDemoAccount('teacher')}
-                className="w-full bg-purple-700 hover:bg-purple-600 text-white py-2 px-4 rounded transition-colors"
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded transition-colors"
               >
                 Teacher Demo: kikii@example.com
               </button>
@@ -127,7 +127,8 @@ function AuthPage() {
                   name="username"
                   type="text"
                   required={!isLogin}
-                  className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  autoComplete="username"
+                  className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                   placeholder="Choose a username"
                   value={formData.username}
                   onChange={handleChange}
@@ -144,7 +145,8 @@ function AuthPage() {
                 name="email"
                 type="email"
                 required
-                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                autoComplete="email"
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
@@ -161,7 +163,7 @@ function AuthPage() {
                 type="password"
                 required
                 autoComplete="current-password"
-                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
@@ -177,7 +179,7 @@ function AuthPage() {
                   id="bio"
                   name="bio"
                   rows="3"
-                  className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  className="mt-1 block w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                   placeholder="Tell us about yourself..."
                   value={formData.bio}
                   onChange={handleChange}
@@ -190,7 +192,7 @@ function AuthPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-700 hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors disabled:opacity-50"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-colors disabled:opacity-50"
             >
               {loading ? 'Please wait...' : (isLogin ? 'Sign in' : 'Create account')}
             </button>
@@ -199,7 +201,7 @@ function AuthPage() {
           <div className="text-center">
             <button
               type="button"
-              className="text-purple-400 hover:text-purple-300 font-medium"
+              className="text-pink-400 hover:text-pink-300 font-medium"
               onClick={() => setIsLogin(!isLogin)}
             >
               {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
