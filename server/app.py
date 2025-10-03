@@ -6,62 +6,57 @@ from database import db
 from models import User
 from datetime import timedelta
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
+app = Flask(__name__)
+app.config.from_object(Config)
 
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=10)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=10)
 
-    db.init_app(app)
+db.init_app(app)
 
-    CORS(app, origins=[
-        "https://skillswap-app.netlify.app",
-        "https://mkskillswap.netlify.app", 
-        "http://localhost:5173",
-        "http://localhost:3000"
-    ])
+CORS(app, origins=[
+    "https://skillswap-app.netlify.app",
+    "https://mkskillswap.netlify.app", 
+    "http://localhost:5173",
+    "http://localhost:3000"
+])
 
-    jwt = JWTManager(app)
+jwt = JWTManager(app)
 
-    @jwt.user_identity_loader
-    def user_identity_lookup(user):
-        return str(user)
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return str(user)
 
-    @jwt.user_lookup_loader
-    def user_lookup_callback(_jwt_header, jwt_data):
-        identity = jwt_data["sub"]
-        return User.query.get(int(identity))
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return User.query.get(int(identity))
 
-    @app.route('/')
-    def home():
-        return jsonify({"message": "SkillSwap API is running!", "status": "success"})
+@app.route('/')
+def home():
+    return jsonify({"message": "SkillSwap API is running!", "status": "success"})
 
-    @app.route('/api/health')
-    def health_check():
-        return jsonify({"status": "API healthy"})
+@app.route('/api/health')
+def health_check():
+    return jsonify({"status": "API healthy"})
 
-    from routes.auth import auth_bp
-    from routes.skills import skills_bp
-    from routes.listings import listings_bp
-    from routes.sessions import sessions_bp
-    from routes.reviews import reviews_bp
-    from routes.users_routes import users_bp
+from routes.auth import auth_bp
+from routes.skills import skills_bp
+from routes.listings import listings_bp
+from routes.sessions import sessions_bp
+from routes.reviews import reviews_bp
+from routes.users_routes import users_bp
 
-    app.register_blueprint(auth_bp, url_prefix='/api/auth')
-    app.register_blueprint(skills_bp, url_prefix='/api/skills')
-    app.register_blueprint(listings_bp, url_prefix='/api/listings')
-    app.register_blueprint(sessions_bp, url_prefix='/api/sessions')
-    app.register_blueprint(reviews_bp, url_prefix='/api/reviews')
-    app.register_blueprint(users_bp, url_prefix='/api/users')
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
+app.register_blueprint(skills_bp, url_prefix='/api/skills')
+app.register_blueprint(listings_bp, url_prefix='/api/listings')
+app.register_blueprint(sessions_bp, url_prefix='/api/sessions')
+app.register_blueprint(reviews_bp, url_prefix='/api/reviews')
+app.register_blueprint(users_bp, url_prefix='/api/users')
 
-    print("✅ All routes registered successfully")
-
-    return app
-
-app = create_app()
+print("✅ All routes registered successfully")
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         print("Database tables created!")
-    app.run(debug=True, port=5555)
+    app.run(debug=True, port=5555)# CORS fix deployment
