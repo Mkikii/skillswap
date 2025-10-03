@@ -1,4 +1,3 @@
-[PASTE THE UPDATED API CODE ABOVE HERE]
 import axios from 'axios';
 
 const API_BASE_URL = 'https://skillswap-production-0e78.up.railway.app';
@@ -26,7 +25,6 @@ api.interceptors.response.use(
   }
 );
 
-// PERMANENT 422 FIX - Proper data formatting
 const formatListingData = (data) => ({
   title: String(data.title || '').trim(),
   description: String(data.description || '').trim(),

@@ -52,9 +52,13 @@ function BookingPage() {
     setBookingLoading(true);
     try {
       const sessionData = {
-        ...bookingData,
-        listing_id: parseInt(listingId)
+        listing_id: parseInt(listingId),
+        scheduled_date: bookingData.scheduled_date,
+        duration_hours: parseFloat(bookingData.duration_hours),
+        notes: bookingData.notes
       };
+      
+      console.log('Sending session data:', sessionData);
       
       await sessionsAPI.create(sessionData);
       
@@ -62,7 +66,8 @@ function BookingPage() {
       navigate('/');
     } catch (error) {
       console.error('Error booking session:', error);
-      setBookingError(error.message || 'Failed to book session. Please check all fields and try again.');
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to book session';
+      setBookingError(errorMsg);
     } finally {
       setBookingLoading(false);
     }
@@ -90,7 +95,7 @@ function BookingPage() {
     );
   }
 
-  const totalCost = listing.price_per_hour * bookingData.duration_hours;
+  const totalCost = listing.price_per_hour * parseFloat(bookingData.duration_hours);
 
   return (
     <div className="min-h-screen bg-black text-white py-8">
@@ -160,7 +165,7 @@ function BookingPage() {
                 </label>
                 <select
                   value={bookingData.duration_hours}
-                  onChange={(e) => setBookingData({...bookingData, duration_hours: e.target.value})}
+                  onChange={(e) => setBookingData({...bookingData, duration_hours: parseFloat(e.target.value)})}
                   className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   required
                 >
@@ -198,7 +203,7 @@ function BookingPage() {
                 <div className="border-t border-gray-600 pt-2 mt-2">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-white">Total Cost:</span>
-                    <span className="text-2xl font-bold text-pink-600">KSh {totalCost}</span>
+                    <span className="text-2xl font-bold text-pink-600">KSh {totalCost.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
