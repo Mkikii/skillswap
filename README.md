@@ -1,56 +1,110 @@
 # SkillSwap - Full Stack Skill Sharing Platform
 
-SkillSwap is a full-stack web application that acts as a bulletin board for skill sharing. Users can create listings to offer skills they can teach or request skills they want to learn. The platform connects learners with expert teachers in various fields including technology, design, culinary arts, fitness, and more.
+## Project Overview
 
-**Developed by:** Maureen Karimi (Scrum Master & Lead Developer), Andrew Omori (Frontend), Ochieng Odour (Backend)
+SkillSwap is a full-stack web application that serves as a bulletin board for skill sharing. Users can create listings to offer skills they can teach or request skills they want to learn. The platform facilitates connections between learners and teachers through a modern React frontend and Flask API backend.
 
-## Live Deployment
-
-- **Frontend:** [Netlify Deployment](https://skillswap-app.netlify.app)
-- **Backend API:** [Railway Deployment](https://skillswap-production-0e78.up.railway.app)
-- **GitHub Repository:** [SkillSwap GitHub](https://github.com/Mkikii/skillswap)
+**Live Demo:** [Frontend](https://skillswap-app.netlify.app) | [Backend API](https://skillswap-production-0e78.up.railway.app)
 
 **Deployment Note:** The application is deployed *exclusively* from the **`dev` branch**, which contains the most stable and tested version of the codebase.
-
 ## Deployment Configuration
 
 * **Process:** Automatic deployment from the GitHub **`dev` branch**.
 * **Environment:** Environment variables configured for both Netlify and Railway.
 * **CORS:** CORS is configured for cross-origin requests.
 
+
+## Team Members
+
+- **Maureen Karimi** (Scrum Master & Full Stack Developer)
+- **Andrew Omori** ( core Frontend Developer)
+- **Ochieng Odour** ( initial Backend Developer)
+
+Features
+User Authentication - Register, login, and logout with JWT-based security.
+
+Skill Marketplace - Create, read, and delete skill listings.
+
+Book Learning Sessions - Initiate and manage session bookings with teachers.
+
+Browsing - Browse available skills and listings.
+
+Profiles - User profiles display skills and ratings.
+
+Session Management - Full booking and status management system.
+
+Responsive Design - Optimized interface for all devices.
+
 ## Tech Stack
 
 ### Frontend
-- React 18
-- React Router DOM
-- Tailwind CSS
-- Axios for API calls
-- Vite build tool
+- React 18 - Modern JavaScript library for building user interfaces.
+- React Router DOM -  For client-side routing and navigation.
+- Tailwind CSS -  Utility-first framework for rapid styling.
+- Axios -Promise-based HTTP client for API calls.
+- Vite- Fast build tool for development.
 
 ### Backend
-- Flask (Python)
-- SQLAlchemy ORM
-- Flask-JWT-Extended for authentication
-- Flask-CORS for cross-origin requests
-- PostgreSQL (Production) / SQLite (Development)
+-Flask - Lightweight Python web framework for the API.
 
-## Features
+SQLAlchemy ORM - Python SQL Toolkit and Object Relational Mapper.
 
-### Core Functionality
-- User authentication (login/register)
-- Create, read, update, delete skill listings
-- Book learning sessions with teachers
-- User profiles with skills and ratings
-- Review and rating system
-- Responsive design for all devices
+Flask-JWT-Extended - For secure token-based authentication.
 
-### User Roles
-- **Students:** Browse listings, book sessions, leave reviews
-- **Teachers:** Create listings, manage bookings, build reputation
+Flask-CORS - For handling cross-origin requests.
 
-### Demo Accounts
-- Teacher: `kikii@example.com` / `password123`
-- Student: `maureen@example.com` / `password123`
+PostgreSQL (Production) / SQLite (Development) - Database solutions.
+
+
+### Deployment
+- Frontend: Netlify
+- Backend: Railway
+
+Project Requirements Met
+Flask Backend
+Uses routes for GET, POST, PATCH, and DELETE operations.
+
+Returns appropriate HTTP status codes.
+
+Implements CORS for cross-origin requests.
+
+Separates client and server code properly.
+
+SQLAlchemy and Serialization
+6 data models with proper relationships.
+
+One-to-many relationships (User-Listings, User-Reviews).
+
+Many-to-many relationship (User-Skills through UserSkill).
+
+SQLAlchemy-Serializer for JSON serialization.
+
+Full session management for CRUD operations.
+
+Forms and Validation
+Formik forms for all POST, PUT, PATCH routes.
+
+Frontend validation on all inputs.
+
+Data type validation (price ranges, required fields).
+
+String format validation (email, username).
+
+React Routes
+6 client-side routes with React Router.
+
+Navigation bar for route navigation.
+
+Use of fetch() or Axios for client-server communication.
+
+Protected routes for authenticated users.
+
+
+
+
+
+
+
 
 ## Database Schema
 
@@ -97,7 +151,6 @@ Table sessions {
   duration_hours decimal
   status varchar
   notes text
-  created_at timestamp
 }
 
 Table reviews {
@@ -109,17 +162,18 @@ Table reviews {
   session_id integer [ref: > sessions.id]
   created_at timestamp
 }
+
 Project Requirements Met
 Flask Backend 
-Uses routes for GET, POST, PUT, DELETE operations
+Uses routes for GET, POST, PATCH, and DELETE operations
 
 Returns appropriate HTTP status codes
 
 Implements CORS for cross-origin requests
 
-Separates client and server code effectively
+Separates client and server code properly
 
-SQLAlchemy & Serialization 
+SQLAlchemy and Serialization 
 6 data models with proper relationships
 
 One-to-many relationships (User-Listings, User-Reviews)
@@ -128,100 +182,81 @@ Many-to-many relationship (User-Skills through UserSkill)
 
 SQLAlchemy-Serializer for JSON serialization
 
-Full CRUD operations with session management
+Full session management for CRUD operations
 
-Forms & Validation 
-Formik forms for all POST/PUT/PATCH routes
+Forms and Validation 
+Formik forms for all POST, PUT, PATCH routes
 
-Comprehensive input validation
+Frontend validation on all inputs
 
-Data type validation (price ranges, skill IDs)
+Data type validation (price ranges, required fields)
 
-String/number format validation
+String format validation (email, username)
 
 React Routes 
 6 client-side routes with React Router
 
 Navigation bar for route navigation
 
-Fetch API for client-server communication
+Use of fetch() for client-server communication
 
 Protected routes for authenticated users
 
 Installation & Setup
 Prerequisites
-Node.js 18+
-
 Python 3.9+
+
+Node.js 18+
 
 Git
 
 Backend Setup
-1. Clone the repository
+Clone the repository:
 git clone https://github.com/Mkikii/skillswap.git
 cd skillswap/server
 
-2. Create virtual environment
+2. Create virtual environment and install dependencies:
+
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-3. Install dependencies
 pip install -r requirements.txt
 
-4. Set up environment variables
+3. Set up environment variables:
+
 cp .env.example .env
 # Edit .env with your database URL and secret keys
 
-5. Initialize database
+4 .Initialize the database:
+
 python seed.py
 
-6. Run the backend server
+5. Run the development server:
 
 python app.py
 
-
 Frontend Setup
-
-1.Navigate to client directory
-
+1. Navigate to client directory:
 
 cd ../client
 
-2.Install dependencies
+Install dependencies:
 
 npm install
 
-3. Set up environment variables
+3. Set up environment variables:
 
-4. Run the development server
+cp .env.example .env
+# Edit .env with your API URL
+
+4.Run the development server:
 
 npm run dev
 
-
-Frontend will run on http://localhost:5173
-
-Deployment
-Backend Deployment (Railway)
-Connect GitHub repository to Railway
-
-Set environment variables in Railway dashboard
-
-Deploy automatically from main branch
-
-Frontend Deployment (Netlify)
-Connect GitHub repository to Netlify
-
-Set build command: npm run build
-
-Set publish directory: dist
-
-Set environment variables in Netlify dashboard
-
 API Endpoints
 Authentication
-POST /api/auth/login - User login
-
 POST /api/auth/register - User registration
+
+POST /api/auth/login - User login
 
 GET /api/auth/profile - Get user profile
 
@@ -240,56 +275,33 @@ GET /api/skills - Get all skills
 Sessions
 POST /api/sessions - Book a session
 
-GET /api/sessions/my-sessions - Get user's sessions
-
-Reviews
-POST /api/reviews - Create review
-
-GET /api/reviews - Get all reviews
+GET /api/sessions - Get user sessions
 
 Users
 GET /api/users/:id - Get user profile
 
 GET /api/users/experts - Get expert users
 
-POST /api/users/skills - Add user skill
+Demo Accounts
+Teacher Account: kikii@example.com / password123
 
-Project Structure
-
-skillswap/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── context/       # React context (Auth)
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API service layer
-│   │   └── App.jsx        # Main app component
-│   └── package.json
-├── server/                # Flask backend
-│   ├── routes/           # API route handlers
-│   ├── models.py         # Database models
-│   ├── database.py       # Database configuration
-│   ├── app.py           # Flask application
-│   └── requirements.txt
+Student Account: maureen@example.com / password123
 
 Development Workflow
-Branch Strategy
+This project was developed using Git feature branch workflow:
 
-Dev - Production-ready code
+Main branch: production-ready code
 
-dev - Development branch
+Dev branch: active development
 
-Feature branches for new functionality
+Feature branches: individual feature development
 
-Code Standards
+Deployment
+The application is deployed on two platforms:
 
-Follow PEP 8 for Python code
+Frontend: Netlify (automatically deploys from dev branch)
 
-Use ESLint and Prettier for JavaScript
-
-Write meaningful commit messages
-
-Create pull requests for code review
+Backend: Railway (deploys from main branch)
 
 Contributing
 Fork the repository
@@ -303,25 +315,55 @@ Push to the branch (git push origin feature/amazing-feature)
 Open a Pull Request
 
 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
 
 Acknowledgments
 Flatiron School for project guidelines and requirements
 
 React and Flask communities for excellent documentation
 
-Railway and Netlify for seamless deployment services
+Netlify and Railway for reliable deployment platforms
 
-Support
-For technical support or questions about the application:
 
-Check terminal output for specific error messages
+##  **FINAL DEPLOYMENT**
 
-Verify all prerequisite software is installed
+```bash
+cd ~/Documents/skillswap/client
 
-Ensure each setup step completes successfully
+# Fix the purple colors in BookingPage
+sed -i 's/purple-600/pink-600/g' src/pages/BookingPage.jsx
+sed -i 's/purple-700/pink-700/g' src/pages/BookingPage.jsx
+sed -i 's/purple-500/pink-500/g' src/pages/BookingPage.jsx
 
-SkillSwap - Bridging knowledge gaps through community-driven learning experiences.
+# Update README
+cat > README.md << 'EOF'
+[PASTE THE ENTIRE README CONTENT ABOVE HERE]
+EOF
+
+# Commit final fixes
+git add .
+git commit -m "final: Fix colors, remove emojis, update professional README"
+git push origin dev
+
+License
+This project is licensed under the MIT License.
+
+Acknowledgments
+Flatiron School for project guidelines and requirements.
+
+React and Flask communities for excellent documentation.
+
+Netlify and Railway for reliable deployment platforms.
+
+
+
+
+
+
+
+
+
+
 
 
 
