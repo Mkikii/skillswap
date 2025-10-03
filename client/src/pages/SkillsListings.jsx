@@ -25,7 +25,11 @@ function SkillsListings() {
   const fetchListings = async () => {
     try {
       const response = await listingsAPI.getAll();
-      setListings(response.data.listings || []);
+      if (response.data && response.data.listings) {
+        setListings(response.data.listings);
+      } else {
+        setListings([]);
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching listings:', error);
@@ -37,7 +41,11 @@ function SkillsListings() {
   const fetchSkills = async () => {
     try {
       const response = await skillsAPI.getAll();
-      setSkills(response.data.skills || []);
+      if (response.data && response.data.skills) {
+        setSkills(response.data.skills);
+      } else {
+        setSkills([]);
+      }
     } catch (error) {
       console.error('Error fetching skills:', error);
       setSkills([]);
@@ -54,7 +62,7 @@ function SkillsListings() {
     }
 
     try {
-      const response = await listingsAPI.create(formData);
+      await listingsAPI.create(formData);
       
       setShowForm(false);
       setFormData({ title: '', description: '', price_per_hour: '', skill_id: '' });
@@ -62,7 +70,7 @@ function SkillsListings() {
       alert('Listing created successfully!');
     } catch (error) {
       console.error('Error creating listing:', error);
-      setFormError(error.response?.data?.error || 'Failed to create listing. Please check all fields.');
+      setFormError(error.message || 'Failed to create listing. Please check all fields.');
     }
   };
 
@@ -85,7 +93,7 @@ function SkillsListings() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-700 mx-auto"></div>
           <p className="mt-4 text-white">Loading listings...</p>
         </div>
       </div>
@@ -163,6 +171,7 @@ function SkillsListings() {
                   placeholder="450"
                   required
                 />
+                <p className="text-xs text-gray-400 mt-1">Must be between 1 and 999 KSh</p>
               </div>
               
               <div>
@@ -224,7 +233,7 @@ function SkillsListings() {
                 {user && user.id === listing.teacher_id && (
                   <button 
                     onClick={() => handleDeleteListing(listing.id)}
-                    className="text-red-400 hover:text-red-300 transition-colors ml-2"
+                    className="text-red-400 hover:text-red-300 transition-colors ml-2 px-3 py-1 bg-red-900 rounded"
                     title="Delete listing"
                   >
                     Delete

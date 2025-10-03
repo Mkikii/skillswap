@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { listingsAPI, sessionsAPI } from '../services/api';
+import { sessionsAPI } from '../services/api';
 
 function BookingPage() {
   const { user } = useAuth();
@@ -10,6 +10,7 @@ function BookingPage() {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingError, setBookingError] = useState('');
   const [bookingData, setBookingData] = useState({
     scheduled_date: '',
     duration_hours: 1,
@@ -22,9 +23,15 @@ function BookingPage() {
 
   const fetchListing = async () => {
     try {
-      const response = await listingsAPI.getAll();
-      const foundListing = response.data.listings?.find(l => l.id === parseInt(listingId));
-      setListing(foundListing);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://skillswap-production-0e78.up.railway.app'}/api/listings`);
+      const data = await response.json();
+      
+      if (response.ok && data.listings) {
+        const foundListing = data.listings.find(l => l.id === parseInt(listingId));
+        setListing(foundListing);
+      } else {
+        setListing(null);
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching listing:', error);
@@ -35,28 +42,27 @@ function BookingPage() {
 
   const handleBookSession = async (e) => {
     e.preventDefault();
+    setBookingError('');
     
     if (!user) {
-      alert('Please login to book a session');
-      navigate('/auth');
+      setBookingError('Please login to book a session');
       return;
     }
 
     setBookingLoading(true);
     try {
       const sessionData = {
-        listing_id: parseInt(listingId),
-        scheduled_date: bookingData.scheduled_date,
-        duration_hours: parseFloat(bookingData.duration_hours),
-        notes: bookingData.notes
+        ...bookingData,
+        listing_id: parseInt(listingId)
       };
-
+      
       await sessionsAPI.create(sessionData);
+      
       alert('Session booked successfully! The teacher will contact you soon.');
       navigate('/');
     } catch (error) {
       console.error('Error booking session:', error);
-      alert('Failed to book session: ' + (error.response?.data?.error || 'Please check all fields'));
+      setBookingError(error.message || 'Failed to book session. Please check all fields and try again.');
     } finally {
       setBookingLoading(false);
     }
@@ -66,7 +72,7 @@ function BookingPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-700 mx-auto"></div>
           <p className="mt-4 text-white">Loading listing...</p>
         </div>
       </div>
@@ -127,6 +133,12 @@ function BookingPage() {
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-700">
             <h2 className="text-2xl font-bold text-white mb-6">Book a Session</h2>
             
+            {bookingError && (
+              <div className="mb-6 p-4 bg-red-900 border border-red-700 rounded-lg text-red-200">
+                {bookingError}
+              </div>
+            )}
+            
             <form onSubmit={handleBookSession} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -158,6 +170,7 @@ function BookingPage() {
                   <option value={2}>2 hours</option>
                   <option value={3}>3 hours</option>
                 </select>
+                <p className="text-xs text-gray-400 mt-1">Select duration between 0.5 and 3 hours</p>
               </div>
 
               <div>
@@ -193,7 +206,7 @@ function BookingPage() {
               <button
                 type="submit"
                 disabled={bookingLoading || !user}
-                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50"
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50 transition-all"
               >
                 {bookingLoading ? (
                   <div className="flex items-center justify-center space-x-2">

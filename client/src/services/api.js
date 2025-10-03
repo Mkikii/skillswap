@@ -25,6 +25,49 @@ api.interceptors.response.use(
   }
 );
 
+// Permanent error handling for listings
+const formatListingData = (data) => {
+  if (!data.title?.trim() || !data.description?.trim() || !data.price_per_hour || !data.skill_id) {
+    throw new Error('All fields are required');
+  }
+  
+  const price = parseFloat(data.price_per_hour);
+  if (price < 1 || price > 999 || isNaN(price)) {
+    throw new Error('Price must be between 1 and 999 KSh');
+  }
+  
+  const skillId = parseInt(data.skill_id);
+  if (isNaN(skillId)) {
+    throw new Error('Please select a valid skill');
+  }
+  
+  return {
+    title: data.title.trim(),
+    description: data.description.trim(),
+    price_per_hour: price,
+    skill_id: skillId
+  };
+};
+
+// Permanent error handling for sessions
+const formatSessionData = (data) => {
+  if (!data.listing_id || !data.scheduled_date) {
+    throw new Error('Date and listing are required');
+  }
+  
+  const duration = parseFloat(data.duration_hours);
+  if (duration < 0.5 || duration > 8 || isNaN(duration)) {
+    throw new Error('Duration must be between 0.5 and 8 hours');
+  }
+  
+  return {
+    listing_id: parseInt(data.listing_id),
+    scheduled_date: data.scheduled_date,
+    duration_hours: duration,
+    notes: data.notes?.trim() || ''
+  };
+};
+
 export const authAPI = {
   login: (credentials) => api.post('/api/auth/login', credentials),
   register: (userData) => api.post('/api/auth/register', userData),
@@ -35,15 +78,13 @@ export const listingsAPI = {
   getAll: () => api.get('/api/listings'),
   getById: (id) => api.get(`/api/listings/${id}`),
   create: (listingData) => {
-    const formattedData = {
-      title: listingData.title?.trim(),
-      description: listingData.description?.trim(),
-      price_per_hour: parseFloat(listingData.price_per_hour) || 0,
-      skill_id: parseInt(listingData.skill_id) || 0
-    };
+    const formattedData = formatListingData(listingData);
     return api.post('/api/listings', formattedData);
   },
-  update: (id, listingData) => api.put(`/api/listings/${id}`, listingData),
+  update: (id, listingData) => {
+    const formattedData = formatListingData(listingData);
+    return api.put(`/api/listings/${id}`, formattedData);
+  },
   delete: (id) => api.delete(`/api/listings/${id}`),
   getMyListings: () => api.get('/api/listings/my-listings'),
 };
@@ -55,12 +96,7 @@ export const skillsAPI = {
 export const sessionsAPI = {
   getAll: () => api.get('/api/sessions'),
   create: (sessionData) => {
-    const formattedData = {
-      listing_id: parseInt(sessionData.listing_id) || 0,
-      scheduled_date: sessionData.scheduled_date,
-      duration_hours: parseFloat(sessionData.duration_hours) || 1.0,
-      notes: sessionData.notes || ''
-    };
+    const formattedData = formatSessionData(sessionData);
     return api.post('/api/sessions', formattedData);
   },
   getMySessions: () => api.get('/api/sessions/my-sessions'),
