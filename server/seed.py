@@ -15,7 +15,7 @@ def setup_database():
         try:
             db.drop_all()
             db.create_all()
-            print("Database tables created successfully")
+            print("✅ Database tables created successfully")
             
             skills_data = [
                 {"name": "Python Programming", "category": "Technology"},
@@ -42,7 +42,7 @@ def setup_database():
                 db.session.add(skill)
             
             db.session.commit()
-            print("Skills created successfully")
+            print("✅ Skills created successfully")
             
             teachers_data = [
                 {
@@ -142,7 +142,7 @@ def setup_database():
                 users.append(user)
             
             db.session.commit()
-            print("Users created successfully")
+            print("✅ Users created successfully")
             
             user_skills_data = [
                 {"user_id": 1, "skill_id": 1, "proficiency_level": "expert"},
@@ -178,7 +178,7 @@ def setup_database():
                 db.session.add(user_skill)
             
             db.session.commit()
-            print("User skills created successfully")
+            print("✅ User skills created successfully")
             
             listings_data = [
                 {
@@ -272,7 +272,7 @@ def setup_database():
                 db.session.add(listing)
             
             db.session.commit()
-            print("Listings created successfully")
+            print("✅ Listings created successfully")
             
             sessions_data = [
                 {
@@ -309,7 +309,7 @@ def setup_database():
                 db.session.add(session)
             
             db.session.commit()
-            print("Sessions created successfully")
+            print("✅ Sessions created successfully")
             
             reviews_data = [
                 {
@@ -340,7 +340,7 @@ def setup_database():
                 db.session.add(review)
             
             db.session.commit()
-            print("Reviews created successfully")
+            print("✅ Reviews created successfully")
             
             user_count = User.query.count()
             skill_count = Skill.query.count()
@@ -348,24 +348,24 @@ def setup_database():
             session_count = Session.query.count()
             review_count = Review.query.count()
             
-            print("\nDATABASE SETUP COMPLETED SUCCESSFULLY!")
+            print("\n🎉 DATABASE SETUP COMPLETED SUCCESSFULLY!")
             print("=" * 50)
-            print(f"Users: {user_count}")
-            print(f"Skills: {skill_count}")
-            print(f"Listings: {listing_count}")
-            print(f"Sessions: {session_count}")
-            print(f"Reviews: {review_count}")
+            print(f"📊 Users: {user_count}")
+            print(f"📊 Skills: {skill_count}")
+            print(f"📊 Listings: {listing_count}")
+            print(f"📊 Sessions: {session_count}")
+            print(f"📊 Reviews: {review_count}")
             print("=" * 50)
-            print("\nDEMO ACCOUNTS:")
-            print("Teacher: kikii@example.com / password123")
-            print("Student: maureen@example.com / password123")
+            print("\n🔑 DEMO ACCOUNTS:")
+            print("👨‍🏫 Teacher: kikii@example.com / password123")
+            print("👩‍🎓 Student: maureen@example.com / password123")
             print("=" * 50)
-            print("\nBackend is ready!")
+            print("\n🚀 Backend is ready!")
             
             return True
             
         except Exception as e:
-            print(f"Error during database setup: {e}")
+            print(f"❌ Error during database setup: {e}")
             import traceback
             traceback.print_exc()
             db.session.rollback()
