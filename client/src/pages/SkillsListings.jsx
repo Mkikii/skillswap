@@ -25,11 +25,7 @@ function SkillsListings() {
   const fetchListings = async () => {
     try {
       const response = await listingsAPI.getAll();
-      if (response.data && response.data.listings) {
-        setListings(response.data.listings);
-      } else {
-        setListings([]);
-      }
+      setListings(response.data.listings || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching listings:', error);
@@ -41,11 +37,7 @@ function SkillsListings() {
   const fetchSkills = async () => {
     try {
       const response = await skillsAPI.getAll();
-      if (response.data && response.data.skills) {
-        setSkills(response.data.skills);
-      } else {
-        setSkills([]);
-      }
+      setSkills(response.data.skills || []);
     } catch (error) {
       console.error('Error fetching skills:', error);
       setSkills([]);
@@ -62,17 +54,7 @@ function SkillsListings() {
     }
 
     try {
-      if (!formData.title.trim() || !formData.description.trim() || !formData.price_per_hour || !formData.skill_id) {
-        setFormError('All fields are required');
-        return;
-      }
-
-      if (parseFloat(formData.price_per_hour) < 1 || parseFloat(formData.price_per_hour) > 999) {
-        setFormError('Price must be between 1 and 999 KSh');
-        return;
-      }
-
-      await listingsAPI.create(formData);
+      const response = await listingsAPI.create(formData);
       
       setShowForm(false);
       setFormData({ title: '', description: '', price_per_hour: '', skill_id: '' });
@@ -80,7 +62,7 @@ function SkillsListings() {
       alert('Listing created successfully!');
     } catch (error) {
       console.error('Error creating listing:', error);
-      setFormError(error.response?.data?.error || 'Failed to create listing');
+      setFormError(error.response?.data?.error || 'Failed to create listing. Please check all fields.');
     }
   };
 
@@ -103,7 +85,7 @@ function SkillsListings() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto"></div>
           <p className="mt-4 text-white">Loading listings...</p>
         </div>
       </div>
@@ -114,18 +96,18 @@ function SkillsListings() {
     <div className="min-h-screen bg-black text-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
-          <Link to="/" className="flex items-center space-x-2 text-purple-600 hover:text-purple-500">
+          <Link to="/" className="flex items-center space-x-2 text-pink-600 hover:text-pink-500">
             <span>Back to Home</span>
           </Link>
           
           {user && (
             <div className="flex items-center space-x-4">
               <span className="text-white">
-                Welcome, <span className="font-semibold text-purple-600">{user.username}</span>
+                Welcome, <span className="font-semibold text-pink-600">{user.username}</span>
               </span>
               <button
                 onClick={() => setShowForm(!showForm)}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
               >
                 {showForm ? 'Cancel' : 'Create New Listing'}
               </button>
@@ -143,7 +125,7 @@ function SkillsListings() {
         </div>
 
         {showForm && (
-          <div className="bg-gray-900 p-8 rounded-lg mb-12 max-w-2xl mx-auto border border-purple-600">
+          <div className="bg-gray-900 p-8 rounded-lg mb-12 max-w-2xl mx-auto border border-pink-600">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">Create New Listing</h2>
 
             {formError && (
@@ -161,7 +143,7 @@ function SkillsListings() {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   placeholder="e.g., Advanced Python Programming"
                   required
                 />
@@ -175,7 +157,7 @@ function SkillsListings() {
                   type="number"
                   value={formData.price_per_hour}
                   onChange={(e) => setFormData({...formData, price_per_hour: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   min="1"
                   max="999"
                   placeholder="450"
@@ -190,7 +172,7 @@ function SkillsListings() {
                 <select
                   value={formData.skill_id}
                   onChange={(e) => setFormData({...formData, skill_id: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   required
                 >
                   <option value="">Choose a skill</option>
@@ -209,7 +191,7 @@ function SkillsListings() {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   rows="4"
                   placeholder="Describe what you'll teach..."
                   required
@@ -218,7 +200,7 @@ function SkillsListings() {
               
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-lg transition-all"
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-semibold rounded-lg transition-all"
               >
                 Create Listing
               </button>
@@ -228,7 +210,7 @@ function SkillsListings() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {listings.map(listing => (
-            <div key={listing.id} className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-purple-600 transition-all">
+            <div key={listing.id} className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-pink-600 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-white mb-2">
@@ -242,7 +224,7 @@ function SkillsListings() {
                 {user && user.id === listing.teacher_id && (
                   <button 
                     onClick={() => handleDeleteListing(listing.id)}
-                    className="text-red-400 hover:text-red-300 transition-colors ml-2 text-sm font-medium"
+                    className="text-red-400 hover:text-red-300 transition-colors ml-2"
                     title="Delete listing"
                   >
                     Delete
@@ -255,11 +237,11 @@ function SkillsListings() {
               </p>
               
               <div className="flex justify-between items-center mb-4">
-                <span className="text-2xl font-bold text-purple-600">
+                <span className="text-2xl font-bold text-pink-600">
                   KSh {listing.price_per_hour}
                   <span className="text-sm font-normal text-gray-400">/hr</span>
                 </span>
-                <span className="text-sm text-white bg-purple-600 px-3 py-1 rounded-full">
+                <span className="text-sm text-white bg-pink-600 px-3 py-1 rounded-full">
                   {listing.skill_name}
                 </span>
               </div>
@@ -285,14 +267,14 @@ function SkillsListings() {
             {user ? (
               <button
                 onClick={() => setShowForm(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-4 rounded-lg"
+                className="bg-pink-600 hover:bg-pink-700 text-white text-lg px-8 py-4 rounded-lg"
               >
                 Create First Listing
               </button>
             ) : (
               <Link
                 to="/auth"
-                className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-4 rounded-lg"
+                className="bg-pink-600 hover:bg-pink-700 text-white text-lg px-8 py-4 rounded-lg"
               >
                 Sign Up to Create Listing
               </Link>

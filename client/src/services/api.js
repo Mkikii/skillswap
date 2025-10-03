@@ -25,13 +25,6 @@ api.interceptors.response.use(
   }
 );
 
-const formatListingData = (data) => ({
-  title: data.title?.trim(),
-  description: data.description?.trim(),
-  price_per_hour: parseFloat(data.price_per_hour) || 0,
-  skill_id: parseInt(data.skill_id) || 0
-});
-
 export const authAPI = {
   login: (credentials) => api.post('/api/auth/login', credentials),
   register: (userData) => api.post('/api/auth/register', userData),
@@ -41,8 +34,16 @@ export const authAPI = {
 export const listingsAPI = {
   getAll: () => api.get('/api/listings'),
   getById: (id) => api.get(`/api/listings/${id}`),
-  create: (listingData) => api.post('/api/listings', formatListingData(listingData)),
-  update: (id, listingData) => api.put(`/api/listings/${id}`, formatListingData(listingData)),
+  create: (listingData) => {
+    const formattedData = {
+      title: listingData.title?.trim(),
+      description: listingData.description?.trim(),
+      price_per_hour: parseFloat(listingData.price_per_hour) || 0,
+      skill_id: parseInt(listingData.skill_id) || 0
+    };
+    return api.post('/api/listings', formattedData);
+  },
+  update: (id, listingData) => api.put(`/api/listings/${id}`, listingData),
   delete: (id) => api.delete(`/api/listings/${id}`),
   getMyListings: () => api.get('/api/listings/my-listings'),
 };
@@ -53,7 +54,15 @@ export const skillsAPI = {
 
 export const sessionsAPI = {
   getAll: () => api.get('/api/sessions'),
-  create: (sessionData) => api.post('/api/sessions', sessionData),
+  create: (sessionData) => {
+    const formattedData = {
+      listing_id: parseInt(sessionData.listing_id) || 0,
+      scheduled_date: sessionData.scheduled_date,
+      duration_hours: parseFloat(sessionData.duration_hours) || 1.0,
+      notes: sessionData.notes || ''
+    };
+    return api.post('/api/sessions', formattedData);
+  },
   getMySessions: () => api.get('/api/sessions/my-sessions'),
 };
 

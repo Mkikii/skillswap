@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
-const API_URL = import.meta.env.VITE_API_URL || 'https://skillswap-production-0e78.up.railway.app';
+import { listingsAPI, sessionsAPI } from '../services/api';
 
 function BookingPage() {
   const { user } = useAuth();
@@ -23,15 +22,9 @@ function BookingPage() {
 
   const fetchListing = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/listings`);
-      const data = await response.json();
-      
-      if (response.ok && data.listings) {
-        const foundListing = data.listings.find(l => l.id === parseInt(listingId));
-        setListing(foundListing);
-      } else {
-        setListing(null);
-      }
+      const response = await listingsAPI.getAll();
+      const foundListing = response.data.listings?.find(l => l.id === parseInt(listingId));
+      setListing(foundListing);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching listing:', error);
@@ -51,32 +44,19 @@ function BookingPage() {
 
     setBookingLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/sessions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          listing_id: parseInt(listingId),
-          scheduled_date: bookingData.scheduled_date,
-          duration_hours: parseFloat(bookingData.duration_hours),
-          notes: bookingData.notes
-        })
-      });
+      const sessionData = {
+        listing_id: parseInt(listingId),
+        scheduled_date: bookingData.scheduled_date,
+        duration_hours: parseFloat(bookingData.duration_hours),
+        notes: bookingData.notes
+      };
 
-      const data = await response.json();
-      
-      if (response.ok) {
-        alert('Session booked successfully! The teacher will contact you soon.');
-        navigate('/');
-      } else {
-        alert('Failed to book session: ' + data.error);
-      }
+      await sessionsAPI.create(sessionData);
+      alert('Session booked successfully! The teacher will contact you soon.');
+      navigate('/');
     } catch (error) {
       console.error('Error booking session:', error);
-      alert('Failed to book session. Please try again.');
+      alert('Failed to book session: ' + (error.response?.data?.error || 'Please check all fields'));
     } finally {
       setBookingLoading(false);
     }
@@ -86,7 +66,7 @@ function BookingPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto"></div>
           <p className="mt-4 text-white">Loading listing...</p>
         </div>
       </div>
@@ -98,7 +78,7 @@ function BookingPage() {
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Listing not found</h2>
-          <Link to="/listings" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">Back to Listings</Link>
+          <Link to="/listings" className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg">Back to Listings</Link>
         </div>
       </div>
     );
@@ -110,7 +90,7 @@ function BookingPage() {
     <div className="min-h-screen bg-black text-white py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
-          <Link to="/listings" className="flex items-center space-x-2 text-purple-600 hover:text-purple-500">
+          <Link to="/listings" className="flex items-center space-x-2 text-pink-600 hover:text-pink-500">
             <span>Back to Listings</span>
           </Link>
         </div>
@@ -123,7 +103,7 @@ function BookingPage() {
 
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <span className="text-2xl font-bold text-purple-600">
+                <span className="text-2xl font-bold text-pink-600">
                   KSh {listing.price_per_hour}
                   <span className="text-sm font-normal text-gray-400">/hour</span>
                 </span>
@@ -150,13 +130,13 @@ function BookingPage() {
             <form onSubmit={handleBookSession} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Preferred Date & Time
+                  Preferred Date & Time *
                 </label>
                 <input
                   type="datetime-local"
                   value={bookingData.scheduled_date}
                   onChange={(e) => setBookingData({...bookingData, scheduled_date: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   required
                   min={new Date().toISOString().slice(0, 16)}
                 />
@@ -164,12 +144,13 @@ function BookingPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Duration (hours)
+                  Duration (hours) *
                 </label>
                 <select
                   value={bookingData.duration_hours}
                   onChange={(e) => setBookingData({...bookingData, duration_hours: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
+                  required
                 >
                   <option value={0.5}>30 minutes</option>
                   <option value={1}>1 hour</option>
@@ -186,7 +167,7 @@ function BookingPage() {
                 <textarea
                   value={bookingData.notes}
                   onChange={(e) => setBookingData({...bookingData, notes: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   rows="3"
                   placeholder="Any specific topics you would like to focus on..."
                 />
@@ -204,7 +185,7 @@ function BookingPage() {
                 <div className="border-t border-gray-600 pt-2 mt-2">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-white">Total Cost:</span>
-                    <span className="text-2xl font-bold text-purple-600">KSh {totalCost}</span>
+                    <span className="text-2xl font-bold text-pink-600">KSh {totalCost}</span>
                   </div>
                 </div>
               </div>
@@ -212,7 +193,7 @@ function BookingPage() {
               <button
                 type="submit"
                 disabled={bookingLoading || !user}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50"
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50"
               >
                 {bookingLoading ? (
                   <div className="flex items-center justify-center space-x-2">
