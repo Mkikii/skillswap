@@ -121,7 +121,6 @@ function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center hover:border-purple-600 transition-all">
-              <div className="text-4xl mb-4">💻</div>
               <h3 className="text-xl font-bold text-white mb-3">Learn Any Skill</h3>
               <p className="text-gray-300 leading-relaxed">From programming to cooking, find expert teachers in any field.</p>
             </div>
@@ -131,7 +130,6 @@ function HomePage() {
               <p className="text-gray-300 leading-relaxed">Earn by teaching skills you are passionate about.</p>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center hover:border-purple-600 transition-all">
-              <div className="text-4xl mb-4">⭐</div>
               <h3 className="text-xl font-bold text-white mb-3">Community Driven</h3>
               <p className="text-gray-300 leading-relaxed">Connect with like-minded learners and teachers.</p>
             </div>
@@ -153,7 +151,7 @@ function HomePage() {
           </div>
 
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center max-w-4xl mx-auto">
-            <div className="text-5xl mb-6">🚀</div>
+           
             <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
               Join our community of learners and teachers today. Share your skills or learn something new!
