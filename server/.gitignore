@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+env/
+
+# Environment
+.env
+instance/
+
+# Database files (CRITICAL - prevents committing local DB)
+*.db
+*.sqlite
+*.sqlite3
+skillswap.db
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
