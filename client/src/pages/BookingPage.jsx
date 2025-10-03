@@ -72,7 +72,7 @@ function BookingPage() {
         alert('Session booked successfully! The teacher will contact you soon.');
         navigate('/');
       } else {
-        alert('Failed to book session: ' + (data.error || 'Unknown error'));
+        alert('Failed to book session: ' + data.error);
       }
     } catch (error) {
       console.error('Error booking session:', error);
@@ -86,7 +86,7 @@ function BookingPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-700 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700 mx-auto"></div>
           <p className="mt-4 text-white">Loading listing...</p>
         </div>
       </div>
@@ -98,7 +98,7 @@ function BookingPage() {
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Listing not found</h2>
-          <Link to="/listings" className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg">Back to Listings</Link>
+          <Link to="/listings" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">Back to Listings</Link>
         </div>
       </div>
     );
@@ -110,7 +110,7 @@ function BookingPage() {
     <div className="min-h-screen bg-black text-white py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
-          <Link to="/listings" className="flex items-center space-x-2 text-pink-600 hover:text-pink-500">
+          <Link to="/listings" className="flex items-center space-x-2 text-purple-600 hover:text-purple-500">
             <span>Back to Listings</span>
           </Link>
         </div>
@@ -123,7 +123,7 @@ function BookingPage() {
 
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <span className="text-2xl font-bold text-pink-600">
+                <span className="text-2xl font-bold text-purple-600">
                   KSh {listing.price_per_hour}
                   <span className="text-sm font-normal text-gray-400">/hour</span>
                 </span>
@@ -156,7 +156,7 @@ function BookingPage() {
                   type="datetime-local"
                   value={bookingData.scheduled_date}
                   onChange={(e) => setBookingData({...bookingData, scheduled_date: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
                   required
                   min={new Date().toISOString().slice(0, 16)}
                 />
@@ -169,7 +169,7 @@ function BookingPage() {
                 <select
                   value={bookingData.duration_hours}
                   onChange={(e) => setBookingData({...bookingData, duration_hours: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
                 >
                   <option value={0.5}>30 minutes</option>
                   <option value={1}>1 hour</option>
@@ -186,7 +186,7 @@ function BookingPage() {
                 <textarea
                   value={bookingData.notes}
                   onChange={(e) => setBookingData({...bookingData, notes: e.target.value})}
-                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
                   rows="3"
                   placeholder="Any specific topics you would like to focus on..."
                 />
@@ -204,7 +204,7 @@ function BookingPage() {
                 <div className="border-t border-gray-600 pt-2 mt-2">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-white">Total Cost:</span>
-                    <span className="text-2xl font-bold text-pink-600">KSh {totalCost}</span>
+                    <span className="text-2xl font-bold text-purple-600">KSh {totalCost}</span>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,7 @@ function BookingPage() {
               <button
                 type="submit"
                 disabled={bookingLoading || !user}
-                className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50"
               >
                 {bookingLoading ? (
                   <div className="flex items-center justify-center space-x-2">
