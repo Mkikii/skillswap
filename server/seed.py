@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import os
 from datetime import datetime, timedelta
@@ -13,7 +15,7 @@ def setup_database():
         try:
             db.drop_all()
             db.create_all()
-            print("✅ Database tables created successfully")
+            print("Database tables created successfully")
             
             skills_data = [
                 {"name": "Python Programming", "category": "Technology"},
@@ -40,32 +42,50 @@ def setup_database():
                 db.session.add(skill)
             
             db.session.commit()
-            print("✅ Skills created successfully")
+            print("Skills created successfully")
             
             teachers_data = [
                 {
-                    "username": "Seoyeji", 
-                    "email": "seoyeji@example.com", 
+                    "username": "Kikii", 
+                    "email": "kikii@example.com", 
                     "password": "password123",
                     "bio": "Software Engineering lecturer and full-stack developer with expertise in modern web technologies."
                 },
                 {
-                    "username": "wooshik", 
-                    "email": "wooshik@example.com", 
+                    "username": "Vanessa", 
+                    "email": "vanessa@example.com", 
                     "password": "password123",
                     "bio": "Full-stack developer passionate about teaching Python and web development."
                 },
                 {
-                    "username": "Taehyung", 
-                    "email": "taehyung@example.com", 
+                    "username": "Dominique", 
+                    "email": "dominique@example.com", 
                     "password": "password123",
                     "bio": "Graphic designer with 5 years of experience in UI/UX design."
                 },
                 {
-                    "username": "Jimin", 
-                    "email": "jimin@example.com", 
+                    "username": "Carl", 
+                    "email": "carl@example.com", 
                     "password": "password123",
                     "bio": "Professional chef specializing in Italian and French cuisine."
+                },
+                {
+                    "username": "Tecra", 
+                    "email": "tecra@example.com", 
+                    "password": "password123",
+                    "bio": "Photography expert with expertise in digital art and creative design."
+                },
+                {
+                    "username": "Wangari", 
+                    "email": "wangari@example.com", 
+                    "password": "password123",
+                    "bio": "Yoga and meditation instructor focused on wellness and mindfulness."
+                },
+                {
+                    "username": "Karimi", 
+                    "email": "karimi@example.com", 
+                    "password": "password123",
+                    "bio": "Financial planning expert and business consultant."
                 }
             ]
             
@@ -77,34 +97,34 @@ def setup_database():
                     "bio": "Student learning web development and programming."
                 },
                 {
-                    "username": "kikii", 
-                    "email": "kikii@example.com", 
+                    "username": "Faruq", 
+                    "email": "faruq@example.com", 
                     "password": "password123",
                     "bio": "Student interested in design and creative arts."
                 },
                 {
-                    "username": "najma", 
-                    "email": "najma@example.com", 
+                    "username": "Tim", 
+                    "email": "tim@example.com", 
                     "password": "password123",
                     "bio": "Student exploring culinary arts and cooking."
                 },
                 {
-                    "username": "carl", 
-                    "email": "carl@example.com", 
+                    "username": "Wangechi", 
+                    "email": "wangechi@example.com", 
                     "password": "password123",
                     "bio": "Student passionate about photography and digital arts."
                 },
                 {
-                    "username": "dominique", 
-                    "email": "dominique@example.com", 
+                    "username": "Chepkorir", 
+                    "email": "chepkorir@example.com", 
                     "password": "password123",
                     "bio": "Student focusing on fitness and wellness studies."
                 },
                 {
-                    "username": "malkiki", 
-                    "email": "malkiki@example.com", 
+                    "username": "Kirimi", 
+                    "email": "kirimi@example.com", 
                     "password": "password123",
-                    "bio": "Guest user exploring SkillSwap platform and available skills."
+                    "bio": "Student learning business and financial skills."
                 }
             ]
             
@@ -122,7 +142,7 @@ def setup_database():
                 users.append(user)
             
             db.session.commit()
-            print("✅ Users created successfully")
+            print("Users created successfully")
             
             user_skills_data = [
                 {"user_id": 1, "skill_id": 1, "proficiency_level": "expert"},
@@ -135,18 +155,22 @@ def setup_database():
                 {"user_id": 3, "skill_id": 5, "proficiency_level": "advanced"},
                 {"user_id": 4, "skill_id": 6, "proficiency_level": "expert"},
                 {"user_id": 4, "skill_id": 7, "proficiency_level": "advanced"},
-                {"user_id": 5, "skill_id": 1, "proficiency_level": "beginner"},
-                {"user_id": 5, "skill_id": 2, "proficiency_level": "beginner"},
-                {"user_id": 6, "skill_id": 4, "proficiency_level": "intermediate"},
-                {"user_id": 6, "skill_id": 5, "proficiency_level": "beginner"},
-                {"user_id": 7, "skill_id": 6, "proficiency_level": "intermediate"},
-                {"user_id": 7, "skill_id": 7, "proficiency_level": "beginner"},
-                {"user_id": 8, "skill_id": 8, "proficiency_level": "intermediate"},
-                {"user_id": 8, "skill_id": 9, "proficiency_level": "beginner"},
-                {"user_id": 9, "skill_id": 10, "proficiency_level": "intermediate"},
-                {"user_id": 9, "skill_id": 11, "proficiency_level": "beginner"},
-                {"user_id": 10, "skill_id": 1, "proficiency_level": "beginner"},
-                {"user_id": 10, "skill_id": 4, "proficiency_level": "beginner"},
+                {"user_id": 5, "skill_id": 8, "proficiency_level": "expert"},
+                {"user_id": 5, "skill_id": 9, "proficiency_level": "advanced"},
+                {"user_id": 6, "skill_id": 10, "proficiency_level": "expert"},
+                {"user_id": 6, "skill_id": 11, "proficiency_level": "advanced"},
+                {"user_id": 7, "skill_id": 15, "proficiency_level": "expert"},
+                {"user_id": 8, "skill_id": 1, "proficiency_level": "beginner"},
+                {"user_id": 8, "skill_id": 2, "proficiency_level": "beginner"},
+                {"user_id": 9, "skill_id": 4, "proficiency_level": "intermediate"},
+                {"user_id": 9, "skill_id": 5, "proficiency_level": "beginner"},
+                {"user_id": 10, "skill_id": 6, "proficiency_level": "intermediate"},
+                {"user_id": 10, "skill_id": 7, "proficiency_level": "beginner"},
+                {"user_id": 11, "skill_id": 8, "proficiency_level": "intermediate"},
+                {"user_id": 11, "skill_id": 9, "proficiency_level": "beginner"},
+                {"user_id": 12, "skill_id": 10, "proficiency_level": "intermediate"},
+                {"user_id": 12, "skill_id": 11, "proficiency_level": "beginner"},
+                {"user_id": 13, "skill_id": 15, "proficiency_level": "beginner"},
             ]
             
             for us_data in user_skills_data:
@@ -154,7 +178,7 @@ def setup_database():
                 db.session.add(user_skill)
             
             db.session.commit()
-            print("✅ User skills created successfully")
+            print("User skills created successfully")
             
             listings_data = [
                 {
@@ -219,6 +243,27 @@ def setup_database():
                     "price_per_hour": 400,
                     "user_id": 4,
                     "skill_id": 7
+                },
+                {
+                    "title": "Digital Photography Course",
+                    "description": "Learn professional photography techniques and digital editing skills.",
+                    "price_per_hour": 380,
+                    "user_id": 5,
+                    "skill_id": 8
+                },
+                {
+                    "title": "Yoga & Meditation for Beginners",
+                    "description": "Start your wellness journey with guided yoga and meditation sessions.",
+                    "price_per_hour": 250,
+                    "user_id": 6,
+                    "skill_id": 10
+                },
+                {
+                    "title": "Financial Planning Basics",
+                    "description": "Learn essential financial planning skills for personal and business success.",
+                    "price_per_hour": 420,
+                    "user_id": 7,
+                    "skill_id": 15
                 }
             ]
             
@@ -227,11 +272,11 @@ def setup_database():
                 db.session.add(listing)
             
             db.session.commit()
-            print("✅ Listings created successfully")
+            print("Listings created successfully")
             
             sessions_data = [
                 {
-                    "student_id": 5,
+                    "student_id": 8,
                     "teacher_id": 1,
                     "listing_id": 1,
                     "scheduled_date": datetime.utcnow() + timedelta(days=3),
@@ -240,7 +285,7 @@ def setup_database():
                     "notes": "Looking forward to learning advanced Flask development!"
                 },
                 {
-                    "student_id": 6,
+                    "student_id": 9,
                     "teacher_id": 1,
                     "listing_id": 2,
                     "scheduled_date": datetime.utcnow() + timedelta(days=5),
@@ -249,7 +294,7 @@ def setup_database():
                     "notes": "Excited to improve my JavaScript skills"
                 },
                 {
-                    "student_id": 7,
+                    "student_id": 10,
                     "teacher_id": 4,
                     "listing_id": 8,
                     "scheduled_date": datetime.utcnow() + timedelta(days=7),
@@ -264,29 +309,29 @@ def setup_database():
                 db.session.add(session)
             
             db.session.commit()
-            print("✅ Sessions created successfully")
+            print("Sessions created successfully")
             
             reviews_data = [
                 {
                     "session_id": 1,
-                    "reviewer_id": 5,
+                    "reviewer_id": 8,
                     "reviewee_id": 1,
                     "rating": 5,
-                    "comment": "Seoyeji is an exceptional teacher! Her explanations are clear and she provides great real-world examples."
+                    "comment": "Kikii is an exceptional teacher! Her explanations are clear and she provides great real-world examples."
                 },
                 {
                     "session_id": 2, 
-                    "reviewer_id": 6,
+                    "reviewer_id": 9,
                     "reviewee_id": 1,
                     "rating": 5,
-                    "comment": "Excellent JavaScript course. Seoyeji's teaching style makes complex concepts easy to understand."
+                    "comment": "Excellent JavaScript course. Kikii's teaching style makes complex concepts easy to understand."
                 },
                 {
                     "session_id": 3,
-                    "reviewer_id": 7,
+                    "reviewer_id": 10,
                     "reviewee_id": 4,
                     "rating": 4,
-                    "comment": "Great cooking tips, learned a lot about Italian cuisine and techniques."
+                    "comment": "Great cooking tips, learned a lot about Italian cuisine and techniques from Carl."
                 }
             ]
             
@@ -295,7 +340,7 @@ def setup_database():
                 db.session.add(review)
             
             db.session.commit()
-            print("✅ Reviews created successfully")
+            print("Reviews created successfully")
             
             user_count = User.query.count()
             skill_count = Skill.query.count()
@@ -303,25 +348,24 @@ def setup_database():
             session_count = Session.query.count()
             review_count = Review.query.count()
             
-            print("\n🎉 DATABASE SETUP COMPLETED SUCCESSFULLY!")
+            print("\nDATABASE SETUP COMPLETED SUCCESSFULLY!")
             print("=" * 50)
-            print(f"📊 Users: {user_count}")
-            print(f"📊 Skills: {skill_count}")
-            print(f"📊 Listings: {listing_count}")
-            print(f"📊 Sessions: {session_count}")
-            print(f"📊 Reviews: {review_count}")
+            print(f"Users: {user_count}")
+            print(f"Skills: {skill_count}")
+            print(f"Listings: {listing_count}")
+            print(f"Sessions: {session_count}")
+            print(f"Reviews: {review_count}")
             print("=" * 50)
-            print("\n🔑 DEMO ACCOUNTS:")
-            print("👨‍🏫 Teacher: seoyeji@example.com / password123")
-            print("👩‍🎓 Student: maureen@example.com / password123")
-            print("👤 Guest: malkiki@example.com / password123")
+            print("\nDEMO ACCOUNTS:")
+            print("Teacher: kikii@example.com / password123")
+            print("Student: maureen@example.com / password123")
             print("=" * 50)
-            print("\n🚀 Backend is ready! Run: python app.py")
+            print("\nBackend is ready!")
             
             return True
             
         except Exception as e:
-            print(f"❌ Error during database setup: {e}")
+            print(f"Error during database setup: {e}")
             import traceback
             traceback.print_exc()
             db.session.rollback()
