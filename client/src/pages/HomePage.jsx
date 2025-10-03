@@ -1,106 +1,182 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCode, FaUsers, FaStar, FaArrowRight, FaRocket, FaGraduationCap, FaChalkboardTeacher, FaHandshake } from 'react-icons/fa';
-import { authAPI } from "../services/api";
 
 function HomePage() {
-  const { user } = useAuth();
+  const { user, login, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleDemoLogin = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://skillswap-production-0e78.up.railway.app'}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: 'maureen@example.com',
+          password: 'password123'
+        })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        login(data.user, data.access_token);
+        alert('Demo login successful! Welcome to SkillSwap!');
+        navigate('/listings');
+      } else {
+        alert('Demo login failed: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Demo login failed. Please check your connection and try again.');
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-purple-600 mb-6 font-cursive">
-            SkillSwap
-          </h1>
-          <p className="text-2xl md:text-3xl text-dark-purple mb-8">
-            Share Skills • Learn Together
-          </p>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-            Connect with experts, learn new skills, and share your knowledge with our community.
-          </p>
-          
-          {user ? (
-            <div className="space-y-4">
-              <p className="text-lg text-dark-purple">Welcome back, {user.username}!</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/listings"
-                  className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
-                >
-                  Browse Listings
-                </Link>
-                <Link
-                  to="/listings"
-                  className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
-                >
-                  Teach a Skill
-                </Link>
+      <nav className="bg-black border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">S</span>
               </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                SKILLSWAP
+              </span>
+            </Link>
+            
+            <div className="flex items-center space-x-4">
+              {!user ? (
+                <>
+                  <button
+                    onClick={handleDemoLogin}
+                    className="bg-black hover:bg-gray-900 text-white border border-purple-600 px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Try Demo
+                  </button>
+                  <Link
+                    to="/auth"
+                    className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Login
+                  </Link>
+                </>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <span className="text-white">Welcome, <span className="font-semibold text-purple-600">{user.username}</span></span>
+                  <Link
+                    to="/listings"
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Create Listing
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Share Skills,
+            <span className="block bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+              Learn Together
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Connect with expert teachers in your community and discover new skills
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <Link
+              to="/listings"
+              className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-4 rounded-lg font-semibold transition-all flex items-center"
+            >
+              Explore Skills
+            </Link>
+            {!user && (
+              <Link
+                to="/auth"
+                className="bg-black hover:bg-gray-900 text-white border border-purple-600 text-lg px-8 py-4 rounded-lg font-semibold transition-all"
+              >
+                Start Teaching
+              </Link>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center hover:border-purple-600 transition-all">
+              <div className="text-4xl mb-4">💻</div>
+              <h3 className="text-xl font-bold text-white mb-3">Learn Any Skill</h3>
+              <p className="text-gray-300 leading-relaxed">From programming to cooking, find expert teachers in any field.</p>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center hover:border-purple-600 transition-all">
+              <div className="text-4xl mb-4">👥</div>
+              <h3 className="text-xl font-bold text-white mb-3">Share Your Expertise</h3>
+              <p className="text-gray-300 leading-relaxed">Earn by teaching skills you are passionate about.</p>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center hover:border-purple-600 transition-all">
+              <div className="text-4xl mb-4">⭐</div>
+              <h3 className="text-xl font-bold text-white mb-3">Community Driven</h3>
+              <p className="text-gray-300 leading-relaxed">Connect with like-minded learners and teachers.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-600 mb-2">50+</div>
+              <div className="text-gray-300 font-medium">Skills Available</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-600 mb-2">100+</div>
+              <div className="text-gray-300 font-medium">Active Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-600 mb-2">4.8/5</div>
+              <div className="text-gray-300 font-medium">Average Rating</div>
+            </div>
+          </div>
+
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center max-w-4xl mx-auto">
+            <div className="text-5xl mb-6">🚀</div>
+            <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
+            <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+              Join our community of learners and teachers today. Share your skills or learn something new!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/listings"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all"
+              >
+                Browse Listings
+              </Link>
+              {!user && (
                 <Link
                   to="/auth"
-                  className="bg-brown-700 hover:bg-brown-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+                  className="border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all"
                 >
-                  Get Started
+                  Create Account
                 </Link>
-                <Link
-                  to="/listings"
-                  className="border-2 border-brown-700 text-brown-700 hover:bg-brown-700 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
-                >
-                  Browse Skills
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 text-center">
-            <FaChalkboardTeacher className="text-yellow-400 text-4xl mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-4">Teach Your Skills</h3>
-            <p className="text-gray-300">Share your expertise and earn while helping others learn</p>
-          </div>
-          
-          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 text-center">
-            <FaGraduationCap className="text-yellow-400 text-4xl mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-4">Learn from Experts</h3>
-            <p className="text-gray-300">Find skilled teachers and master new abilities</p>
-          </div>
-          
-          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 text-center">
-            <FaHandshake className="text-yellow-400 text-4xl mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-4">Build Community</h3>
-            <p className="text-gray-300">Connect with like-minded learners and teachers</p>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-dark-purple mb-8">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
-              <p className="text-gold font-semibold">Sign Up</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
-              <p className="text-gold font-semibold">Browse or Create Listings</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
-              <p className="text-gold font-semibold">Connect with Teachers</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
-              <p className="text-gold font-semibold">Learn & Grow</p>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

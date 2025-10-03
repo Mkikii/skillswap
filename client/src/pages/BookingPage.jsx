@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaArrowLeft, FaCalendar, FaClock, FaMoneyBillWave, FaStar, FaCheckCircle } from 'react-icons/fa';
-import { listingsAPI, sessionsAPI } from "../services/api";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5555';
+const API_URL = import.meta.env.VITE_API_URL || 'https://skillswap-production-0e78.up.railway.app';
 
 function BookingPage() {
   const { user } = useAuth();
@@ -25,12 +23,19 @@ function BookingPage() {
 
   const fetchListing = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/listings/${listingId}`);
+      const response = await fetch(`${API_URL}/api/listings`);
       const data = await response.json();
-      setListing(data.listing);
+      
+      if (response.ok && data.listings) {
+        const foundListing = data.listings.find(l => l.id === parseInt(listingId));
+        setListing(foundListing);
+      } else {
+        setListing(null);
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching listing:', error);
+      setListing(null);
       setLoading(false);
     }
   };
@@ -64,35 +69,25 @@ function BookingPage() {
       const data = await response.json();
       
       if (response.ok) {
-        alert('🎉 Session booked successfully! The teacher will contact you soon.');
+        alert('Session booked successfully! The teacher will contact you soon.');
         navigate('/');
       } else {
-        alert('❌ Failed to book session: ' + data.error);
+        alert('Failed to book session: ' + data.error);
       }
     } catch (error) {
       console.error('Error booking session:', error);
-      alert('❌ Failed to book session. Please try again.');
+      alert('Failed to book session. Please try again.');
     } finally {
       setBookingLoading(false);
     }
   };
 
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <FaStar 
-        key={i} 
-        className={i < rating ? "text-yellow-400" : "text-gray-300"} 
-        size={16}
-      />
-    ));
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading listing...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700 mx-auto"></div>
+          <p className="mt-4 text-white">Loading listing...</p>
         </div>
       </div>
     );
@@ -100,10 +95,10 @@ function BookingPage() {
 
   if (!listing) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Listing not found</h2>
-          <Link to="/listings" className="btn-primary">Back to Listings</Link>
+          <h2 className="text-2xl font-bold text-white mb-4">Listing not found</h2>
+          <Link to="/listings" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">Back to Listings</Link>
         </div>
       </div>
     );
@@ -112,87 +107,69 @@ function BookingPage() {
   const totalCost = listing.price_per_hour * bookingData.duration_hours;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div className="min-h-screen bg-black text-white py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <Link to="/listings" className="flex items-center space-x-2 text-primary-700 hover:text-primary-800">
-            <FaArrowLeft />
+          <Link to="/listings" className="flex items-center space-x-2 text-purple-600 hover:text-purple-500">
             <span>Back to Listings</span>
           </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Listing Details */}
-          <div className="card">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">{listing.title}</h1>
+          <div className="bg-gray-900 p-6 rounded-lg border border-gray-700">
+            <h1 className="text-3xl font-bold text-white mb-4">{listing.title}</h1>
             
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="flex items-center space-x-1">
-                {renderStars(Math.round(listing.teacher.average_rating))}
-              </div>
-              <span className="text-sm text-gray-500">
-                ({listing.teacher.total_reviews} reviews)
-              </span>
-            </div>
-
-            <p className="text-gray-600 mb-6">{listing.description}</p>
+            <p className="text-gray-300 mb-6">{listing.description}</p>
 
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <FaMoneyBillWave className="text-green-600" />
-                <span className="text-2xl font-bold text-primary-700">
+                <span className="text-2xl font-bold text-purple-600">
                   KSh {listing.price_per_hour}
-                  <span className="text-sm font-normal text-gray-500">/hour</span>
+                  <span className="text-sm font-normal text-gray-400">/hour</span>
                 </span>
               </div>
               
               <div className="flex items-center space-x-3">
-                <FaCheckCircle className="text-blue-600" />
-                <span className="text-gray-700">Skill: {listing.skill.name}</span>
+                <span className="text-gray-300">Skill: {listing.skill_name}</span>
               </div>
               
               <div className="flex items-center space-x-3">
-                <FaCheckCircle className="text-blue-600" />
-                <span className="text-gray-700">Category: {listing.skill.category}</span>
+                <span className="text-gray-300">Category: {listing.skill_category}</span>
               </div>
             </div>
 
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">About the Teacher</h3>
-              <p className="text-blue-800">{listing.teacher.bio || 'Experienced teacher passionate about sharing knowledge.'}</p>
+            <div className="mt-6 p-4 bg-blue-900 rounded-lg">
+              <h3 className="font-semibold text-blue-200 mb-2">About the Teacher</h3>
+              <p className="text-blue-100">{listing.teacher_username}</p>
             </div>
           </div>
 
-          {/* Booking Form */}
-          <div className="card">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Book a Session</h2>
+          <div className="bg-gray-900 p-6 rounded-lg border border-gray-700">
+            <h2 className="text-2xl font-bold text-white mb-6">Book a Session</h2>
             
             <form onSubmit={handleBookSession} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <FaCalendar className="inline mr-2" />
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Preferred Date & Time
                 </label>
                 <input
                   type="datetime-local"
                   value={bookingData.scheduled_date}
                   onChange={(e) => setBookingData({...bookingData, scheduled_date: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
                   required
                   min={new Date().toISOString().slice(0, 16)}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <FaClock className="inline mr-2" />
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Duration (hours)
                 </label>
                 <select
                   value={bookingData.duration_hours}
                   onChange={(e) => setBookingData({...bookingData, duration_hours: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
                 >
                   <option value={0.5}>30 minutes</option>
                   <option value={1}>1 hour</option>
@@ -203,32 +180,31 @@ function BookingPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Additional Notes (Optional)
                 </label>
                 <textarea
                   value={bookingData.notes}
                   onChange={(e) => setBookingData({...bookingData, notes: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 text-white"
                   rows="3"
-                  placeholder="Any specific topics you'd like to focus on..."
+                  placeholder="Any specific topics you would like to focus on..."
                 />
               </div>
 
-              {/* Cost Summary */}
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-gray-800 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-600">Hourly rate:</span>
+                  <span className="text-gray-300">Hourly rate:</span>
                   <span className="font-semibold">KSh {listing.price_per_hour}</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-600">Duration:</span>
+                  <span className="text-gray-300">Duration:</span>
                   <span className="font-semibold">{bookingData.duration_hours} hours</span>
                 </div>
-                <div className="border-t border-gray-300 pt-2 mt-2">
+                <div className="border-t border-gray-600 pt-2 mt-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-gray-900">Total Cost:</span>
-                    <span className="text-2xl font-bold text-primary-700">KSh {totalCost}</span>
+                    <span className="text-lg font-bold text-white">Total Cost:</span>
+                    <span className="text-2xl font-bold text-purple-600">KSh {totalCost}</span>
                   </div>
                 </div>
               </div>
@@ -236,7 +212,7 @@ function BookingPage() {
               <button
                 type="submit"
                 disabled={bookingLoading || !user}
-                className="w-full btn-primary py-4 text-lg disabled:opacity-50"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-lg disabled:opacity-50"
               >
                 {bookingLoading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -251,7 +227,7 @@ function BookingPage() {
               </button>
 
               {!user && (
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-sm text-gray-400">
                   You need to be logged in to book a session
                 </p>
               )}
