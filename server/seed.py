@@ -64,26 +64,26 @@ def setup_database():
                     "bio": "Graphic designer with 5 years of experience in UI/UX design."
                 },
                 {
-                    "username": "Carl", 
-                    "email": "carl@example.com", 
+                    "username": "Koech", 
+                    "email": "koech@example.com", 
                     "password": "password123",
-                    "bio": "Professional chef specializing in Italian and French cuisine."
+                    "bio": "Professional chef specializing in African and international cuisine."
                 },
                 {
-                    "username": "Tecra", 
-                    "email": "tecra@example.com", 
+                    "username": "Samini", 
+                    "email": "samini@example.com", 
                     "password": "password123",
                     "bio": "Photography expert with expertise in digital art and creative design."
                 },
                 {
-                    "username": "Wangari", 
-                    "email": "wangari@example.com", 
+                    "username": "Ndungu", 
+                    "email": "ndungu@example.com", 
                     "password": "password123",
                     "bio": "Yoga and meditation instructor focused on wellness and mindfulness."
                 },
                 {
-                    "username": "Karimi", 
-                    "email": "karimi@example.com", 
+                    "username": "Wangari", 
+                    "email": "wangari@example.com", 
                     "password": "password123",
                     "bio": "Financial planning expert and business consultant."
                 }
@@ -97,8 +97,8 @@ def setup_database():
                     "bio": "Student learning web development and programming."
                 },
                 {
-                    "username": "Faruq", 
-                    "email": "faruq@example.com", 
+                    "username": "Najma", 
+                    "email": "najma@example.com", 
                     "password": "password123",
                     "bio": "Student interested in design and creative arts."
                 },
@@ -109,20 +109,20 @@ def setup_database():
                     "bio": "Student exploring culinary arts and cooking."
                 },
                 {
-                    "username": "Wangechi", 
-                    "email": "wangechi@example.com", 
+                    "username": "Tecra", 
+                    "email": "tecra@example.com", 
                     "password": "password123",
                     "bio": "Student passionate about photography and digital arts."
                 },
                 {
-                    "username": "Chepkorir", 
-                    "email": "chepkorir@example.com", 
+                    "username": "Njeri", 
+                    "email": "njeri@example.com", 
                     "password": "password123",
                     "bio": "Student focusing on fitness and wellness studies."
                 },
                 {
-                    "username": "Kirimi", 
-                    "email": "kirimi@example.com", 
+                    "username": "Mkikii", 
+                    "email": "mkikii@example.com", 
                     "password": "password123",
                     "bio": "Student learning business and financial skills."
                 }
@@ -231,8 +231,8 @@ def setup_database():
                     "skill_id": 5
                 },
                 {
-                    "title": "Italian Cooking Masterclass",
-                    "description": "Learn authentic Italian recipes and cooking techniques from a professional chef.",
+                    "title": "African Cooking Masterclass",
+                    "description": "Learn authentic African recipes and cooking techniques from a professional chef.",
                     "price_per_hour": 450,
                     "user_id": 4,
                     "skill_id": 6
@@ -331,7 +331,7 @@ def setup_database():
                     "reviewer_id": 10,
                     "reviewee_id": 4,
                     "rating": 4,
-                    "comment": "Great cooking tips, learned a lot about Italian cuisine and techniques from Carl."
+                    "comment": "Great cooking tips, learned a lot about African cuisine and techniques from Koech."
                 }
             ]
             
