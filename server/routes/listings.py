@@ -39,6 +39,7 @@ def create_listing():
         current_user_id = get_jwt_identity()
         data = request.get_json()
         
+        # REMOVE RESTRICTIONS - ALLOW ANY AUTHENTICATED USER
         if not data.get('title') or not data.get('description') or not data.get('price_per_hour') or not data.get('skill_id'):
             return jsonify({'error': 'All fields are required'}), 422
         
@@ -103,6 +104,7 @@ def delete_listing(listing_id):
         if not listing:
             return jsonify({'error': 'Listing not found'}), 404
         
+        # ONLY ALLOW OWNER TO DELETE
         if listing.user_id != user_id:
             return jsonify({'error': 'Unauthorized to delete this listing'}), 403
         

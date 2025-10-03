@@ -11,23 +11,40 @@ sessions_bp = Blueprint('sessions', __name__)
 def create_session():
     try:
         data = request.get_json()
-        student_id = get_jwt_identity()
+        student_id = get_jwt_identity()  # ANY authenticated user can book
+        
+        # Validate required fields
+        if not data.get('listing_id') or not data.get('scheduled_date'):
+            return jsonify({'error': 'Listing ID and scheduled date are required'}), 422
+        
         listing = Listing.query.get(data['listing_id'])
         if not listing:
             return jsonify({'error': 'Listing not found'}), 404
+        
+        # ALLOW ANY USER TO BOOK (except booking their own listing)
+        if student_id == listing.user_id:
+            return jsonify({'error': 'Cannot book your own listing'}), 400
+        
         session = Session(
             student_id=student_id,
             teacher_id=listing.user_id,
             listing_id=data['listing_id'],
-            scheduled_date=datetime.fromisoformat(data['scheduled_date']),
+            scheduled_date=datetime.fromisoformat(data['scheduled_date'].replace('Z', '+00:00')),
             duration_hours=data.get('duration_hours', 1.0),
             status='scheduled',
             notes=data.get('notes', '')
         )
+        
         db.session.add(session)
         db.session.commit()
-        return jsonify({'message': 'Session booked successfully', 'session_id': session.id}), 201
+        
+        return jsonify({
+            'message': 'Session booked successfully', 
+            'session_id': session.id
+        }), 201
+        
     except Exception as e:
+        db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
 @sessions_bp.route('', methods=['GET'])
