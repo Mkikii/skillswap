@@ -32,16 +32,13 @@ def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return User.query.get(int(identity))
 
-# AUTO-CREATE AND SEED DATABASE ON STARTUP
 def initialize_database():
     try:
         print("🔄 Initializing database...")
         
-        # Create all tables
         db.create_all()
         print("✅ Database tables created successfully!")
         
-        # Check if we need to seed data
         user_count = User.query.count()
         skill_count = Skill.query.count()
         
@@ -59,14 +56,12 @@ def initialize_database():
             
     except Exception as e:
         print(f"❌ Database initialization error: {e}")
-        # Try creating just tables without seed
         try:
             db.create_all()
             print("✅ Tables created (minimal setup)")
         except Exception as e2:
             print(f"❌ Critical database error: {e2}")
 
-# Initialize database when app starts
 with app.app_context():
     initialize_database()
 
