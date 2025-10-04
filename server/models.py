@@ -1,13 +1,12 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 from database import db
 
 bcrypt = Bcrypt()
 
-class UserSkill(db.Model, SerializerMixin):
+class UserSkill(db.Model):
     __tablename__ = 'user_skills'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -19,10 +18,8 @@ class UserSkill(db.Model, SerializerMixin):
     
     user = db.relationship('User', backref='user_skills')
     skill = db.relationship('Skill', backref='user_skills')
-    
-    serialize_rules = ('-user.user_skills', '-skill.user_skills')
 
-class User(db.Model, SerializerMixin):
+class User(db.Model):
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -36,15 +33,22 @@ class User(db.Model, SerializerMixin):
     reviews_given = db.relationship('Review', foreign_keys='Review.reviewer_id', backref='reviewer', lazy=True)
     reviews_received = db.relationship('Review', foreign_keys='Review.reviewee_id', backref='reviewee', lazy=True)
     
-    serialize_rules = ('-password_hash', '-listings.user', '-reviews_given.reviewer', '-reviews_received.reviewee', '-user_skills.user')
-    
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'bio': self.bio,
+            'created_at': self.created_at.isoformat()
+        }
 
-class Skill(db.Model, SerializerMixin):
+class Skill(db.Model):
     __tablename__ = 'skills'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -54,9 +58,15 @@ class Skill(db.Model, SerializerMixin):
     
     listings = db.relationship('Listing', backref='skill', lazy=True)
     
-    serialize_rules = ('-listings.skill', '-user_skills.skill')
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': self.category,
+            'description': self.description
+        }
 
-class Listing(db.Model, SerializerMixin):
+class Listing(db.Model):
     __tablename__ = 'listings'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -67,9 +77,18 @@ class Listing(db.Model, SerializerMixin):
     skill_id = db.Column(db.Integer, db.ForeignKey('skills.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    serialize_rules = ('-user.listings', '-skill.listings')
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'price_per_hour': self.price_per_hour,
+            'user_id': self.user_id,
+            'skill_id': self.skill_id,
+            'created_at': self.created_at.isoformat()
+        }
 
-class Session(db.Model, SerializerMixin):
+class Session(db.Model):
     __tablename__ = 'sessions'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -86,9 +105,20 @@ class Session(db.Model, SerializerMixin):
     teacher = db.relationship('User', foreign_keys=[teacher_id], backref='sessions_as_teacher')
     listing = db.relationship('Listing', backref='sessions')
     
-    serialize_rules = ('-student.sessions_as_student', '-teacher.sessions_as_teacher', '-listing.sessions')
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'student_id': self.student_id,
+            'teacher_id': self.teacher_id,
+            'listing_id': self.listing_id,
+            'scheduled_date': self.scheduled_date.isoformat(),
+            'duration_hours': self.duration_hours,
+            'status': self.status,
+            'notes': self.notes,
+            'created_at': self.created_at.isoformat()
+        }
 
-class Review(db.Model, SerializerMixin):
+class Review(db.Model):
     __tablename__ = 'reviews'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -101,4 +131,13 @@ class Review(db.Model, SerializerMixin):
     
     session = db.relationship('Session', backref='reviews')
     
-    serialize_rules = ('-reviewer.reviews_given', '-reviewee.reviews_received', '-session.reviews')
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'rating': self.rating,
+            'comment': self.comment,
+            'reviewer_id': self.reviewer_id,
+            'reviewee_id': self.reviewee_id,
+            'session_id': self.session_id,
+            'created_at': self.created_at.isoformat()
+        }

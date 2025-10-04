@@ -1,8 +1,8 @@
-from app import app
+import os
 
-print("🔍 Checking registered routes:")
-for rule in app.url_map.iter_rules():
-    methods = ','.join(sorted(rule.methods))
-    print(f"📍 {rule.endpoint:30} {methods:20} {rule.rule}")
-
-print(f"\n📊 Total routes: {len(list(app.url_map.iter_rules()))}")
+class Config:
+    # Use persistent SQLite on Railway (/tmp/ directory persists between deployments)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/skillswap.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'skillswap-secret-key'
+    JWT_SECRET_KEY = 'jwt-skillswap-secret'

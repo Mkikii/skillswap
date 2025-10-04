@@ -11,12 +11,10 @@ from models import User, Skill, Listing, UserSkill, Session, Review
 def setup_database():
     with app.app_context():
         try:
-            # Clear existing data first
             db.drop_all()
             db.create_all()
             print("✅ Database tables created successfully")
             
-            # Create skills
             skills_data = [
                 {"name": "Python Programming", "category": "Technology"},
                 {"name": "JavaScript", "category": "Technology"},
@@ -46,7 +44,6 @@ def setup_database():
             db.session.commit()
             print("✅ Skills created successfully")
             
-            # Create users (teachers and students)
             teachers_data = [
                 {
                     "username": "Seoyeji", 
@@ -129,7 +126,6 @@ def setup_database():
             db.session.commit()
             print("✅ Users created successfully")
             
-            # Add user skills
             user_skills_data = [
                 {"user_id": 1, "skill_id": 1, "proficiency_level": "expert"},
                 {"user_id": 1, "skill_id": 2, "proficiency_level": "expert"},
@@ -162,7 +158,6 @@ def setup_database():
             db.session.commit()
             print("✅ User skills created successfully")
             
-            # Create listings
             listings_data = [
                 {
                     "title": "Advanced Python & Flask Development",
@@ -236,7 +231,6 @@ def setup_database():
             db.session.commit()
             print("✅ Listings created successfully")
             
-            # Create some sessions
             sessions_data = [
                 {
                     "student_id": 5,
@@ -265,7 +259,6 @@ def setup_database():
             db.session.commit()
             print("✅ Sessions created successfully")
             
-            # Create some reviews
             reviews_data = [
                 {
                     "session_id": 1,
@@ -290,7 +283,6 @@ def setup_database():
             db.session.commit()
             print("✅ Reviews created successfully")
             
-            # Final counts
             user_count = User.query.count()
             skill_count = Skill.query.count()
             listing_count = Listing.query.count()

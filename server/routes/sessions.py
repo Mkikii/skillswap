@@ -11,26 +11,41 @@ sessions_bp = Blueprint('sessions', __name__)
 def create_session():
     try:
         data = request.get_json()
-        student_id = get_jwt_identity()  # ANY authenticated user can book
+        student_id = get_jwt_identity()
         
-        # Validate required fields
-        if not data.get('listing_id') or not data.get('scheduled_date'):
-            return jsonify({'error': 'Listing ID and scheduled date are required'}), 422
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        if not data.get('listing_id'):
+            return jsonify({'error': 'Listing ID is required'}), 400
+        if not data.get('scheduled_date'):
+            return jsonify({'error': 'Scheduled date is required'}), 400
         
         listing = Listing.query.get(data['listing_id'])
         if not listing:
             return jsonify({'error': 'Listing not found'}), 404
         
-        # ALLOW ANY USER TO BOOK (except booking their own listing)
         if student_id == listing.user_id:
             return jsonify({'error': 'Cannot book your own listing'}), 400
+        
+        try:
+            scheduled_date = datetime.fromisoformat(data['scheduled_date'].replace('Z', '+00:00'))
+        except ValueError:
+            return jsonify({'error': 'Invalid date format'}), 400
+        
+        # Validate date is in future
+        if scheduled_date <= datetime.utcnow():
+            return jsonify({'error': 'Scheduled date must be in the future'}), 400
+        
+        duration_hours = float(data.get('duration_hours', 1.0))
+        if duration_hours < 0.5 or duration_hours > 8:
+            return jsonify({'error': 'Duration must be between 0.5 and 8 hours'}), 400
         
         session = Session(
             student_id=student_id,
             teacher_id=listing.user_id,
             listing_id=data['listing_id'],
-            scheduled_date=datetime.fromisoformat(data['scheduled_date'].replace('Z', '+00:00')),
-            duration_hours=data.get('duration_hours', 1.0),
+            scheduled_date=scheduled_date,
+            duration_hours=duration_hours,
             status='scheduled',
             notes=data.get('notes', '')
         )
@@ -45,7 +60,7 @@ def create_session():
         
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'Failed to book session: ' + str(e)}), 500
 
 @sessions_bp.route('', methods=['GET'])
 @jwt_required()

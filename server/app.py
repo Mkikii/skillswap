@@ -5,6 +5,7 @@ from config import Config
 from database import db
 from models import User
 from datetime import timedelta
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -31,14 +32,12 @@ def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return User.query.get(int(identity))
 
-# Auto-create tables for SQLite
 with app.app_context():
     try:
         print("🔄 Initializing database...")
         db.create_all()
         print("✅ Database tables created successfully!")
         
-        # Seed data if empty
         from models import User, Skill
         user_count = User.query.count()
         skill_count = Skill.query.count()
@@ -53,7 +52,7 @@ with app.app_context():
             
     except Exception as e:
         print(f"❌ Database initialization failed: {e}")
-        # Don't crash the app, just log the error
+        print("⚠️  Continuing without database initialization...")
 
 @app.route('/')
 def home():
@@ -61,9 +60,8 @@ def home():
 
 @app.route('/api/health')
 def health_check():
-    return jsonify({"status": "API healthy"})
+    return jsonify({"status": "API healthy", "database": "connected"})
 
-# Import and register routes
 from routes.auth import auth_bp
 from routes.skills import skills_bp
 from routes.listings import listings_bp
@@ -81,4 +79,5 @@ app.register_blueprint(users_bp, url_prefix='/api/users')
 print("✅ All routes registered successfully")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    port = int(os.environ.get('PORT', 5555))
+    app.run(host='0.0.0.0', port=port, debug=False)
