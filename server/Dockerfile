@@ -9,6 +9,4 @@ COPY . .
 
 EXPOSE 5000
 
-WORKDIR /app/server
-
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
+CMD ["gunicorn", "server.app:app", "--bind", "0.0.0.0:5000"]
