@@ -9,20 +9,20 @@ from datetime import timedelta
 app = Flask(__name__)
 app.config.from_object(Config)
 
-db.init_app(app)
+# CORS Configuration - THIS IS CRITICAL
+CORS(app, 
+     resources={r"/api/*": {"origins": "*"}},
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=10)
-
-# Fix CORS configuration - allow all origins or specific ones
-CORS(app, origins=[
-    "https://skillswap-app.netlify.app",
-    "http://localhost:5173",
-    "http://localhost:3000"
-], supports_credentials=True)
-
-# Or for development, you can allow all origins:
-# CORS(app, origins="*", supports_credentials=True)
+# Or for production, be more specific:
+# CORS(app, 
+#      resources={r"/api/*": {"origins": "https://skillswap-app.netlify.app"}},
+#      supports_credentials=True,
+#      allow_headers=["Content-Type", "Authorization"],
+#      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
 jwt = JWTManager(app)
 
-# ... rest of your app.py code remains the same
+# Rest of your app code...
