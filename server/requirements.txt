@@ -9,4 +9,4 @@ psycopg2-binary==2.9.7
 python-dotenv==1.0.0
 bcrypt==4.0.1
 Werkzeug==2.3.7
-SQLAlchemy-serializer==1.4.12psycopg2-binary==2.9.7
+SQLAlchemy-serializer==1.4.12
