@@ -52,12 +52,34 @@ function SkillsListings() {
     }
   };
 
+  const validateForm = () => {
+    if (!formData.title.trim()) {
+      return 'Title is required';
+    }
+    if (!formData.description.trim()) {
+      return 'Description is required';
+    }
+    if (!formData.price_per_hour || formData.price_per_hour < 1 || formData.price_per_hour > 9999) {
+      return 'Price must be between 1 and 9999 KSh';
+    }
+    if (!formData.skill_id) {
+      return 'Please select a skill';
+    }
+    return null;
+  };
+
   const createListing = async (e) => {
     e.preventDefault();
     setFormError('');
     
     if (!user) {
       setFormError('Please login to create a listing');
+      return;
+    }
+
+    const validationError = validateForm();
+    if (validationError) {
+      setFormError(validationError);
       return;
     }
 
@@ -70,7 +92,8 @@ function SkillsListings() {
       alert('Listing created successfully!');
     } catch (error) {
       console.error('Error creating listing:', error);
-      setFormError(error.message || 'Failed to create listing. Please check all fields.');
+      const errorMessage = error.response?.data?.error || 'Failed to create listing. Please try again.';
+      setFormError(errorMessage);
     }
   };
 
@@ -154,6 +177,8 @@ function SkillsListings() {
                   className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   placeholder="e.g., Advanced Python Programming"
                   required
+                  minLength={5}
+                  maxLength={200}
                 />
               </div>
 
@@ -167,11 +192,12 @@ function SkillsListings() {
                   onChange={(e) => setFormData({...formData, price_per_hour: e.target.value})}
                   className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-600 text-white"
                   min="1"
-                  max="999"
+                  max="9999"
+                  step="50"
                   placeholder="450"
                   required
                 />
-                <p className="text-xs text-gray-400 mt-1">Must be between 1 and 999 KSh</p>
+                <p className="text-xs text-gray-400 mt-1">Must be between 1 and 9999 KSh</p>
               </div>
               
               <div>
@@ -204,6 +230,7 @@ function SkillsListings() {
                   rows="4"
                   placeholder="Describe what you'll teach..."
                   required
+                  minLength={10}
                 />
               </div>
               

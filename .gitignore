@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log
+
+# Test and temporary files
+test_*.py
+create_listings_only.py
+debug_*.py
+minimal_test.py
+simple_test.py
+final_test.js
+test_backend.sh
+test_api.py
+test_local.py
+
+# Server virtual environment
+server/venv/

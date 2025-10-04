@@ -12,25 +12,19 @@ build/
 venv/
 env/
 
-# Environment
-.env
-instance/
-
-# Database files (CRITICAL - prevents committing local DB)
+# Database files
 *.db
 *.sqlite
 *.sqlite3
-skillswap.db
+
+# Environment
+.env
+instance/
 
 # IDE
 .vscode/
 .idea/
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 
 # Logs
 logs/
